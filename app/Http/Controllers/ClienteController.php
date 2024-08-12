@@ -124,7 +124,7 @@ class ClienteController extends Controller
         $countOrdenesCobradas = $cliente->ordenes()->where('eliminado', false)->where('cobrado', true)->count();
         $countOrdenesNoCobradas = $cliente->ordenes()->where('eliminado', false)->where('cobrado', false)->count();
 
-        return view('cliente.show', compact(
+        return view('pages/cliente.show', compact(
             'cliente',
             'countPresupuestos',
             'countPresupuestosAceptados',

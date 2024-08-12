@@ -144,7 +144,8 @@ class PresupuestoController extends Controller
      */
     public function show(Request $request, Presupuesto $presupuesto)
     {
-        dd($request);
+        // exit("X2");
+        // dd($request);
         // Cargar las relaciones necesarias
         $presupuesto->load('cliente', 'productoPresupuestos.producto');
 
@@ -246,7 +247,7 @@ class PresupuestoController extends Controller
 
         $dompdf = new Dompdf($options);
 
-        $html = view('presupuesto.show', compact('presupuesto', 'productos_print'))->render();
+        $html = view('pages/presupuesto.show', compact('presupuesto', 'productos_print'))->render();
 
         $dompdf->loadHtml($html);
         $dompdf->setPaper('A4', 'portrait');

@@ -1,5 +1,5 @@
 <!-- Contenido del presupuesto para el modal -->
-<div id="orden" class="container my-3"
+<div id="orden" class="container"
     style="font-family: Arial, sans-serif; margin: 0; padding: 0; width: 100%; margin: auto; background-color: white; padding: 20px; box-sizing: border-box;">
     <div class="header"
         style="background-color:#212529; color:white; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid black; padding: 10px; margin-bottom: 10px; border-radius:10px;">
@@ -9,9 +9,9 @@
 
     <div class="details" style="display: flex; justify-content: space-between; ">
         <div class="col">
-            <strong>Datos de la orden</strong>
+            <strong>Datos del presupuesto</strong>
             <p>
-                Orden:
+                Presupuesto:
                 <strong>
                     {{ $presupuesto->id }}
                 </strong>
@@ -75,64 +75,48 @@
         </div>
     </div>
 
-    <style>
-        .brd{
-            border-radius:10px;
-        }
-    </style>
+    <p><strong>Productos en el presupuesto7</strong></p>
 
-    <div class="">
-        <p><strong>Productos en orden</strong></p>
-        <div class="" style="padding: 0;">
-            <div class="table-responsive brd" style="width: 100%; overflow-x: auto;">
-                <table class="table table-bordered rounded-table" style="width: 100%; border-collapse: collapse;">
-                    <thead style="background-color: #212529; color: white;">
-                        <tr>
-                            <th style="border: 1px solid black; padding: 8px; text-align: left; color:white;">Id</th>
-                            <th style="border: 1px solid black; padding: 8px; text-align: left; color:white;">Producto
-                            </th>
-                            <th style="border: 1px solid black; padding: 8px; text-align: left; color:white;">Cantidad
-                            </th>
-                            <th style="border: 1px solid black; padding: 8px; text-align: left; color:white;">Precio
-                                Unitario</th>
+    <div class="table-responsive" style="width: 100%; overflow-x: auto; border-radius: 10px;">
+        <table class="table table-light text-center table-hover rounded-table" style="width: 100%; border-collapse: collapse; border-radius: 10px; overflow: hidden;">
+            <thead class="table-dark" style="background-color: #212529; color: white;">
+                <tr style="margin-top: 8px; margin-bottom: 8px;">
+                    <th>Id</th>
+                    <th>Producto</th>
+                    <th>Cantidad</th>
+                    <th>Precio Unitario</th>
+                    <th>Precio Total</th>
+                </tr>
+            </thead>
+            <tbody style="text-align: center;">
+                @if (isset($productos_print))
+                    @foreach ($productos_print as $productoPresupuesto)
+                        <tr style="margin-top: 8px; margin-bottom: 8px;">
+                            <td>{{ $productoPresupuesto->producto->id }}</td>
+                            <td>{{ $productoPresupuesto->producto->nombre }}</td>
+                            <td>{{ $productoPresupuesto->cantidad }}</td>
+                            <td>{{ $productoPresupuesto->precio }}</td>
+                            <td>{{ $productoPresupuesto->cantidad * $productoPresupuesto->precio }}</td>
                         </tr>
-                    </thead>
-                    <tbody>
-                        @if (isset($productos_print))
-                            @foreach ($productos_print as $productoPresupuesto)
-                                <tr>
-                                    <td style="border: 1px solid black; padding: 8px; text-align: left;">
-                                        {{ $productoPresupuesto->producto->id }}</td>
-                                    <td style="border: 1px solid black; padding: 8px; text-align: left;">
-                                        {{ $productoPresupuesto->producto->nombre }}</td>
-                                    <td style="border: 1px solid black; padding: 8px; text-align: left;">
-                                        {{ $productoPresupuesto->cantidad }}</td>
-                                    <td style="border: 1px solid black; padding: 8px; text-align: left;">
-                                        {{ $productoPresupuesto->precio }}</td>
-                                </tr>
-                            @endforeach
-                        @else
-                            @foreach ($presupuesto->productoPresupuestos as $productoPresupuesto)
-                                <tr>
-                                    <td style="border: 1px solid black; padding: 8px; text-align: left;">
-                                        {{ $productoPresupuesto->producto->id }}</td>
-                                    <td style="border: 1px solid black; padding: 8px; text-align: left;">
-                                        {{ $productoPresupuesto->producto->nombre }}</td>
-                                    <td style="border: 1px solid black; padding: 8px; text-align: left;">
-                                        {{ $productoPresupuesto->cantidad }}</td>
-                                    <td style="border: 1px solid black; padding: 8px; text-align: left;">
-                                        {{ $productoPresupuesto->precio }}</td>
-                                </tr>
-                            @endforeach
-                        @endif
-                    </tbody>
-                </table>
-            </div>
-            <div class="total" style="display: flex; justify-content: space-between;">
-                <p>Precio Total:</p>
-                <p><strong>€ {{ $presupuesto->precio_total }}</strong></p>
-            </div>
-        </div>
+                    @endforeach
+                @else
+                    @foreach ($presupuesto->productoPresupuestos as $productoPresupuesto)
+                    <tr style="margin-top: 8px; margin-bottom: 8px;">
+                        <td>{{ $productoPresupuesto->producto->id }}</td>
+                        <td>{{ $productoPresupuesto->producto->nombre }}</td>
+                        <td>{{ $productoPresupuesto->cantidad }}</td>
+                        <td>{{ $productoPresupuesto->precio }}</td>
+                        <td>{{ $productoPresupuesto->cantidad * $productoPresupuesto->precio }}</td>
+                    </tr>
+                    @endforeach
+                @endif
+                <tr style="border-top:1px solid black; margin-top: 8px; margin-bottom: 8px;">
+                    <td><strong>Total</strong></td>
+                    <td colspan="3"></td>
+                    <td><strong>€ {{ $presupuesto->precio_total }}</strong></td>
+                </tr>
+            </tbody>
+        </table>
     </div>
 </div>
 

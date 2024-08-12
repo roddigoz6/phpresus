@@ -434,7 +434,7 @@
         var ordenId = button.data('orden-id');
 
         $.ajax({
-            url: '/phpresus/public/orden/' + ordenId,
+            url: 'orden/' + ordenId,
             method: 'GET',
             success: function(response) {
                 $('#detalleOrdenContent').html(response);
@@ -442,7 +442,7 @@
                 var clienteEmail = response.cliente ? response.cliente.email : null;
 
                 $('#modalButtonsContainer').html(`
-                    <a href="/presus/public/orden/${ordenId}/download" class="btn btn-light-primary"><i class="fa-solid fa-circle-down"></i> Descargar PDF</a>
+                    <a href="orden/${ordenId}/download" class="btn btn-light-primary"><i class="fa-solid fa-circle-down"></i> Descargar PDF</a>
                     <button type="button" class="btn btn-light-success btn-send-to-client" data-cliente-email="${clienteEmail}" data-orden-id="${ordenId}">
                         <i class="fa-solid fa-envelope"></i> Enviar a Cliente
                     </button>
@@ -466,7 +466,7 @@
 
         // Realizar la solicitud AJAX para enviar el correo
         $.ajax({
-            url: '/phpresus/public/orden/send-mail/' + ordenId,
+            url: 'orden/send-mail/' + ordenId,
             method: 'POST',
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')

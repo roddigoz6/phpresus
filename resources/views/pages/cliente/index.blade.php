@@ -527,7 +527,6 @@
     </div>
 </div>
 
-
 <!-- Modal para ver el cliente -->
 <div class="modal fade" id="detalleClienteModal" tabindex="-1" aria-labelledby="detalleClienteModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg modal-dialog-centered">
@@ -537,14 +536,12 @@
     </div>
 </div>
 
-
-<!-- Modales para editar clientes -->
+<!-- Modal para editar clientes -->
 @foreach ($clientes as $cliente)
     <div class="modal fade" id="editarClienteModal{{ $cliente->id }}" tabindex="-1" aria-labelledby="editarClienteModalLabel{{ $cliente->id }}" aria-hidden="true">
         <div class="modal-dialog modal-lg modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-body">
-                    <!-- Formulario para editar cliente -->
                     <form action="{{ route('cliente.update', $cliente->id) }}" method="POST">
                         @csrf
                         @method('PUT')
@@ -771,25 +768,23 @@
                             cancelButtonText: "Cancelar"
                         }).then((result) => {
                             if (result.isConfirmed) {
-                                // Enviar el formulario de eliminación del cliente
                                 $(formId).submit();
                             }
                         });
                     } else {
-                        // Si no hay presupuestos asociados, proceder con la eliminación directamente
                         $(formId).submit();
                     }
                 }
             });
         });
 
-    // Evento al mostrar el modal para cargar detalles del presupuesto
+    //Mostrar el modal con la info del cliente
     $('#detalleClienteModal').on('show.bs.modal', function(event) {
         var button = $(event.relatedTarget);
         var clienteId = button.data('cliente-id');
 
         $.ajax({
-            url: '/presus/public/cliente/' + clienteId,
+            url: "{{ route('cliente.show', ':id') }}".replace(':id', clienteId),
             method: 'GET',
             success: function(response) {
                 $('#detalleClienteContent').html(response);

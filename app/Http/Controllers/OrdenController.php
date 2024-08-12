@@ -210,7 +210,7 @@ class OrdenController extends Controller
 
         $dompdf = new Dompdf($options);
 
-        $html = view('orden.show', compact('orden', 'productos_print'))->render();
+        $html = view('pages/orden.show', compact('orden', 'productos_print'))->render();
 
         $dompdf->loadHtml($html);
         $dompdf->setPaper('A4', 'portrait');

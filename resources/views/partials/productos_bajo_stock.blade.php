@@ -1,3 +1,4 @@
+@if (!$productosBajoStock->isEmpty())
 <table class="table table-light text-center table-hover rounded-table">
     <thead class="table-dark">
         <tr>
@@ -60,3 +61,9 @@ if ($endPage - $startPage + 1 < $maxPagesToShow) {
         @endif
     </ul>
 </div>
+
+@else
+    <h3 class="text-center">
+        No hay productos con menos de <span class="text-danger opacity-75-hover">5 unidades</span> en stock. :)
+    </h3>
+@endif

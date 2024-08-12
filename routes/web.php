@@ -30,7 +30,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::resource('/user-management/permissions', PermissionManagementController::class);
     });
 
-    //Rutas por controlador
     Route::resource('categoria', CategoriaController::class);
     Route::resource('cliente', ClienteController::class);
     Route::resource('factura', FacturaController::class);
@@ -47,6 +46,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/orden/send-mail/{ordenId}', [OrdenController::class, 'sendMail'])->name('orden.sendMail');
 
     Route::get('/productos/bajo-stock', [DashboardController::class, 'getProductosBajoStock'])->name('productos.bajo.stock');
+
 });
 
 Route::get('/error', function () {
