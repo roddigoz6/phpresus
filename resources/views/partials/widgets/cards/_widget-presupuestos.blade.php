@@ -3,7 +3,7 @@
     @if ($presupuestosCount == 0)
     <div class="card-header pt-5">
         <div class="card-title d-flex flex-column">
-            <span class="fs-2hx fw-bold text-white me-2 lh-1 ls-n2">No hay presupuestos registrados</span>
+            <span class="fs-2hx fw-bold text-white me-2 lh-1 ls-n2">No hay presupuestos registrados.</span>
         </div>
     </div>
 

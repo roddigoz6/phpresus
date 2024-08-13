@@ -12,13 +12,13 @@
         <div class="text-center mb-10">
             <!--begin::Title-->
             <h1 class="text-gray-900 fw-bolder mb-3">
-                New Password
+                Restablecer contraseña
             </h1>
             <!--end::Title-->
 
             <!--begin::Link-->
             <div class="text-gray-500 fw-semibold fs-6">
-                Enter your new password.
+                Ingresa tu nueva contraseña.
             </div>
             <!--end::Link-->
         </div>
@@ -30,7 +30,7 @@
             <div class="mb-1">
                 <!--begin::Input wrapper-->
                 <div class="position-relative mb-3">
-                    <input class="form-control bg-transparent" type="password" placeholder="Password" name="password" autocomplete="off"/>
+                    <input class="form-control bg-transparent" type="password" placeholder="Nueva contraseña" name="password" autocomplete="off"/>
 
                     <span class="btn btn-sm btn-icon position-absolute translate-middle top-50 end-0 me-n2" data-kt-password-meter-control="visibility">
                         <i class="bi bi-eye-slash fs-2"></i>
@@ -52,7 +52,7 @@
 
             <!--begin::Hint-->
             <div class="text-muted">
-                Use 8 or more characters with a mix of letters, numbers & symbols.
+                Usa 8 o más carácteres combinando letras, números y símbolos.
             </div>
             <!--end::Hint-->
         </div>
@@ -61,7 +61,7 @@
         <!--end::Input group--->
         <div class="fv-row mb-8">
             <!--begin::Repeat Password-->
-            <input placeholder="Repeat Password" name="password_confirmation" type="password" autocomplete="off" class="form-control bg-transparent"/>
+            <input placeholder="Confirmar contraseña" name="password_confirmation" type="password" autocomplete="off" class="form-control bg-transparent"/>
             <!--end::Repeat Password-->
         </div>
         <!--end::Input group--->
@@ -72,9 +72,9 @@
                 <input class="form-check-input" type="checkbox" name="toc" value="1"/>
 
                 <label class="form-check-label fw-semibold text-gray-700 fs-6">
-                    I Agree &
+                    Acepto los
 
-                    <a href="#" class="ms-1 link-primary">Terms and conditions</a>.
+                    <a href="#" class="ms-1 link-primary">Términos y condiciones</a>.
                 </label>
             </div>
         </div>
@@ -83,10 +83,10 @@
         <!--begin::Actions-->
         <div class="d-flex flex-wrap justify-content-center pb-lg-0">
             <button type="button" id="kt_new_password_submit" class="btn btn-primary me-4">
-                @include('partials/general/_button-indicator', ['label' => 'Submit'])
+                @include('partials/general/_button-indicator', ['label' => 'Aceptar'])
             </button>
 
-            <a href="{{ route('login') }}" class="btn btn-light">Cancel</a>
+            <a href="{{ route('login') }}" class="btn btn-light">Cancelar</a>
         </div>
         <!--end::Actions-->
     </form>

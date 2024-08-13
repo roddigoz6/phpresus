@@ -57,7 +57,7 @@ var KTAppEcommerceSettings = function () {
                     detectedField = select;
                 }
 
-                // Add validation rule                
+                // Add validation rule
                 const name = detectedField.getAttribute('name');
                 validationFields.fields[name] = {
                     validators: {
@@ -89,7 +89,7 @@ var KTAppEcommerceSettings = function () {
                             // Show loading indication
                             submitButton.setAttribute('data-kt-indicator', 'on');
 
-                            // Disable button to avoid multiple click 
+                            // Disable button to avoid multiple click
                             submitButton.disabled = true;
 
                             // Simulate form submission. For more info check the plugin's official documentation: https://sweetalert2.github.io/
@@ -100,12 +100,12 @@ var KTAppEcommerceSettings = function () {
                                 // Enable button
                                 submitButton.disabled = false;
 
-                                // Show popup confirmation 
+                                // Show popup confirmation
                                 Swal.fire({
                                     text: "Form has been successfully submitted!",
                                     icon: "success",
                                     buttonsStyling: false,
-                                    confirmButtonText: "Ok, got it!",
+                                    confirmButtonText: "¡Ok!",
                                     customClass: {
                                         confirmButton: "btn btn-primary"
                                     }
@@ -114,12 +114,12 @@ var KTAppEcommerceSettings = function () {
                                 //form.submit(); // Submit form
                             }, 2000);
                         } else {
-                            // Show popup error 
+                            // Show popup error
                             Swal.fire({
                                 text: "Oops! There are some error(s) detected.",
                                 icon: "error",
                                 buttonsStyling: false,
-                                confirmButtonText: "Ok, got it!",
+                                confirmButtonText: "¡Ok!",
                                 customClass: {
                                     confirmButton: "btn btn-primary"
                                 }

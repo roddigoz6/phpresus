@@ -17,6 +17,7 @@ use App\Http\Controllers\FacturaController;
 use App\Http\Controllers\OrdenController;
 use App\Http\Controllers\PresupuestoController;
 use App\Http\Controllers\ProductoController;
+use App\Http\Controllers\UserController;
 
 Route::middleware(['auth', 'verified'])->group(function () {
 
@@ -36,6 +37,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::resource('orden', OrdenController::class);
     Route::resource('presupuesto', PresupuestoController::class);
     Route::resource('producto', ProductoController::class);
+    Route::resource('user', UserController::class);
+    Route::put('/user/{user}', [UserController::class, 'update'])->name('user.update');
 
     Route::get('/presupuesto/create/getProductos', [PresupuestoController::class, 'getProductos'])->name('presupuesto.getProductos');
 

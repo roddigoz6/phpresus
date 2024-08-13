@@ -34,7 +34,7 @@ var KTCustomersList = function () {
             initToggleToolbar();
             handleDeleteRows();
             toggleToolbars();
-            KTMenu.init(); // reinit KTMenu instances 
+            KTMenu.init(); // reinit KTMenu instances
         });
     }
 
@@ -113,7 +113,7 @@ var KTCustomersList = function () {
                             text: "You have deleted " + customerName + "!.",
                             icon: "success",
                             buttonsStyling: false,
-                            confirmButtonText: "Ok, got it!",
+                            confirmButtonText: "¡Ok!",
                             customClass: {
                                 confirmButton: "btn fw-bold btn-primary",
                             }
@@ -126,7 +126,7 @@ var KTCustomersList = function () {
                             text: customerName + " was not deleted.",
                             icon: "error",
                             buttonsStyling: false,
-                            confirmButtonText: "Ok, got it!",
+                            confirmButtonText: "¡Ok!",
                             customClass: {
                                 confirmButton: "btn fw-bold btn-primary",
                             }
@@ -194,7 +194,7 @@ var KTCustomersList = function () {
                         text: "You have deleted all selected customers!.",
                         icon: "success",
                         buttonsStyling: false,
-                        confirmButtonText: "Ok, got it!",
+                        confirmButtonText: "¡Ok!",
                         customClass: {
                             confirmButton: "btn fw-bold btn-primary",
                         }
@@ -215,7 +215,7 @@ var KTCustomersList = function () {
                         text: "Selected customers was not deleted.",
                         icon: "error",
                         buttonsStyling: false,
-                        confirmButtonText: "Ok, got it!",
+                        confirmButtonText: "¡Ok!",
                         customClass: {
                             confirmButton: "btn fw-bold btn-primary",
                         }
@@ -232,7 +232,7 @@ var KTCustomersList = function () {
         const toolbarSelected = document.querySelector('[data-kt-customer-table-toolbar="selected"]');
         const selectedCount = document.querySelector('[data-kt-customer-table-select="selected_count"]');
 
-        // Select refreshed checkbox DOM elements 
+        // Select refreshed checkbox DOM elements
         const allCheckboxes = table.querySelectorAll('tbody [type="checkbox"]');
 
         // Detect checkboxes state & count
@@ -262,7 +262,7 @@ var KTCustomersList = function () {
     return {
         init: function () {
             table = document.querySelector('#kt_customers_table');
-            
+
             if (!table) {
                 return;
             }

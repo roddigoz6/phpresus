@@ -79,7 +79,7 @@ var KTModalCreateApiKey = function () {
 					if (status == 'Valid') {
 						submitButton.setAttribute('data-kt-indicator', 'on');
 
-						// Disable button to avoid multiple click 
+						// Disable button to avoid multiple click
 						submitButton.disabled = true;
 
 						setTimeout(function() {
@@ -87,12 +87,12 @@ var KTModalCreateApiKey = function () {
 
 							// Enable button
 							submitButton.disabled = false;
-							
+
 							Swal.fire({
 								text: "Form has been successfully submitted!",
 								icon: "success",
 								buttonsStyling: false,
-								confirmButtonText: "Ok, got it!",
+								confirmButtonText: "¡Ok!",
 								customClass: {
 									confirmButton: "btn btn-primary"
 								}
@@ -103,14 +103,14 @@ var KTModalCreateApiKey = function () {
 							});
 
 							//form.submit(); // Submit form
-						}, 2000);   						
+						}, 2000);
 					} else {
 						// Show error popuo. For more info check the plugin's official documentation: https://sweetalert2.github.io/
 						Swal.fire({
-							text: "Sorry, looks like there are some errors detected, please try again.",
+							text: "Oops, hubo un error. Inténtalo de nuevo.",
 							icon: "error",
 							buttonsStyling: false,
-							confirmButtonText: "Ok, got it!",
+							confirmButtonText: "¡Ok!",
 							customClass: {
 								confirmButton: "btn btn-primary"
 							}
@@ -137,15 +137,15 @@ var KTModalCreateApiKey = function () {
 				}
 			}).then(function (result) {
 				if (result.value) {
-					form.reset(); // Reset form	
-					modal.hide(); // Hide modal				
+					form.reset(); // Reset form
+					modal.hide(); // Hide modal
 				} else if (result.dismiss === 'cancel') {
-					// Show success message. 
+					// Show success message.
 					Swal.fire({
 						text: "Your form has not been cancelled!.",
 						icon: "error",
 						buttonsStyling: false,
-						confirmButtonText: "Ok, got it!",
+						confirmButtonText: "¡Ok!",
 						customClass: {
 							confirmButton: "btn btn-primary",
 						}

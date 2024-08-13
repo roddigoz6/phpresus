@@ -8,7 +8,7 @@ var KTModalNewCard = function () {
 	var form;
 	var modal;
 	var modalEl;
-	
+
 	// Init form inputs
 	var initForm = function() {
 		// Expiry month. For more info, plase visit the official plugin site: https://select2.org/
@@ -80,7 +80,7 @@ var KTModalNewCard = function () {
 						}
 					}
 				},
-				
+
 				plugins: {
 					trigger: new FormValidation.plugins.Trigger(),
 					bootstrap: new FormValidation.plugins.Bootstrap5({
@@ -106,7 +106,7 @@ var KTModalNewCard = function () {
 						// Show loading indication
 						submitButton.setAttribute('data-kt-indicator', 'on');
 
-						// Disable button to avoid multiple click 
+						// Disable button to avoid multiple click
 						submitButton.disabled = true;
 
 						// Simulate form submission. For more info check the plugin's official documentation: https://sweetalert2.github.io/
@@ -116,13 +116,13 @@ var KTModalNewCard = function () {
 
 							// Enable button
 							submitButton.disabled = false;
-							
-							// Show popup confirmation 
+
+							// Show popup confirmation
 							Swal.fire({
 								text: "Form has been successfully submitted!",
 								icon: "success",
 								buttonsStyling: false,
-								confirmButtonText: "Ok, got it!",
+								confirmButtonText: "¡Ok!",
 								customClass: {
 									confirmButton: "btn btn-primary"
 								}
@@ -133,14 +133,14 @@ var KTModalNewCard = function () {
 							});
 
 							//form.submit(); // Submit form
-						}, 2000);   						
+						}, 2000);
 					} else {
 						// Show popup warning. For more info check the plugin's official documentation: https://sweetalert2.github.io/
 						Swal.fire({
-							text: "Sorry, looks like there are some errors detected, please try again.",
+							text: "Oops, hubo un error. Inténtalo de nuevo.",
 							icon: "error",
 							buttonsStyling: false,
-							confirmButtonText: "Ok, got it!",
+							confirmButtonText: "¡Ok!",
 							customClass: {
 								confirmButton: "btn btn-primary"
 							}
@@ -167,15 +167,15 @@ var KTModalNewCard = function () {
 				}
 			}).then(function (result) {
 				if (result.value) {
-					form.reset(); // Reset form	
-					modal.hide(); // Hide modal				
+					form.reset(); // Reset form
+					modal.hide(); // Hide modal
 				} else if (result.dismiss === 'cancel') {
 					// Show error message.
 					Swal.fire({
 						text: "Your form has not been cancelled!.",
 						icon: "error",
 						buttonsStyling: false,
-						confirmButtonText: "Ok, got it!",
+						confirmButtonText: "¡Ok!",
 						customClass: {
 							confirmButton: "btn btn-primary",
 						}

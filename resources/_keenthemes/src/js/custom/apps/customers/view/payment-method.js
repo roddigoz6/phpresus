@@ -32,13 +32,13 @@ var KTCustomerViewPaymentMethod = function () {
                 }).then(function (result) {
                     if (result.value) {
                         row.remove();
-                        modal.hide(); // Hide modal				
+                        modal.hide(); // Hide modal
                     } else if (result.dismiss === 'cancel') {
                         Swal.fire({
                             text: "Your card was not deleted!.",
                             icon: "error",
                             buttonsStyling: false,
-                            confirmButtonText: "Ok, got it!",
+                            confirmButtonText: "¡Ok!",
                             customClass: {
                                 confirmButton: "btn btn-primary",
                             }
@@ -75,7 +75,7 @@ var KTCustomerViewPaymentMethod = function () {
                         text: "Your card was set to primary!.",
                         icon: "success",
                         buttonsStyling: false,
-                        confirmButtonText: "Ok, got it!",
+                        confirmButtonText: "¡Ok!",
                         customClass: {
                             confirmButton: "btn btn-primary",
                         }
@@ -85,7 +85,7 @@ var KTCustomerViewPaymentMethod = function () {
                         text: "Your card was not set to primary!.",
                         icon: "error",
                         buttonsStyling: false,
-                        confirmButtonText: "Ok, got it!",
+                        confirmButtonText: "¡Ok!",
                         customClass: {
                             confirmButton: "btn btn-primary",
                         }

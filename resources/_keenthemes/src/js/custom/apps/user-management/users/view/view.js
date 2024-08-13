@@ -27,7 +27,7 @@ var KTUsersViewMain = function () {
                         text: "You have signed out all sessions!.",
                         icon: "success",
                         buttonsStyling: false,
-                        confirmButtonText: "Ok, got it!",
+                        confirmButtonText: "¡Ok!",
                         customClass: {
                             confirmButton: "btn btn-primary",
                         }
@@ -37,7 +37,7 @@ var KTUsersViewMain = function () {
                         text: "Your sessions are still preserved!.",
                         icon: "error",
                         buttonsStyling: false,
-                        confirmButtonText: "Ok, got it!",
+                        confirmButtonText: "¡Ok!",
                         customClass: {
                             confirmButton: "btn btn-primary",
                         }
@@ -75,7 +75,7 @@ var KTUsersViewMain = function () {
                             text: "You have signed out " + deviceName + "!.",
                             icon: "success",
                             buttonsStyling: false,
-                            confirmButtonText: "Ok, got it!",
+                            confirmButtonText: "¡Ok!",
                             customClass: {
                                 confirmButton: "btn btn-primary",
                             }
@@ -87,7 +87,7 @@ var KTUsersViewMain = function () {
                             text: deviceName + "'s session is still preserved!.",
                             icon: "error",
                             buttonsStyling: false,
-                            confirmButtonText: "Ok, got it!",
+                            confirmButtonText: "¡Ok!",
                             customClass: {
                                 confirmButton: "btn btn-primary",
                             }
@@ -124,7 +124,7 @@ var KTUsersViewMain = function () {
                         text: "You have removed this two-step authentication!.",
                         icon: "success",
                         buttonsStyling: false,
-                        confirmButtonText: "Ok, got it!",
+                        confirmButtonText: "¡Ok!",
                         customClass: {
                             confirmButton: "btn btn-primary",
                         }
@@ -134,7 +134,7 @@ var KTUsersViewMain = function () {
                         text: "Your two-step authentication is still valid!.",
                         icon: "error",
                         buttonsStyling: false,
-                        confirmButtonText: "Ok, got it!",
+                        confirmButtonText: "¡Ok!",
                         customClass: {
                             confirmButton: "btn btn-primary",
                         }
@@ -158,7 +158,7 @@ var KTUsersViewMain = function () {
             // Show loading indication
             submitButton.setAttribute('data-kt-indicator', 'on');
 
-            // Disable button to avoid multiple click 
+            // Disable button to avoid multiple click
             submitButton.disabled = true;
 
             // Simulate form submission. For more info check the plugin's official documentation: https://sweetalert2.github.io/
@@ -169,12 +169,12 @@ var KTUsersViewMain = function () {
                 // Enable button
                 submitButton.disabled = false;
 
-                // Show popup confirmation 
+                // Show popup confirmation
                 Swal.fire({
                     text: "Form has been successfully submitted!",
                     icon: "success",
                     buttonsStyling: false,
-                    confirmButtonText: "Ok, got it!",
+                    confirmButtonText: "¡Ok!",
                     customClass: {
                         confirmButton: "btn btn-primary"
                     }
@@ -200,13 +200,13 @@ var KTUsersViewMain = function () {
                 }
             }).then(function (result) {
                 if (result.value) {
-                    form.reset(); // Reset form				
+                    form.reset(); // Reset form
                 } else if (result.dismiss === 'cancel') {
                     Swal.fire({
                         text: "Your form has not been cancelled!.",
                         icon: "error",
                         buttonsStyling: false,
-                        confirmButtonText: "Ok, got it!",
+                        confirmButtonText: "¡Ok!",
                         customClass: {
                             confirmButton: "btn btn-primary",
                         }

@@ -81,14 +81,14 @@ var KTUsersUpdatePassword = function () {
                 }
             }).then(function (result) {
                 if (result.value) {
-                    form.reset(); // Reset form	
-                    modal.hide(); // Hide modal				
+                    form.reset(); // Reset form
+                    modal.hide(); // Hide modal
                 } else if (result.dismiss === 'cancel') {
                     Swal.fire({
                         text: "Your form has not been cancelled!.",
                         icon: "error",
                         buttonsStyling: false,
-                        confirmButtonText: "Ok, got it!",
+                        confirmButtonText: "¡Ok!",
                         customClass: {
                             confirmButton: "btn btn-primary",
                         }
@@ -115,14 +115,14 @@ var KTUsersUpdatePassword = function () {
                 }
             }).then(function (result) {
                 if (result.value) {
-                    form.reset(); // Reset form	
-                    modal.hide(); // Hide modal				
+                    form.reset(); // Reset form
+                    modal.hide(); // Hide modal
                 } else if (result.dismiss === 'cancel') {
                     Swal.fire({
                         text: "Your form has not been cancelled!.",
                         icon: "error",
                         buttonsStyling: false,
-                        confirmButtonText: "Ok, got it!",
+                        confirmButtonText: "¡Ok!",
                         customClass: {
                             confirmButton: "btn btn-primary",
                         }
@@ -146,7 +146,7 @@ var KTUsersUpdatePassword = function () {
                         // Show loading indication
                         submitButton.setAttribute('data-kt-indicator', 'on');
 
-                        // Disable button to avoid multiple click 
+                        // Disable button to avoid multiple click
                         submitButton.disabled = true;
 
                         // Simulate form submission. For more info check the plugin's official documentation: https://sweetalert2.github.io/
@@ -157,12 +157,12 @@ var KTUsersUpdatePassword = function () {
                             // Enable button
                             submitButton.disabled = false;
 
-                            // Show popup confirmation 
+                            // Show popup confirmation
                             Swal.fire({
                                 text: "Form has been successfully submitted!",
                                 icon: "success",
                                 buttonsStyling: false,
-                                confirmButtonText: "Ok, got it!",
+                                confirmButtonText: "¡Ok!",
                                 customClass: {
                                     confirmButton: "btn btn-primary"
                                 }

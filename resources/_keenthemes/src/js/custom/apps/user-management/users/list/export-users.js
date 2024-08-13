@@ -57,7 +57,7 @@ var KTModalExportUsers = function () {
                                 text: "User list has been successfully exported!",
                                 icon: "success",
                                 buttonsStyling: false,
-                                confirmButtonText: "Ok, got it!",
+                                confirmButtonText: "¡Ok!",
                                 customClass: {
                                     confirmButton: "btn btn-primary"
                                 }
@@ -74,10 +74,10 @@ var KTModalExportUsers = function () {
                         }, 2000);
                     } else {
                         Swal.fire({
-                            text: "Sorry, looks like there are some errors detected, please try again.",
+                            text: "Oops, hubo un error. Inténtalo de nuevo.",
                             icon: "error",
                             buttonsStyling: false,
-                            confirmButtonText: "Ok, got it!",
+                            confirmButtonText: "¡Ok!",
                             customClass: {
                                 confirmButton: "btn btn-primary"
                             }
@@ -105,14 +105,14 @@ var KTModalExportUsers = function () {
                 }
             }).then(function (result) {
                 if (result.value) {
-                    form.reset(); // Reset form	
-                    modal.hide(); // Hide modal				
+                    form.reset(); // Reset form
+                    modal.hide(); // Hide modal
                 } else if (result.dismiss === 'cancel') {
                     Swal.fire({
                         text: "Your form has not been cancelled!.",
                         icon: "error",
                         buttonsStyling: false,
-                        confirmButtonText: "Ok, got it!",
+                        confirmButtonText: "¡Ok!",
                         customClass: {
                             confirmButton: "btn btn-primary",
                         }
@@ -139,14 +139,14 @@ var KTModalExportUsers = function () {
                 }
             }).then(function (result) {
                 if (result.value) {
-                    form.reset(); // Reset form	
-                    modal.hide(); // Hide modal				
+                    form.reset(); // Reset form
+                    modal.hide(); // Hide modal
                 } else if (result.dismiss === 'cancel') {
                     Swal.fire({
                         text: "Your form has not been cancelled!.",
                         icon: "error",
                         buttonsStyling: false,
-                        confirmButtonText: "Ok, got it!",
+                        confirmButtonText: "¡Ok!",
                         customClass: {
                             confirmButton: "btn btn-primary",
                         }

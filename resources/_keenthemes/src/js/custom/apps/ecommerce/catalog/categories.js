@@ -67,7 +67,7 @@ var KTAppEcommerceCategories = function () {
                             text: "You have deleted " + categoryName + "!.",
                             icon: "success",
                             buttonsStyling: false,
-                            confirmButtonText: "Ok, got it!",
+                            confirmButtonText: "¡Ok!",
                             customClass: {
                                 confirmButton: "btn fw-bold btn-primary",
                             }
@@ -80,7 +80,7 @@ var KTAppEcommerceCategories = function () {
                             text: categoryName + " was not deleted.",
                             icon: "error",
                             buttonsStyling: false,
-                            confirmButtonText: "Ok, got it!",
+                            confirmButtonText: "¡Ok!",
                             customClass: {
                                 confirmButton: "btn fw-bold btn-primary",
                             }

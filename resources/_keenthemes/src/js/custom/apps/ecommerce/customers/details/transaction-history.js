@@ -34,7 +34,7 @@ var KTCustomerViewPaymentTable = function () {
     var deleteRows = () => {
         // Select all delete buttons
         const deleteButtons = table.querySelectorAll('[data-kt-customer-table-filter="delete_row"]');
-        
+
         deleteButtons.forEach(d => {
             // Delete button on click
             d.addEventListener('click', function (e) {
@@ -64,7 +64,7 @@ var KTCustomerViewPaymentTable = function () {
                             text: "You have deleted " + invoiceNumber + "!.",
                             icon: "success",
                             buttonsStyling: false,
-                            confirmButtonText: "Ok, got it!",
+                            confirmButtonText: "¡Ok!",
                             customClass: {
                                 confirmButton: "btn fw-bold btn-primary",
                             }
@@ -80,7 +80,7 @@ var KTCustomerViewPaymentTable = function () {
                             text: customerName + " was not deleted.",
                             icon: "error",
                             buttonsStyling: false,
-                            confirmButtonText: "Ok, got it!",
+                            confirmButtonText: "¡Ok!",
                             customClass: {
                                 confirmButton: "btn fw-bold btn-primary",
                             }

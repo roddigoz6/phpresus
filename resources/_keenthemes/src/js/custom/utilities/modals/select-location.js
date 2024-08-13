@@ -63,7 +63,7 @@ var KTModalSelectLocation = function () {
                     html: '<div class="mb-2">Your selected - <b>"' + selectedlocation + '"</b>.</div>' + 'Click on the "Apply" button to select this location.',
                     icon: "success",
                     buttonsStyling: false,
-                    confirmButtonText: "Ok, got it!",
+                    confirmButtonText: "¡Ok!",
                     customClass: {
                         confirmButton: "btn btn-primary"
                     }
@@ -95,17 +95,17 @@ var KTModalSelectLocation = function () {
 			if (!modal) {
 				return;
 			}
-            
+
             locationSelectTarget = document.querySelector('#kt_modal_select_location_target');
             locationSelectButton = document.querySelector('#kt_modal_select_location_button');
 
             handleSelection();
-            
+
             modal.addEventListener('shown.bs.modal', function () {
                 if (!mapInitialized) {
                     initMap();
                     mapInitialized = true;
-                }                
+                }
             });
         }
     }

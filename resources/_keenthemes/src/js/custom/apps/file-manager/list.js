@@ -144,7 +144,7 @@ var KTFileManagerList = function () {
                             text: "You have deleted " + fileName + "!.",
                             icon: "success",
                             buttonsStyling: false,
-                            confirmButtonText: "Ok, got it!",
+                            confirmButtonText: "¡Ok!",
                             customClass: {
                                 confirmButton: "btn fw-bold btn-primary",
                             }
@@ -157,7 +157,7 @@ var KTFileManagerList = function () {
                             text: customerName + " was not deleted.",
                             icon: "error",
                             buttonsStyling: false,
-                            confirmButtonText: "Ok, got it!",
+                            confirmButtonText: "¡Ok!",
                             customClass: {
                                 confirmButton: "btn fw-bold btn-primary",
                             }
@@ -211,7 +211,7 @@ var KTFileManagerList = function () {
                         text: "You have deleted all selected  files or folders!.",
                         icon: "success",
                         buttonsStyling: false,
-                        confirmButtonText: "Ok, got it!",
+                        confirmButtonText: "¡Ok!",
                         customClass: {
                             confirmButton: "btn fw-bold btn-primary",
                         }
@@ -232,7 +232,7 @@ var KTFileManagerList = function () {
                         text: "Selected  files or folders was not deleted.",
                         icon: "error",
                         buttonsStyling: false,
-                        confirmButtonText: "Ok, got it!",
+                        confirmButtonText: "¡Ok!",
                         customClass: {
                             confirmButton: "btn fw-bold btn-primary",
                         }
@@ -249,7 +249,7 @@ var KTFileManagerList = function () {
         const toolbarSelected = document.querySelector('[data-kt-filemanager-table-toolbar="selected"]');
         const selectedCount = document.querySelector('[data-kt-filemanager-table-select="selected_count"]');
 
-        // Select refreshed checkbox DOM elements 
+        // Select refreshed checkbox DOM elements
         const allCheckboxes = table.querySelectorAll('tbody [type="checkbox"]');
 
         // Detect checkboxes state & count
@@ -453,7 +453,7 @@ var KTFileManagerList = function () {
 
     // Handle rename file or folder
     const handleRename = () => {
-        const renameButton = table.querySelectorAll('[data-kt-filemanager-table="rename"]');     
+        const renameButton = table.querySelectorAll('[data-kt-filemanager-table="rename"]');
 
         renameButton.forEach(button => {
             button.addEventListener('click', renameCallback);
@@ -473,7 +473,7 @@ var KTFileManagerList = function () {
                 text: "Unsaved input detected. Please save or cancel the current item",
                 icon: "warning",
                 buttonsStyling: false,
-                confirmButtonText: "Ok, got it!",
+                confirmButtonText: "¡Ok!",
                 customClass: {
                     confirmButton: "btn fw-bold btn-danger"
                 }
@@ -553,7 +553,7 @@ var KTFileManagerList = function () {
                                     text: "You have renamed " + nameValue + "!.",
                                     icon: "success",
                                     buttonsStyling: false,
-                                    confirmButtonText: "Ok, got it!",
+                                    confirmButtonText: "¡Ok!",
                                     customClass: {
                                         confirmButton: "btn fw-bold btn-primary",
                                     }
@@ -575,7 +575,7 @@ var KTFileManagerList = function () {
                                     text: nameValue + " was not renamed.",
                                     icon: "error",
                                     buttonsStyling: false,
-                                    confirmButtonText: "Ok, got it!",
+                                    confirmButtonText: "¡Ok!",
                                     customClass: {
                                         confirmButton: "btn fw-bold btn-primary",
                                     }
@@ -739,7 +739,7 @@ var KTFileManagerList = function () {
                         text: "Your files was not removed!.",
                         icon: "error",
                         buttonsStyling: false,
-                        confirmButtonText: "Ok, got it!",
+                        confirmButtonText: "¡Ok!",
                         customClass: {
                             confirmButton: "btn btn-primary",
                         }
@@ -854,8 +854,8 @@ var KTFileManagerList = function () {
                                 }
                             }).then(function (result) {
                                 if (result.isConfirmed) {
-                                    form.reset(); // Reset form	
-                                    moveModal.hide(); // Hide modal			
+                                    form.reset(); // Reset form
+                                    moveModal.hide(); // Hide modal
 
                                     toastr.options = {
                                         "closeButton": true,
@@ -882,7 +882,7 @@ var KTFileManagerList = function () {
                                         text: "Your action has been cancelled!.",
                                         icon: "error",
                                         buttonsStyling: false,
-                                        confirmButtonText: "Ok, got it!",
+                                        confirmButtonText: "¡Ok!",
                                         customClass: {
                                             confirmButton: "btn btn-primary",
                                         }

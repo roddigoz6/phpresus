@@ -25,10 +25,10 @@ var KTAccountSettingsSigninMethods = function () {
     }
 
     // Private functions
-    var initSettings = function () {  
+    var initSettings = function () {
         if (!signInMainEl) {
             return;
-        }        
+        }
 
         // toggle UI
         signInChangeEmail.querySelector('button').addEventListener('click', function () {
@@ -49,7 +49,7 @@ var KTAccountSettingsSigninMethods = function () {
     }
 
     var handleChangeEmail = function (e) {
-        var validation;        
+        var validation;
 
         if (!signInForm) {
             return;
@@ -62,10 +62,10 @@ var KTAccountSettingsSigninMethods = function () {
                     emailaddress: {
                         validators: {
                             notEmpty: {
-                                message: 'Email is required'
+                                message: 'El email es requerido.'
                             },
                             emailAddress: {
-                                message: 'The value is not a valid email address'
+                                message: 'Email no válido.'
                             }
                         }
                     },
@@ -73,7 +73,7 @@ var KTAccountSettingsSigninMethods = function () {
                     confirmemailpassword: {
                         validators: {
                             notEmpty: {
-                                message: 'Password is required'
+                                message: 'La contraseña es requerida.'
                             }
                         }
                     }
@@ -95,10 +95,10 @@ var KTAccountSettingsSigninMethods = function () {
             validation.validate().then(function (status) {
                 if (status == 'Valid') {
                     swal.fire({
-                        text: "Sent password reset. Please check your email",
+                        text: "Recuperación enviada. Por favor revisa tu email.",
                         icon: "success",
                         buttonsStyling: false,
-                        confirmButtonText: "Ok, got it!",
+                        confirmButtonText: "¡Ok!",
                         customClass: {
                             confirmButton: "btn font-weight-bold btn-light-primary"
                         }
@@ -109,10 +109,10 @@ var KTAccountSettingsSigninMethods = function () {
                     });
                 } else {
                     swal.fire({
-                        text: "Sorry, looks like there are some errors detected, please try again.",
+                        text: "Oops, hubo un error. Inténtalo de nuevo.",
                         icon: "error",
                         buttonsStyling: false,
-                        confirmButtonText: "Ok, got it!",
+                        confirmButtonText: "¡Ok!",
                         customClass: {
                             confirmButton: "btn font-weight-bold btn-light-primary"
                         }
@@ -139,7 +139,7 @@ var KTAccountSettingsSigninMethods = function () {
                     currentpassword: {
                         validators: {
                             notEmpty: {
-                                message: 'Current Password is required'
+                                message: 'La contraseña actual es requerida.'
                             }
                         }
                     },
@@ -147,7 +147,7 @@ var KTAccountSettingsSigninMethods = function () {
                     newpassword: {
                         validators: {
                             notEmpty: {
-                                message: 'New Password is required'
+                                message: 'La nueva contraseña es requerida.'
                             }
                         }
                     },
@@ -155,13 +155,13 @@ var KTAccountSettingsSigninMethods = function () {
                     confirmpassword: {
                         validators: {
                             notEmpty: {
-                                message: 'Confirm Password is required'
+                                message: 'Es necesario confirmar tu contraseña.'
                             },
                             identical: {
                                 compare: function() {
                                     return passwordForm.querySelector('[name="newpassword"]').value;
                                 },
-                                message: 'The password and its confirm are not the same'
+                                message: 'Las contraseñas no coinciden. Inténtalo de nuevo.'
                             }
                         }
                     },
@@ -183,10 +183,10 @@ var KTAccountSettingsSigninMethods = function () {
             validation.validate().then(function (status) {
                 if (status == 'Valid') {
                     swal.fire({
-                        text: "Sent password reset. Please check your email",
+                        text: "Recuperación enviada. Por favor revisa tu email",
                         icon: "success",
                         buttonsStyling: false,
-                        confirmButtonText: "Ok, got it!",
+                        confirmButtonText: "¡Ok!",
                         customClass: {
                             confirmButton: "btn font-weight-bold btn-light-primary"
                         }
@@ -197,10 +197,10 @@ var KTAccountSettingsSigninMethods = function () {
                     });
                 } else {
                     swal.fire({
-                        text: "Sorry, looks like there are some errors detected, please try again.",
+                        text: "Oops, hubo un error. Inténtalo de nuevo.",
                         icon: "error",
                         buttonsStyling: false,
-                        confirmButtonText: "Ok, got it!",
+                        confirmButtonText: "¡Ok!",
                         customClass: {
                             confirmButton: "btn font-weight-bold btn-light-primary"
                         }

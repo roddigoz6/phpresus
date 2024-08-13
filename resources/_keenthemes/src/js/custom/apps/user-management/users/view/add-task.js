@@ -65,14 +65,14 @@ var KTUsersAddTask = function () {
                 }
             }).then(function (result) {
                 if (result.value) {
-                    form.reset(); // Reset form	
-                    modal.hide(); // Hide modal				
+                    form.reset(); // Reset form
+                    modal.hide(); // Hide modal
                 } else if (result.dismiss === 'cancel') {
                     Swal.fire({
                         text: "Your form has not been cancelled!.",
                         icon: "error",
                         buttonsStyling: false,
-                        confirmButtonText: "Ok, got it!",
+                        confirmButtonText: "¡Ok!",
                         customClass: {
                             confirmButton: "btn btn-primary",
                         }
@@ -99,14 +99,14 @@ var KTUsersAddTask = function () {
                 }
             }).then(function (result) {
                 if (result.value) {
-                    form.reset(); // Reset form	
-                    modal.hide(); // Hide modal				
+                    form.reset(); // Reset form
+                    modal.hide(); // Hide modal
                 } else if (result.dismiss === 'cancel') {
                     Swal.fire({
                         text: "Your form has not been cancelled!.",
                         icon: "error",
                         buttonsStyling: false,
-                        confirmButtonText: "Ok, got it!",
+                        confirmButtonText: "¡Ok!",
                         customClass: {
                             confirmButton: "btn btn-primary",
                         }
@@ -130,7 +130,7 @@ var KTUsersAddTask = function () {
                         // Show loading indication
                         submitButton.setAttribute('data-kt-indicator', 'on');
 
-                        // Disable button to avoid multiple click 
+                        // Disable button to avoid multiple click
                         submitButton.disabled = true;
 
                         // Simulate form submission. For more info check the plugin's official documentation: https://sweetalert2.github.io/
@@ -141,12 +141,12 @@ var KTUsersAddTask = function () {
                             // Enable button
                             submitButton.disabled = false;
 
-                            // Show popup confirmation 
+                            // Show popup confirmation
                             Swal.fire({
                                 text: "Form has been successfully submitted!",
                                 icon: "success",
                                 buttonsStyling: false,
-                                confirmButtonText: "Ok, got it!",
+                                confirmButtonText: "¡Ok!",
                                 customClass: {
                                     confirmButton: "btn btn-primary"
                                 }
@@ -161,10 +161,10 @@ var KTUsersAddTask = function () {
                     } else {
                         // Show popup warning. For more info check the plugin's official documentation: https://sweetalert2.github.io/
                         Swal.fire({
-                            text: "Sorry, looks like there are some errors detected, please try again.",
+                            text: "Oops, hubo un error. Inténtalo de nuevo.",
                             icon: "error",
                             buttonsStyling: false,
-                            confirmButtonText: "Ok, got it!",
+                            confirmButtonText: "¡Ok!",
                             customClass: {
                                 confirmButton: "btn btn-primary"
                             }
@@ -232,14 +232,14 @@ var KTUsersAddTask = function () {
                     }
                 }).then(function (result) {
                     if (result.value) {
-                        taskForm.reset(); // Reset form		
+                        taskForm.reset(); // Reset form
                         el.hide();
                     } else if (result.dismiss === 'cancel') {
                         Swal.fire({
                             text: "Your form was not reset!.",
                             icon: "error",
                             buttonsStyling: false,
-                            confirmButtonText: "Ok, got it!",
+                            confirmButtonText: "¡Ok!",
                             customClass: {
                                 confirmButton: "btn btn-primary",
                             }
@@ -261,7 +261,7 @@ var KTUsersAddTask = function () {
                             // Show loading indication
                             submitButton.setAttribute('data-kt-indicator', 'on');
 
-                            // Disable button to avoid multiple click 
+                            // Disable button to avoid multiple click
                             submitButton.disabled = true;
 
                             // Simulate form submission. For more info check the plugin's official documentation: https://sweetalert2.github.io/
@@ -272,12 +272,12 @@ var KTUsersAddTask = function () {
                                 // Enable button
                                 submitButton.disabled = false;
 
-                                // Show popup confirmation 
+                                // Show popup confirmation
                                 Swal.fire({
                                     text: "Form has been successfully submitted!",
                                     icon: "success",
                                     buttonsStyling: false,
-                                    confirmButtonText: "Ok, got it!",
+                                    confirmButtonText: "¡Ok!",
                                     customClass: {
                                         confirmButton: "btn btn-primary"
                                     }
@@ -292,10 +292,10 @@ var KTUsersAddTask = function () {
                         } else {
                             // Show popup warning. For more info check the plugin's official documentation: https://sweetalert2.github.io/
                             Swal.fire({
-                                text: "Sorry, looks like there are some errors detected, please try again.",
+                                text: "Oops, hubo un error. Inténtalo de nuevo.",
                                 icon: "error",
                                 buttonsStyling: false,
-                                confirmButtonText: "Ok, got it!",
+                                confirmButtonText: "¡Ok!",
                                 customClass: {
                                     confirmButton: "btn btn-primary"
                                 }

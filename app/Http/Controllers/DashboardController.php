@@ -7,12 +7,15 @@ use App\Models\Presupuesto;
 use App\Models\Orden;
 use App\Models\Producto;
 use App\Models\Cliente;
+use Illuminate\Support\Facades\Auth;
 
 class DashboardController extends Controller
 {
     public function index()
     {
         addVendors(['amcharts', 'amcharts-maps', 'amcharts-stock']);
+
+        $user = Auth::user();
 
         //Presupuestos
         $presupuestosAceptados = Presupuesto::where('aceptado', true)->where('eliminado', false)->count();
@@ -56,7 +59,8 @@ class DashboardController extends Controller
         $clientesEstablecidos = Cliente::where('establecido', true)->where('eliminado', false)->count();
         $clientesNoEstablecidos = Cliente::where('establecido', false)->where('eliminado', false)->count();
 
-        return view('pages/dashboards.index', compact(
+        return view('pages.dashboards.index', compact(
+            'user',
             'presupuestosAceptados',
             'presupuestosNoAceptados',
             'porcentajeAceptados',

@@ -7,7 +7,7 @@ var KTSigninTwoFactor = function() {
     var submitButton;
 
     // Handle form
-    var handleForm = function(e) {        
+    var handleForm = function(e) {
         // Handle form submit
         submitButton.addEventListener('click', function (e) {
             e.preventDefault();
@@ -25,7 +25,7 @@ var KTSigninTwoFactor = function() {
                 // Show loading indication
                 submitButton.setAttribute('data-kt-indicator', 'on');
 
-                // Disable button to avoid multiple click 
+                // Disable button to avoid multiple click
                 submitButton.disabled = true;
 
                 // Simulate ajax request
@@ -41,12 +41,12 @@ var KTSigninTwoFactor = function() {
                         text: "You have been successfully verified!",
                         icon: "success",
                         buttonsStyling: false,
-                        confirmButtonText: "Ok, got it!",
+                        confirmButtonText: "¡Ok!",
                         customClass: {
                             confirmButton: "btn btn-primary"
                         }
                     }).then(function (result) {
-                        if (result.isConfirmed) { 
+                        if (result.isConfirmed) {
                             inputs.map(function (input) {
                                 input.value = '';
                             });
@@ -57,13 +57,13 @@ var KTSigninTwoFactor = function() {
                             }
                         }
                     });
-                }, 1000); 
+                }, 1000);
             } else {
                 swal.fire({
                     text: "Please enter valid securtiy code and try again.",
                     icon: "error",
                     buttonsStyling: false,
-                    confirmButtonText: "Ok, got it!",
+                    confirmButtonText: "¡Ok!",
                     customClass: {
                         confirmButton: "btn fw-bold btn-light-primary"
                     }
@@ -113,13 +113,13 @@ var KTSigninTwoFactor = function() {
                 input6.focus();
             }
         });
-        
+
         input6.addEventListener("keyup", function() {
             if (this.value.length === 1) {
                 input6.blur();
             }
         });
-    }    
+    }
 
     // Public functions
     return {

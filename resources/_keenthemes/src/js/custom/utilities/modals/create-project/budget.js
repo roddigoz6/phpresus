@@ -49,7 +49,7 @@ var KTModalCreateProjectBudget = function () {
 						}
 					}
 				},
-				
+
 				plugins: {
 					trigger: new FormValidation.plugins.Trigger(),
 					bootstrap: new FormValidation.plugins.Bootstrap5({
@@ -73,7 +73,7 @@ var KTModalCreateProjectBudget = function () {
 			// Prevent default button action
 			e.preventDefault();
 
-			// Disable button to avoid multiple click 
+			// Disable button to avoid multiple click
 			nextButton.disabled = true;
 
 			// Validate form before submit
@@ -92,27 +92,27 @@ var KTModalCreateProjectBudget = function () {
 
 							// Enable button
 							nextButton.disabled = false;
-							
+
 							// Go to next step
 							stepper.goNext();
-						}, 1500);   						
+						}, 1500);
 					} else {
 						// Enable button
 						nextButton.disabled = false;
 
 						// Show popup warning. For more info check the plugin's official documentation: https://sweetalert2.github.io/
 						Swal.fire({
-							text: "Sorry, looks like there are some errors detected, please try again.",
+							text: "Oops, hubo un error. Inténtalo de nuevo.",
 							icon: "error",
 							buttonsStyling: false,
-							confirmButtonText: "Ok, got it!",
+							confirmButtonText: "¡Ok!",
 							customClass: {
 								confirmButton: "btn btn-primary"
 							}
 						});
 					}
 				});
-			}			
+			}
 		});
 
 		previousButton.addEventListener('click', function () {

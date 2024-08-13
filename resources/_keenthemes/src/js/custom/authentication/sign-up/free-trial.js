@@ -14,7 +14,7 @@ var KTSignupFreeTrial = function() {
         validator = FormValidation.formValidation(
 			form,
 			{
-				fields: {					 
+				fields: {
 					'email': {
                         validators: {
                             regexp: {
@@ -66,14 +66,14 @@ var KTSignupFreeTrial = function() {
 					trigger: new FormValidation.plugins.Trigger({
                         event: {
                             password: false
-                        }  
+                        }
                     }),
 					bootstrap: new FormValidation.plugins.Bootstrap5({
                         rowSelector: '.fv-row',
                         eleInvalidClass: '',
                         eleValidClass: ''
                     })
-                }			 
+                }
 			}
 		);
 
@@ -87,7 +87,7 @@ var KTSignupFreeTrial = function() {
                     // Show loading indication
                     submitButton.setAttribute('data-kt-indicator', 'on');
 
-                    // Disable button to avoid multiple click 
+                    // Disable button to avoid multiple click
                     submitButton.disabled = true;
 
                     // Simulate ajax request
@@ -103,13 +103,13 @@ var KTSignupFreeTrial = function() {
                             text: "You have successfully registered!",
                             icon: "success",
                             buttonsStyling: false,
-                            confirmButtonText: "Ok, got it!",
+                            confirmButtonText: "¡Ok!",
                             customClass: {
                                 confirmButton: "btn btn-primary"
                             }
                         }).then(function (result) {
-                            if (result.isConfirmed) { 
-                                form.reset();  // reset form                    
+                            if (result.isConfirmed) {
+                                form.reset();  // reset form
                                 passwordMeter.reset();  // reset password meter
 
                                 //form.submit(); // submit form
@@ -119,14 +119,14 @@ var KTSignupFreeTrial = function() {
                                 }
                             }
                         });
-                    }, 1500);   						
+                    }, 1500);
                 } else {
                     // Show error popup. For more info check the plugin's official documentation: https://sweetalert2.github.io/
                     Swal.fire({
-                        text: "Sorry, looks like there are some errors detected, please try again.",
+                        text: "Oops, hubo un error. Inténtalo de nuevo.",
                         icon: "error",
                         buttonsStyling: false,
-                        confirmButtonText: "Ok, got it!",
+                        confirmButtonText: "¡Ok!",
                         customClass: {
                             confirmButton: "btn btn-primary"
                         }
@@ -166,4 +166,3 @@ KTUtil.onDOMContentLoaded(function() {
 });
 
 
- 

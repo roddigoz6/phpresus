@@ -27,7 +27,7 @@ var KTSubscriptionsList = function () {
             "lengthChange": false,
             'columnDefs': [
                 { orderable: false, targets: 0 }, // Disable ordering on column 0 (checkbox)
-                { orderable: false, targets: 6 }, // Disable ordering on column 6 (actions)                
+                { orderable: false, targets: 6 }, // Disable ordering on column 6 (actions)
             ]
         });
 
@@ -122,7 +122,7 @@ var KTSubscriptionsList = function () {
                             text: "You have deleted " + customerName + "!.",
                             icon: "success",
                             buttonsStyling: false,
-                            confirmButtonText: "Ok, got it!",
+                            confirmButtonText: "¡Ok!",
                             customClass: {
                                 confirmButton: "btn fw-bold btn-primary",
                             }
@@ -138,7 +138,7 @@ var KTSubscriptionsList = function () {
                             text: customerName + " was not deleted.",
                             icon: "error",
                             buttonsStyling: false,
-                            confirmButtonText: "Ok, got it!",
+                            confirmButtonText: "¡Ok!",
                             customClass: {
                                 confirmButton: "btn fw-bold btn-primary",
                             }
@@ -191,7 +191,7 @@ var KTSubscriptionsList = function () {
                         text: "You have deleted all selected customers!.",
                         icon: "success",
                         buttonsStyling: false,
-                        confirmButtonText: "Ok, got it!",
+                        confirmButtonText: "¡Ok!",
                         customClass: {
                             confirmButton: "btn fw-bold btn-primary",
                         }
@@ -215,7 +215,7 @@ var KTSubscriptionsList = function () {
                         text: "Selected customers was not deleted.",
                         icon: "error",
                         buttonsStyling: false,
-                        confirmButtonText: "Ok, got it!",
+                        confirmButtonText: "¡Ok!",
                         customClass: {
                             confirmButton: "btn fw-bold btn-primary",
                         }
@@ -227,7 +227,7 @@ var KTSubscriptionsList = function () {
 
     // Toggle toolbars
     const toggleToolbars = () => {
-        // Select refreshed checkbox DOM elements 
+        // Select refreshed checkbox DOM elements
         const allCheckboxes = table.querySelectorAll('tbody [type="checkbox"]');
 
         // Detect checkboxes state & count
@@ -254,7 +254,7 @@ var KTSubscriptionsList = function () {
     }
 
     return {
-        // Public functions  
+        // Public functions
         init: function () {
             table = document.getElementById('kt_subscriptions_table');
 

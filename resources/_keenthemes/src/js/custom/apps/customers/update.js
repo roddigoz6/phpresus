@@ -24,12 +24,12 @@ var KTModalUpdateCustomer = function () {
                 // Simulate form submission
                 submitButton.removeAttribute('data-kt-indicator');
 
-                // Show popup confirmation 
+                // Show popup confirmation
                 Swal.fire({
                     text: "Form has been successfully submitted!",
                     icon: "success",
                     buttonsStyling: false,
-                    confirmButtonText: "Ok, got it!",
+                    confirmButtonText: "¡Ok!",
                     customClass: {
                         confirmButton: "btn btn-primary"
                     }
@@ -59,14 +59,14 @@ var KTModalUpdateCustomer = function () {
                 }
             }).then(function (result) {
                 if (result.value) {
-                    form.reset(); // Reset form	
-                    modal.hide(); // Hide modal				
+                    form.reset(); // Reset form
+                    modal.hide(); // Hide modal
                 } else if (result.dismiss === 'cancel') {
                     Swal.fire({
                         text: "Your form has not been cancelled!.",
                         icon: "error",
                         buttonsStyling: false,
-                        confirmButtonText: "Ok, got it!",
+                        confirmButtonText: "¡Ok!",
                         customClass: {
                             confirmButton: "btn btn-primary",
                         }
@@ -91,14 +91,14 @@ var KTModalUpdateCustomer = function () {
                 }
             }).then(function (result) {
                 if (result.value) {
-                    form.reset(); // Reset form	
-                    modal.hide(); // Hide modal				
+                    form.reset(); // Reset form
+                    modal.hide(); // Hide modal
                 } else if (result.dismiss === 'cancel') {
                     Swal.fire({
                         text: "Your form has not been cancelled!.",
                         icon: "error",
                         buttonsStyling: false,
-                        confirmButtonText: "Ok, got it!",
+                        confirmButtonText: "¡Ok!",
                         customClass: {
                             confirmButton: "btn btn-primary",
                         }

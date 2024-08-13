@@ -25,7 +25,7 @@ var KTUsersPermissionsList = function () {
                 { orderable: false, targets: 1 }, // Disable ordering on column 1 (assigned)
                 { orderable: false, targets: 3 }, // Disable ordering on column 3 (actions)
             ]
-        });        
+        });
     }
 
     // Search Datatable --- official docs reference: https://datatables.net/reference/api/search()
@@ -70,7 +70,7 @@ var KTUsersPermissionsList = function () {
                             text: "You have deleted " + permissionName + "!.",
                             icon: "success",
                             buttonsStyling: false,
-                            confirmButtonText: "Ok, got it!",
+                            confirmButtonText: "¡Ok!",
                             customClass: {
                                 confirmButton: "btn fw-bold btn-primary",
                             }
@@ -83,7 +83,7 @@ var KTUsersPermissionsList = function () {
                             text: customerName + " was not deleted.",
                             icon: "error",
                             buttonsStyling: false,
-                            confirmButtonText: "Ok, got it!",
+                            confirmButtonText: "¡Ok!",
                             customClass: {
                                 confirmButton: "btn fw-bold btn-primary",
                             }
@@ -99,7 +99,7 @@ var KTUsersPermissionsList = function () {
         // Public functions
         init: function () {
             table = document.querySelector('#kt_permissions_table');
-            
+
             if (!table) {
                 return;
             }

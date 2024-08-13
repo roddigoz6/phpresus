@@ -17,56 +17,56 @@ var KTAccountSettingsProfileDetails = function () {
                     fname: {
                         validators: {
                             notEmpty: {
-                                message: 'First name is required'
+                                message: 'El nombre es requerido.'
                             }
                         }
                     },
                     lname: {
                         validators: {
                             notEmpty: {
-                                message: 'Last name is required'
+                                message: 'El apellido es requerido.'
                             }
                         }
                     },
                     company: {
                         validators: {
                             notEmpty: {
-                                message: 'Company name is required'
+                                message: 'Nombre de empresa requerido.'
                             }
                         }
                     },
                     phone: {
                         validators: {
                             notEmpty: {
-                                message: 'Contact phone number is required'
+                                message: 'Número de móvil es requerido.'
                             }
                         }
                     },
                     country: {
                         validators: {
                             notEmpty: {
-                                message: 'Please select a country'
+                                message: 'Selecciona un país, por favor.'
                             }
                         }
                     },
                     timezone: {
                         validators: {
                             notEmpty: {
-                                message: 'Please select a timezone'
+                                message: 'Selecciona una zona horaria, por favor.'
                             }
                         }
                     },
                     'communication[]': {
                         validators: {
                             notEmpty: {
-                                message: 'Please select at least one communication method'
+                                message: 'Selecciona por lo menos un método de contacto.'
                             }
                         }
                     },
                     language: {
                         validators: {
                             notEmpty: {
-                                message: 'Please select a language'
+                                message: 'Selecciona un idioma.'
                             }
                         }
                     },
@@ -112,7 +112,7 @@ var KTAccountSettingsProfileDetails = function () {
                         text: "Thank you! You've updated your basic info",
                         icon: "success",
                         buttonsStyling: false,
-                        confirmButtonText: "Ok, got it!",
+                        confirmButtonText: "¡Ok!",
                         customClass: {
                             confirmButton: "btn fw-bold btn-light-primary"
                         }
@@ -120,10 +120,10 @@ var KTAccountSettingsProfileDetails = function () {
 
                 } else {
                     swal.fire({
-                        text: "Sorry, looks like there are some errors detected, please try again.",
+                        text: "Oops, hubo un error. Inténtalo de nuevo.",
                         icon: "error",
                         buttonsStyling: false,
-                        confirmButtonText: "Ok, got it!",
+                        confirmButtonText: "¡Ok!",
                         customClass: {
                             confirmButton: "btn fw-bold btn-light-primary"
                         }
@@ -137,7 +137,7 @@ var KTAccountSettingsProfileDetails = function () {
     return {
         init: function () {
             form = document.getElementById('kt_account_profile_details_form');
-            
+
             if (!form) {
                 return;
             }

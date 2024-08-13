@@ -3,7 +3,7 @@
 // Class definition
 var KTCreateAccount = function () {
 	// Elements
-	var modal;	
+	var modal;
 	var modalEl;
 
 	var stepper;
@@ -53,10 +53,10 @@ var KTCreateAccount = function () {
 						KTUtil.scrollTop();
 					} else {
 						Swal.fire({
-							text: "Sorry, looks like there are some errors detected, please try again.",
+							text: "Oops, hubo un error. Inténtalo de nuevo.",
 							icon: "error",
 							buttonsStyling: false,
-							confirmButtonText: "Ok, got it!",
+							confirmButtonText: "¡Ok!",
 							customClass: {
 								confirmButton: "btn btn-light"
 							}
@@ -93,7 +93,7 @@ var KTCreateAccount = function () {
 					// Prevent default button action
 					e.preventDefault();
 
-					// Disable button to avoid multiple click 
+					// Disable button to avoid multiple click
 					formSubmitButton.disabled = true;
 
 					// Show loading indication
@@ -111,10 +111,10 @@ var KTCreateAccount = function () {
 					}, 2000);
 				} else {
 					Swal.fire({
-						text: "Sorry, looks like there are some errors detected, please try again.",
+						text: "Oops, hubo un error. Inténtalo de nuevo.",
 						icon: "error",
 						buttonsStyling: false,
-						confirmButtonText: "Ok, got it!",
+						confirmButtonText: "¡Ok!",
 						customClass: {
 							confirmButton: "btn btn-light"
 						}
@@ -331,8 +331,8 @@ var KTCreateAccount = function () {
 			modalEl = document.querySelector('#kt_modal_create_account');
 
 			if ( modalEl ) {
-				modal = new bootstrap.Modal(modalEl);	
-			}					
+				modal = new bootstrap.Modal(modalEl);
+			}
 
 			stepper = document.querySelector('#kt_create_account_stepper');
 

@@ -3,7 +3,7 @@
 // Class definition
 var KTCreateApp = function () {
 	// Elements
-	var modal;	
+	var modal;
 	var modalEl;
 
 	var stepper;
@@ -54,10 +54,10 @@ var KTCreateApp = function () {
 					} else {
 						// Show error message popup. For more info check the plugin's official documentation: https://sweetalert2.github.io/
 						Swal.fire({
-							text: "Sorry, looks like there are some errors detected, please try again.",
+							text: "Oops, hubo un error. Inténtalo de nuevo.",
 							icon: "error",
 							buttonsStyling: false,
-							confirmButtonText: "Ok, got it!",
+							confirmButtonText: "¡Ok!",
 							customClass: {
 								confirmButton: "btn btn-light"
 							}
@@ -92,7 +92,7 @@ var KTCreateApp = function () {
 					// Prevent default button action
 					e.preventDefault();
 
-					// Disable button to avoid multiple click 
+					// Disable button to avoid multiple click
 					formSubmitButton.disabled = true;
 
 					// Show loading indication
@@ -111,10 +111,10 @@ var KTCreateApp = function () {
 					}, 2000);
 				} else {
 					Swal.fire({
-						text: "Sorry, looks like there are some errors detected, please try again.",
+						text: "Oops, hubo un error. Inténtalo de nuevo.",
 						icon: "error",
 						buttonsStyling: false,
-						confirmButtonText: "Ok, got it!",
+						confirmButtonText: "¡Ok!",
 						customClass: {
 							confirmButton: "btn btn-light"
 						}

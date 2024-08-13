@@ -27,7 +27,7 @@ var KTUsersViewRole = function () {
                 { orderable: false, targets: 0 }, // Disable ordering on column 0 (checkbox)
                 { orderable: false, targets: 4 }, // Disable ordering on column 4 (actions)
             ]
-        });        
+        });
     }
 
     // Search Datatable --- official docs reference: https://datatables.net/reference/api/search()
@@ -72,7 +72,7 @@ var KTUsersViewRole = function () {
                             text: "You have deleted " + userName + "!.",
                             icon: "success",
                             buttonsStyling: false,
-                            confirmButtonText: "Ok, got it!",
+                            confirmButtonText: "¡Ok!",
                             customClass: {
                                 confirmButton: "btn fw-bold btn-primary",
                             }
@@ -85,7 +85,7 @@ var KTUsersViewRole = function () {
                             text: customerName + " was not deleted.",
                             icon: "error",
                             buttonsStyling: false,
-                            confirmButtonText: "Ok, got it!",
+                            confirmButtonText: "¡Ok!",
                             customClass: {
                                 confirmButton: "btn fw-bold btn-primary",
                             }
@@ -135,7 +135,7 @@ var KTUsersViewRole = function () {
                         text: "You have deleted all selected customers!.",
                         icon: "success",
                         buttonsStyling: false,
-                        confirmButtonText: "Ok, got it!",
+                        confirmButtonText: "¡Ok!",
                         customClass: {
                             confirmButton: "btn fw-bold btn-primary",
                         }
@@ -159,7 +159,7 @@ var KTUsersViewRole = function () {
                         text: "Selected customers was not deleted.",
                         icon: "error",
                         buttonsStyling: false,
-                        confirmButtonText: "Ok, got it!",
+                        confirmButtonText: "¡Ok!",
                         customClass: {
                             confirmButton: "btn fw-bold btn-primary",
                         }
@@ -176,7 +176,7 @@ var KTUsersViewRole = function () {
         const toolbarSelected = document.querySelector('[data-kt-view-roles-table-toolbar="selected"]');
         const selectedCount = document.querySelector('[data-kt-view-roles-table-select="selected_count"]');
 
-        // Select refreshed checkbox DOM elements 
+        // Select refreshed checkbox DOM elements
         const allCheckboxes = table.querySelectorAll('tbody [type="checkbox"]');
 
         // Detect checkboxes state & count
@@ -206,7 +206,7 @@ var KTUsersViewRole = function () {
         // Public functions
         init: function () {
             table = document.querySelector('#kt_roles_view_table');
-            
+
             if (!table) {
                 return;
             }

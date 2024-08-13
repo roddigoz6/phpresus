@@ -15,7 +15,7 @@ var KTAppContactView = function () {
             // Prevent default button action
             e.preventDefault();
 
-            // Show popup confirmation 
+            // Show popup confirmation
             Swal.fire({
                 text: "Delete contact confirmation",
                 icon: "warning",
@@ -33,7 +33,7 @@ var KTAppContactView = function () {
                         text: "Contact has been deleted!",
                         icon: "success",
                         buttonsStyling: false,
-                        confirmButtonText: "Ok, got it!",
+                        confirmButtonText: "¡Ok!",
                         customClass: {
                             confirmButton: "btn btn-primary"
                         }
@@ -48,7 +48,7 @@ var KTAppContactView = function () {
                         text: "Contact has not been deleted!.",
                         icon: "error",
                         buttonsStyling: false,
-                        confirmButtonText: "Ok, got it!",
+                        confirmButtonText: "¡Ok!",
                         customClass: {
                             confirmButton: "btn btn-primary",
                         }
