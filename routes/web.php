@@ -38,7 +38,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::resource('presupuesto', PresupuestoController::class);
     Route::resource('producto', ProductoController::class);
     Route::resource('user', UserController::class);
-    Route::put('/user/{user}', [UserController::class, 'update'])->name('user.update');
 
     Route::get('/presupuesto/create/getProductos', [PresupuestoController::class, 'getProductos'])->name('presupuesto.getProductos');
 

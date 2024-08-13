@@ -38,9 +38,7 @@
                     <h5 class="modal-title" id="changePasswordModalLabel">Cambiar contraseña</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <form id="changePasswordForm" method="POST" action="{{ route('user.update', $user->id) }}">
-                    @csrf
-                    @method('PUT')
+                <form id="changePasswordForm" >
                     <div class="modal-body">
                         <div class="mb-3">
                             <label for="newPassword" class="form-label">Nueva contraseña</label>
@@ -53,7 +51,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-light-danger" data-bs-dismiss="modal">Cancelar</button>
-                        <button type="submit" class="btn btn-light-primary">Guardar</button>
+                        <button id="guardarNuevaContra" type="submit" class="btn btn-light-primary">Guardar</button>
                     </div>
                 </form>
             </div>
@@ -63,21 +61,7 @@
     @if (session('update_user'))
     <script>
     document.addEventListener('DOMContentLoaded', function() {
-        const Toast = Swal.mixin({
-            toast: true,
-            position: "top-end",
-            showConfirmButton: false,
-            timer: 3000,
-            timerProgressBar: true,
-            didOpen: (toast) => {
-                toast.onmouseenter = Swal.stopTimer;
-                toast.onmouseleave = Swal.resumeTimer;
-            }
-        });
-        Toast.fire({
-            icon: "success",
-            title: "{{ session('update_user') }}"
-        });
+
     });
     </script>
     @endif
@@ -124,16 +108,46 @@
                 var updatedName = $('#userNameInput').val();
                 $.ajax({
                     url: "{{ route('user.update', $user->id) }}",
-                    method: "PUT",
+                    type: "POST",
                     data: {
+                        _method: "PUT",
                         _token: "{{ csrf_token() }}",
                         name: updatedName
                     },
                     success: function(response) {
-                        alert('Nombre actualizado correctamente.');
+                        const Toast = Swal.mixin({
+                            toast: true,
+                            position: "top-end",
+                            showConfirmButton: false,
+                            timer: 3000,
+                            timerProgressBar: true,
+                            didOpen: (toast) => {
+                                toast.onmouseenter = Swal.stopTimer;
+                                toast.onmouseleave = Swal.resumeTimer;
+                            }
+                        });
+                        Toast.fire({
+                            icon: "success",
+                            title: response.message
+                        });
                     },
                     error: function(xhr) {
-                        alert('Hubo un error al actualizar el nombre.');
+                        console.log(xhr.responseText);
+                        const Toast = Swal.mixin({
+                            toast: true,
+                            position: "top-end",
+                            showConfirmButton: false,
+                            timer: 3000,
+                            timerProgressBar: true,
+                            didOpen: (toast) => {
+                                toast.onmouseenter = Swal.stopTimer;
+                                toast.onmouseleave = Swal.resumeTimer;
+                            }
+                        });
+                        Toast.fire({
+                            icon: "error",
+                            title: 'Error al validar. Inténtalo de nuevo.'
+                        });
                     }
                 });
             });
@@ -143,16 +157,97 @@
                 var updatedEmail = $('#userEmailInput').val();
                 $.ajax({
                     url: "{{ route('user.update', $user->id) }}",
-                    method: "PUT",
+                    type: "POST",
                     data: {
+                        _method: "PUT",
                         _token: "{{ csrf_token() }}",
-                        email: updatedEmail
+                        name: updatedEmail
                     },
                     success: function(response) {
-                        alert('Correo Electrónico actualizado correctamente.');
+                        const Toast = Swal.mixin({
+                            toast: true,
+                            position: "top-end",
+                            showConfirmButton: false,
+                            timer: 3000,
+                            timerProgressBar: true,
+                            didOpen: (toast) => {
+                                toast.onmouseenter = Swal.stopTimer;
+                                toast.onmouseleave = Swal.resumeTimer;
+                            }
+                        });
+                        Toast.fire({
+                            icon: "success",
+                            title: response.message
+                        });
+                        $('#userNameInput').val($('#userNameDisplay').text());
+                $('#userNameEdit').addClass('d-none');
+                $('#userNameDisplay').removeClass('d-none');
                     },
                     error: function(xhr) {
-                        alert('Hubo un error al actualizar el correo electrónico.');
+                        console.log(xhr.responseText);
+                        const Toast = Swal.mixin({
+                            toast: true,
+                            position: "top-end",
+                            showConfirmButton: false,
+                            timer: 3000,
+                            timerProgressBar: true,
+                            didOpen: (toast) => {
+                                toast.onmouseenter = Swal.stopTimer;
+                                toast.onmouseleave = Swal.resumeTimer;
+                            }
+                        });
+                        Toast.fire({
+                            icon: "error",
+                            title: 'Error al validar. Inténtalo de nuevo.'
+                        });
+                    }
+                });
+            });
+
+            // Guardar contraseña
+            $('#guardarNuevaContra').on('click', function() {
+                $.ajax({
+                    url: "{{ route('user.update', $user->id) }}",
+                    type: "POST",
+                    data: {
+                        _method: "PUT",
+                        _token: "{{ csrf_token() }}",
+                        name: updatedName
+                    },
+                    success: function(response) {
+                        const Toast = Swal.mixin({
+                            toast: true,
+                            position: "top-end",
+                            showConfirmButton: false,
+                            timer: 3000,
+                            timerProgressBar: true,
+                            didOpen: (toast) => {
+                                toast.onmouseenter = Swal.stopTimer;
+                                toast.onmouseleave = Swal.resumeTimer;
+                            }
+                        });
+                        Toast.fire({
+                            icon: "success",
+                            title: response.message
+                        });
+                    },
+                    error: function(xhr) {
+                        console.log(xhr.responseText);
+                        const Toast = Swal.mixin({
+                            toast: true,
+                            position: "top-end",
+                            showConfirmButton: false,
+                            timer: 3000,
+                            timerProgressBar: true,
+                            didOpen: (toast) => {
+                                toast.onmouseenter = Swal.stopTimer;
+                                toast.onmouseleave = Swal.resumeTimer;
+                            }
+                        });
+                        Toast.fire({
+                            icon: "error",
+                            title: 'Error al validar. Inténtalo de nuevo.'
+                        });
                     }
                 });
             });
