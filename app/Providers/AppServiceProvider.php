@@ -5,6 +5,7 @@ namespace App\Providers;
 use App\Core\KTBootstrap;
 use Illuminate\Database\Schema\Builder;
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Facades\URL;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -25,9 +26,13 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        // Update defaultStringLength
         Builder::defaultStringLength(191);
+
+        if (config('app.env') === 'production') {
+            URL::forceScheme('https');
+        }
 
         KTBootstrap::init();
     }
+
 }

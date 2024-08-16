@@ -22,37 +22,24 @@ class DashboardController extends Controller
         $presupuestosNoAceptados = Presupuesto::where('aceptado', false)->where('eliminado', false)->count();
         $presupuestosCount = Presupuesto::where('eliminado', false)->count();
         $porcentajeAceptados = $presupuestosCount > 0 ? ($presupuestosAceptados / $presupuestosCount) * 100 : 0;
-        $clientesMasPresupuestos = Cliente::select('clientes.*')
-            ->leftJoin('presupuestos', function($join) {
-                $join->on('clientes.id', '=', 'presupuestos.cliente_id')
-                    ->where('presupuestos.eliminado', false);
-            })
-            ->where('clientes.eliminado', false)
-            ->selectRaw('COUNT(presupuestos.id) as presupuestos_count')
-            ->groupBy('clientes.id')
-            ->orderBy('presupuestos_count', 'desc')
-            ->take(5)
-            ->get();
 
         //Ordenes
         $ordenes = Orden::where('eliminado', false)->get();
         $ordenesCount = Orden::where('eliminado', false)->count();
         $ordenesCobradasCount = Orden::where('cobrado', true)->where('eliminado', false)->count();
         $ordenesSinCobrarCount = Orden::where('cobrado', false)->where('eliminado', false)->count();
-        $clientesMasOrdenes = Cliente::select('clientes.*')
-            ->leftJoin('ordenes', function($join) {
-                $join->on('clientes.id', '=', 'ordenes.cliente_id')
-                    ->where('ordenes.eliminado', false);
-            })
-            ->where('clientes.eliminado', false)
-            ->selectRaw('COUNT(ordenes.id) as ordenes_count')
-            ->groupBy('clientes.id')
-            ->orderBy('ordenes_count', 'desc')
-            ->take(5)
-            ->get();
+        $porcentajeCobradas = $ordenesCount > 0 ? ($ordenesCobradasCount / $ordenesSinCobrarCount) * 100 : 0;
 
         //Productos
         $productosDisponiblesCount = Producto::where('eliminado', false)->sum('stock');
+        $productosMasPopulares = Producto::select('productos.*')
+            ->leftJoin('producto_presupuestos', 'productos.id', '=', 'producto_presupuestos.producto_id')
+            ->where('productos.eliminado', false)
+            ->selectRaw('COUNT(producto_presupuestos.id) as presupuestos_count')
+            ->groupBy('productos.id', 'productos.nombre', 'productos.descripcion', 'productos.stock', 'productos.precio') // Ajusta estos campos según tu modelo Producto
+            ->orderBy('presupuestos_count', 'desc')
+            ->take(5)
+            ->get();
 
         //Clientes
         $clientes = Cliente::where('eliminado', false)->get();
@@ -65,12 +52,12 @@ class DashboardController extends Controller
             'presupuestosNoAceptados',
             'porcentajeAceptados',
             'presupuestosCount',
-            'clientesMasPresupuestos',
+            'productosMasPopulares',
             'ordenes',
             'ordenesCount',
             'ordenesCobradasCount',
             'ordenesSinCobrarCount',
-            'clientesMasOrdenes',
+            'porcentajeCobradas',
             'productosDisponiblesCount',
             'clientes',
             'clientesEstablecidos',

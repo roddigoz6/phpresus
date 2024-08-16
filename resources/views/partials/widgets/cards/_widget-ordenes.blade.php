@@ -19,15 +19,14 @@
 
     <div class="card-body d-flex align-items-end pt-0">
         <div class="d-flex align-items-center flex-column mt-3 w-100">
-            <div class="d-flex justify-content-between fw-bold fs-6 text-primary opacity-100 w-100 mt-auto mb-2">
-                <span>2 Aceptados</span>
-                <span>2%</span>
+            <div class="d-flex justify-content-between fw-bold fs-6 text-dark opacity-75 w-100 mt-auto mb-2">
+                <span>{{ $ordenesCobradasCount }} cobradas</span>
+                <span>{{ round($porcentajeCobradas, 2) }}%</span>
             </div>
-            <div class="h-8px mx-3 w-100 bg-primary bg-opacity-50 rounded">
-                <div class="bg-primary rounded h-8px" role="progressbar" style="width: 2%;" aria-valuenow="2" aria-valuemin="0" aria-valuemax="100"></div>
+            <div class="h-8px mx-3 w-100 bg-dark bg-opacity-50 rounded">
+                <div class="bg-white rounded h-8px" role="progressbar" style="width: {{ $porcentajeCobradas }}%;" aria-valuenow="{{ $porcentajeCobradas }}" aria-valuemin="0" aria-valuemax="100"></div>
             </div>
         </div>
     </div>
-
     @endif
 </div>

@@ -36,14 +36,10 @@
 
     <!--begin::Row-->
     <div class="row g-5 g-xl-10 mb-5 mb-xl-10">
+
         <!--begin::Col-->
-        <div class="col-xl-4">
-            @include('partials/widgets/charts/_widget-35')
-        </div>
-        <!--end::Col-->
-        <!--begin::Col-->
-        <div class="col-xl-8">
-            @include('partials/widgets/tables/_widget-14')
+        <div class="col-xl-12">
+            @include('partials/widgets/tables/_widget-populares')
         </div>
         <!--end::Col-->
     </div>
