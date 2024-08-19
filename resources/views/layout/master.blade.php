@@ -61,6 +61,17 @@
             width: 75px;
             height: 75px;
         }
+        @media (max-width: 576px) {
+            .agregar {
+                display: table-cell;
+            }
+        }
+
+        @media (min-width: 577px) {
+            .agregar {
+                display: none;
+            }
+        }
     </style>
 </head>
 <!--end::Head-->
@@ -92,6 +103,12 @@
 <!--end::Custom Javascript-->
 <!--end::Javascript-->
 <script>
+    $(document).ready(function() {
+        $('.btn').on('click', function() {
+            $(this).removeClass('active');
+        });
+    });
+
     document.addEventListener('livewire:init', () => {
         Livewire.on('success', (message) => {
             toastr.success(message);

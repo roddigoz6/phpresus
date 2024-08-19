@@ -79,16 +79,12 @@ class PresupuestoController extends Controller
                 });
             }
             $productosQuery->orderBy('precio', $precio_order);
-            $productos = $productosQuery->paginate(10);
+            $productos = $productosQuery->paginate(15);
 
-            // Verificar si es una solicitud AJAX
             if ($request->ajax()) {
                 return response()->json([
-                    'html' => view('pages.presupuesto.productos', compact('productos', 'order', 'precio_order'))->render()
-                ]);
+                    'html' => view('pages.presupuesto.productos', compact('productos', 'order', 'precio_order'))->render()                ]);
             }
-
-            //Log::info('Productos obtenidos correctamente', $productos->toArray());
 
             return view('pages.presupuesto.productos', compact('productos', 'order', 'precio_order'));
         } catch (\Exception $e) {

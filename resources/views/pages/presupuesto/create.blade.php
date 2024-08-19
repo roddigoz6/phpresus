@@ -360,12 +360,10 @@
 <script>
 let productosArrastrados = [];
 
-// Función para limpiar los productos almacenados en localStorage
 function limpiarProductos() {
     localStorage.removeItem('productosArrastrados');
 }
 
-// Función para permitir soltar (drop)
 function allowDrop(event) {
     event.preventDefault();
 }
@@ -427,20 +425,16 @@ function drop2(event) {
     const x = event.clientX;
     const y = event.clientY;
 
-    // Obtener el elemento DOM que está debajo del ratón
     const elementoDebajoDelRaton = document.elementFromPoint(x, y);
     const fila_destino = $(elementoDebajoDelRaton).closest("tr");
 
-    // Validar que la fila destino no sea la misma que la fila original
     if (fila_destino.length && !fila_destino.is(window.fila_original)) {
-        // Obtener las posiciones de la fila original y la fila destino
         const posicionOriginal = window.fila_original.index();
         const posicionDestino = fila_destino.index();
 
         console.log('Posición original:', posicionOriginal);
         console.log('Posición destino:', posicionDestino);
 
-        // Reordenar dependiendo de la posición
         if (posicionOriginal < posicionDestino) {
             fila_destino.after(window.fila_original);
         } else {
@@ -474,13 +468,13 @@ function actualizarListaProductos() {
             type: 'hidden',
             class: 'orden-producto',
             name: `orden_producto_${producto.id}`,
-            value: index + 1 //Valor para input, desde 1
+            value: index + 1
         });
 
-        const tdNombre = $('<td></td>');
+        const tdNombre = $('<td class="align-middle"></td>');
         tdNombre.text(producto.nombre);
 
-        const tdCantidad = $('<td></td>');
+        const tdCantidad = $('<td class="align-middle"></td>');
         const cantidadInput = $('<input>');
         cantidadInput.attr({
             type: 'number',
@@ -497,7 +491,7 @@ function actualizarListaProductos() {
         });
         tdCantidad.append(cantidadInput);
 
-        const tdPrecio = $('<td></td>');
+        const tdPrecio = $('<td class="align-middle"></td>');
         const precioInput = $('<input>');
         precioInput.attr({
             type: 'number',
@@ -515,11 +509,11 @@ function actualizarListaProductos() {
         });
         tdPrecio.append(precioInput);
 
-        const tdPrecioTotal = $('<td></td>');
+        const tdPrecioTotal = $('<td class="align-middle"></td>');
         tdPrecioTotal.addClass('precio-total-producto text-center');
         tdPrecioTotal.text((producto.cantidad * producto.precio).toFixed(2) + '€');
 
-        const tdAcciones = $('<td></td>');
+        const tdAcciones = $('<td class="align-middle"></td>');
         const eliminarBtn = $('<button></button>');
         eliminarBtn.attr('type', 'button');
         eliminarBtn.addClass('btn btn-danger btn-sm');
@@ -585,6 +579,48 @@ document.getElementById("limpiarCanvas").addEventListener("click", function() {
     actualizarPrecioTotal();
 });
 
+
+function agregarProducto(productoId) {
+    const productoElement = document.querySelector(`#producto-${productoId}`);
+
+    if (!productoElement) {
+        console.error('Producto no encontrado.');
+        return;
+    }
+
+    const productoNombre = productoElement.querySelector('.producto-nombre').textContent;
+    const productoPrecio = parseFloat(productoElement.querySelector('.producto-precio').textContent);
+    const productoStock = parseInt(productoElement.querySelector('.producto-stock').textContent);
+
+    const productoExistente = productosArrastrados.find(producto => producto.id === productoId);
+    if (productoExistente) {
+        const Toast = Swal.mixin({
+            toast: true,
+            position: "top-end",
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+                toast.onmouseenter = Swal.stopTimer;
+                toast.onmouseleave = Swal.resumeTimer;
+            }
+        });
+        Toast.fire({
+            icon: "error",
+            title: "Ya agregaste este producto"
+        });
+    } else {
+        productosArrastrados.push({
+            id: productoId,
+            nombre: productoNombre,
+            precio: productoPrecio,
+            stock: productoStock,
+            cantidad: 1
+        });
+    }
+    actualizarListaProductos();
+}
+
 $(document).ready(function() {
     $('#cliente').select2({
         placeholder: 'Seleccionar cliente',
@@ -599,8 +635,8 @@ $(document).ready(function() {
             return markup;
         },
         templateResult: formatResult,
-        dropdownCssClass: 'custom-dropdown', // Clase personalizada para el dropdown
-        selectionCssClass: 'custom-selection' // Clase personalizada para la selección
+        dropdownCssClass: 'custom-dropdown',
+        selectionCssClass: 'custom-selection'
     });
 
     function formatResult(result) {
@@ -654,6 +690,7 @@ $(document).ready(function() {
     // Función para cargar productos utilizando AJAX
     function cargarProductos(params = {}) {
     const url = params.url || '{{ route('presupuesto.getProductos') }}';
+    //const url = (params.url || '{{ route('presupuesto.getProductos') }}').replace(/^http:/, 'https:');
     const data = {
         search: $('#search-input').val(),
         order: $('#order-input').val(),
@@ -667,6 +704,7 @@ $(document).ready(function() {
         data: data,
         success: function(response) {
             $('#productos-content').html(response.html);
+            $('.pagination').html(response.pagination);
         },
         error: function(xhr, status, error) {
             alert('Error al cargar los productos.');

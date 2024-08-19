@@ -28,9 +28,13 @@ class AppServiceProvider extends ServiceProvider
     {
         Builder::defaultStringLength(191);
 
-        if (config('app.env') === 'production') {
+        /*
+        if (config('app.env') === 'local') {
+            URL::forceScheme('http');
+        } elseif (config('app.env') === 'production') {
             URL::forceScheme('https');
         }
+        */
 
         KTBootstrap::init();
     }

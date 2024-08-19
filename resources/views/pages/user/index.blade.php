@@ -115,38 +115,27 @@
                         name: updatedName
                     },
                     success: function(response) {
-                        const Toast = Swal.mixin({
+                        Swal.fire({
+                            icon: "success",
+                            title: response.message,
                             toast: true,
                             position: "top-end",
                             showConfirmButton: false,
                             timer: 3000,
                             timerProgressBar: true,
-                            didOpen: (toast) => {
-                                toast.onmouseenter = Swal.stopTimer;
-                                toast.onmouseleave = Swal.resumeTimer;
-                            }
                         });
-                        Toast.fire({
-                            icon: "success",
-                            title: response.message
-                        });
+                        $('#userNameDisplay').text(updatedName).removeClass('d-none');
+                        $('#userNameEdit').addClass('d-none');
                     },
                     error: function(xhr) {
-                        console.log(xhr.responseText);
-                        const Toast = Swal.mixin({
+                        Swal.fire({
+                            icon: "error",
+                            title: 'Error al validar. Inténtalo de nuevo.',
                             toast: true,
                             position: "top-end",
                             showConfirmButton: false,
                             timer: 3000,
                             timerProgressBar: true,
-                            didOpen: (toast) => {
-                                toast.onmouseenter = Swal.stopTimer;
-                                toast.onmouseleave = Swal.resumeTimer;
-                            }
-                        });
-                        Toast.fire({
-                            icon: "error",
-                            title: 'Error al validar. Inténtalo de nuevo.'
                         });
                     }
                 });
@@ -161,104 +150,77 @@
                     data: {
                         _method: "PUT",
                         _token: "{{ csrf_token() }}",
-                        name: updatedEmail
+                        email: updatedEmail
                     },
                     success: function(response) {
-                        const Toast = Swal.mixin({
+                        Swal.fire({
+                            icon: "success",
+                            title: response.message,
                             toast: true,
                             position: "top-end",
                             showConfirmButton: false,
                             timer: 3000,
                             timerProgressBar: true,
-                            didOpen: (toast) => {
-                                toast.onmouseenter = Swal.stopTimer;
-                                toast.onmouseleave = Swal.resumeTimer;
-                            }
                         });
-                        Toast.fire({
-                            icon: "success",
-                            title: response.message
-                        });
-                        $('#userNameInput').val($('#userNameDisplay').text());
-                $('#userNameEdit').addClass('d-none');
-                $('#userNameDisplay').removeClass('d-none');
+                        $('#userEmailDisplay').text(updatedEmail).removeClass('d-none');
+                        $('#userEmailEdit').addClass('d-none');
                     },
                     error: function(xhr) {
-                        console.log(xhr.responseText);
-                        const Toast = Swal.mixin({
+                        Swal.fire({
+                            icon: "error",
+                            title: 'Error al validar. Inténtalo de nuevo.',
                             toast: true,
                             position: "top-end",
                             showConfirmButton: false,
                             timer: 3000,
                             timerProgressBar: true,
-                            didOpen: (toast) => {
-                                toast.onmouseenter = Swal.stopTimer;
-                                toast.onmouseleave = Swal.resumeTimer;
-                            }
-                        });
-                        Toast.fire({
-                            icon: "error",
-                            title: 'Error al validar. Inténtalo de nuevo.'
                         });
                     }
                 });
             });
 
             // Guardar contraseña
-            $('#guardarNuevaContra').on('click', function() {
+            $('#changePasswordForm').on('submit', function(e) {
+                e.preventDefault(); // Evitar el envío normal del formulario
                 $.ajax({
                     url: "{{ route('user.update', $user->id) }}",
                     type: "POST",
-                    data: {
-                        _method: "PUT",
-                        _token: "{{ csrf_token() }}",
-                        name: updatedName
-                    },
+                    data: $(this).serialize() + '&_method=PUT',
                     success: function(response) {
-                        const Toast = Swal.mixin({
+                        Swal.fire({
+                            icon: "success",
+                            title: response.message,
                             toast: true,
                             position: "top-end",
                             showConfirmButton: false,
                             timer: 3000,
                             timerProgressBar: true,
-                            didOpen: (toast) => {
-                                toast.onmouseenter = Swal.stopTimer;
-                                toast.onmouseleave = Swal.resumeTimer;
-                            }
                         });
-                        Toast.fire({
-                            icon: "success",
-                            title: response.message
-                        });
+                        $('#changePasswordModal').modal('hide'); // Cerrar el modal
                     },
                     error: function(xhr) {
-                        console.log(xhr.responseText);
-                        const Toast = Swal.mixin({
+                        Swal.fire({
+                            icon: "error",
+                            title: 'Error al validar. Inténtalo de nuevo.',
                             toast: true,
                             position: "top-end",
                             showConfirmButton: false,
                             timer: 3000,
                             timerProgressBar: true,
-                            didOpen: (toast) => {
-                                toast.onmouseenter = Swal.stopTimer;
-                                toast.onmouseleave = Swal.resumeTimer;
-                            }
-                        });
-                        Toast.fire({
-                            icon: "error",
-                            title: 'Error al validar. Inténtalo de nuevo.'
                         });
                     }
                 });
             });
 
-            $('#cancelarNameBtn').on('click', function(){
+            // Cancelar edición de nombre
+            $('#cancelarNameBtn').on('click', function() {
                 $('#userNameInput').val($('#userNameDisplay').text());
                 $('#userNameEdit').addClass('d-none');
                 $('#userNameDisplay').removeClass('d-none');
             });
 
-            $('#cancelarEmailBtn').on('click', function(){
+            // Cancelar edición de email
+            $('#cancelarEmailBtn').on('click', function() {
                 $('#userEmailInput').val($('#userEmailDisplay').text());
                 $('#userEmailEdit').addClass('d-none');
                 $('#userEmailDisplay').removeClass('d-none');
