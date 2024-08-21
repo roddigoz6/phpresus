@@ -13,12 +13,11 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('presupuestos', function (Blueprint $table) {
+        Schema::create('TFacturas', function (Blueprint $table) {
             $table->id();
             //
-            $table->foreignId('cliente_id')->nullable()->constrained()->onDelete('cascade');
-            $table->float('precio_total')->nullable();
-            $table->boolean('aceptado')->default(false);
+            $table->string('proyecto_id');
+            $table->foreign('proyecto_id')->references('proyecto_id')->on('TProyectos')->onDelete('cascade');
             $table->boolean('eliminado')->default(false);
             //
             $table->timestamps();
@@ -32,6 +31,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('presupuestos');
+        Schema::dropIfExists('TFacturas');
     }
 };

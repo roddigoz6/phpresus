@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Factura extends Model
 {
     use HasFactory;
+    protected $table = 'TFacturas';
 
     protected $fillable = [
         'orden_id',
@@ -18,7 +19,4 @@ class Factura extends Model
         'eliminado' => 'bool',
     ];
 
-    public function orden(){
-        return $this->belongsTo(Orden::class, 'orden_id');
-    }
 }

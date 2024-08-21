@@ -31,31 +31,6 @@ class DatabaseSeeder extends Seeder
         //     'email' => 'test@example.com',
         // ]);
 
-        //Categorias
-        \App\Models\Categoria::create([
-            "nombre" => "General",
-        ]);
-        //1
-        \App\Models\Categoria::create([
-            "nombre" => "martillo",
-        ]);
-        //2
-        \App\Models\Categoria::create([
-            "nombre" => "atornillador",
-        ]);
-        //3
-        \App\Models\Categoria::create([
-            "nombre" => "sierra",
-        ]);
-        //4
-        \App\Models\Categoria::create([
-            "nombre" => "pintar",
-        ]);
-        //5
-        \App\Models\Categoria::create([
-            "nombre" => "reparacion",
-        ]);
-
         //Productos
         Producto::factory()->count(200)->create();
 

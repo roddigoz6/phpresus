@@ -46,14 +46,6 @@
                                 <option value="Visita">Visita</option>
                             </select>
                         </div>
-                        <div class="">
-                            <label for="categoria">Categoría</label> <strong class="required"></strong>
-                            <select class="form-select" id="categoria" name="categoria_id" required>
-                                @foreach($categorias as $categoria)
-                                    <option value="{{ $categoria->id }}">{{ $categoria->nombre }}</option>
-                                @endforeach
-                            </select>
-                        </div>
                         <div class="mt-3">Los campos con <strong class="required"></strong> son requeridos.</div>
                         <div class="d-flex justify-content-end">
                             <button type="submit" class="btn btn-light-primary mt-3" id="CreaProd">Ingresar nuevo producto <i class="fas fa-check-circle"></i></button>
@@ -88,7 +80,7 @@
     <form action="{{ route('producto.index') }}" method="GET" class="mb-3">
         <input type="hidden" name="tab" value="{{ $tab }}">
         <div class="input-group">
-            <input type="text" class="form-control" name="search" placeholder="Buscar por nombre de producto o categoría" value="{{ $search }}">
+            <input type="text" class="form-control" name="search" placeholder="Buscar por nombre de producto" value="{{ $search }}">
             <button class="btn btn-light-primary" type="submit"><i class="fas fa-search"></i></button>
         </div>
     </form>
@@ -97,11 +89,6 @@
         <li class="nav-item" role="presentation">
             <a class="nav-link {{ $tab == 'todas' ? 'active' : '' }}" id="todas_tab" href="{{ route('producto.index', ['tab' => 'todas', 'search' => $search]) }}">Todos</a>
         </li>
-        @foreach($categorias as $categoria)
-            <li class="nav-item" role="presentation">
-                <a class="nav-link {{ $tab == 'categoria_' . $categoria->id ? 'active' : '' }}" id="categoria_{{ $categoria->id }}_tab" href="{{ route('producto.index', ['tab' => 'categoria_' . $categoria->id, 'search' => $search]) }}">{{ $categoria->nombre }}</a>
-            </li>
-        @endforeach
     </ul>
     <!-- Contenido de las pestañas -->
     <div class="tab-content mt-3" id="categoriasTabContent">
@@ -110,7 +97,6 @@
                 <table class="table table-light text-center table-hover rounded-table">
                     <thead class="table-dark">
                         <tr class="align-middle">
-                            <th class="icon-table">Categoría</th>
                             <th class="icon-table">Id</th>
                             <th class="icon-table">Nombre</th>
                             <th class="icon-table">Descripción</th>
@@ -123,7 +109,6 @@
                     <tbody>
                         @foreach($productos as $producto)
                             <tr>
-                                <td class="align-middle">{{ $producto->categoria->nombre }}</td>
                                 <td class="align-middle"><span class="badge badge-light-info fs-base">{{ $producto->id }}</span></td>
                                 <td class="align-middle">{{ $producto->nombre }}</td>
                                 <td class="align-middle">{{ $producto->descripcion }}</td>
@@ -193,55 +178,6 @@
                 @endif
             </div>
         </div>
-
-        @foreach($categorias as $categoria)
-        <div class="tab-pane fade {{ $tab == 'categoria_' . $categoria->id ? 'show active' : '' }}" id="categoria_{{ $categoria->id }}" role="tabpanel" aria-labelledby="categoria_{{ $categoria->id }}_tab">
-            <div class="table-responsive">
-                @if($tab == 'categoria_' . $categoria->id)
-                    @php
-                        $totalPages = $productos->lastPage();
-                        $currentPage = $productos->currentPage();
-                        $maxPagesToShow = 5;
-
-                        $startPage = max($currentPage - floor($maxPagesToShow / 2), 1);
-                        $endPage = min($startPage + $maxPagesToShow - 1, $totalPages);
-
-                        if ($endPage - $startPage + 1 < $maxPagesToShow) {
-                            $startPage = max($endPage - $maxPagesToShow + 1, 1);
-                        }
-                    @endphp
-
-                    <div class="d-flex justify-content-center">
-                        <ul class="pagination">
-                            @if ($startPage > 1)
-                                <li class="page-item">
-                                    <a class="page-link" href="{{ $productos->url(1) }}&tab=categoria_{{ $categoria->id }}">1</a>
-                                </li>
-                                @if ($startPage > 2)
-                                    <li class="page-item disabled"><span class="page-link">...</span></li>
-                                @endif
-                            @endif
-
-                            @for ($i = $startPage; $i <= $endPage; $i++)
-                                <li class="page-item {{ ($productos->currentPage() == $i) ? 'active' : '' }}">
-                                    <a class="page-link" href="{{ $productos->url($i) }}&tab=categoria_{{ $categoria->id }}">{{ $i }}</a>
-                                </li>
-                            @endfor
-
-                            @if ($endPage < $totalPages)
-                                @if ($endPage < $totalPages - 1)
-                                    <li class="page-item disabled"><span class="page-link">...</span></li>
-                                @endif
-                                <li class="page-item">
-                                    <a class="page-link" href="{{ $productos->url($totalPages) }}&tab=categoria_{{ $categoria->id }}">{{ $totalPages }}</a>
-                                </li>
-                            @endif
-                        </ul>
-                    </div>
-                @endif
-                </div>
-            </div>
-        @endforeach
     </div>
 
     <!-- Modales para editar producto -->
@@ -280,14 +216,7 @@
                                     <option value="Visita" {{ $producto->tipo == 'Visita' ? 'selected' : '' }}>Visita</option>
                                 </select>
                             </div>
-                            <div class="mb-3">
-                                <label for="categoria{{ $producto->id }}">Categoría</label>
-                                <select class="form-select" id="categoria{{ $producto->id }}" name="categoria_id" required>
-                                    @foreach($categorias as $categoria)
-                                        <option value="{{ $categoria->id }}" {{ $producto->categoria_id == $categoria->id ? 'selected' : '' }}>{{ $categoria->nombre }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
+
                             <div class="d-flex justify-content-end">
                                 <button type="submit" class="btn btn-light-primary">Guardar Cambios</button>
                             </div>

@@ -8,14 +8,14 @@ use Illuminate\Database\Eloquent\Model;
 class Producto extends Model
 {
     use HasFactory;
+    protected $table = 'TProductos';
 
     protected $fillable = [
         'nombre',
         'precio',
-        'descripcion',
+        'leyenda',
         'stock',
         'tipo',
-        'categoria_id',
         'eliminado',
     ];
 
@@ -24,10 +24,6 @@ class Producto extends Model
         'stock' => 'int',
         'eliminado' => 'bool',
     ];
-
-    public function categoria(){
-        return $this->belongsTo(Categoria::class, 'categoria_id');
-    }
 
     public function producto_presupuestos()
     {

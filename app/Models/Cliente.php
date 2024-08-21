@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Cliente extends Model
 {
     use HasFactory;
+    protected $table = 'TClientes';
 
     protected $fillable = [
         'nombre',
@@ -45,8 +46,9 @@ class Cliente extends Model
         return $this->hasMany(Presupuesto::class, 'cliente_id');
     }
 
-    public function ordenes()
+    public function proyectos()
     {
-        return $this->hasMany(Orden::class, 'cliente_id');
+        return $this->hasMany(Proyecto::class, 'cliente_id');
     }
+
 }

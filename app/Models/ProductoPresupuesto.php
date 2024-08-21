@@ -8,13 +8,17 @@ use Illuminate\Database\Eloquent\Model;
 class ProductoPresupuesto extends Model
 {
     use HasFactory;
+    protected $table = 'TProd_Presu';
 
     protected $fillable = [
         'producto_id',
         'presupuesto_id',
         'precio',
         'cantidad',
-        'orden_prod',
+        'orden',
+        'descripcion',
+        'tipo',
+        'titulo'
     ];
 
     public function producto()

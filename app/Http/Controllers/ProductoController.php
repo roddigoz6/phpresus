@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\Producto;
-use App\Models\Categoria;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
@@ -18,35 +17,27 @@ class ProductoController extends Controller
     {
         $search = $request->input('search');
         $tab = $request->input('tab', 'todas');
+
         $query = Producto::where('eliminado', false);
 
         if ($search) {
             $query->where(function ($query) use ($search) {
                 $query->where('id', $search)
-                    ->orWhere('nombre', 'like', "%$search%")
-                    ->orWhereHas('categoria', function ($query) use ($search) {
-                        $query->where('nombre', 'like', "%$search%");
-                    })
-                    ->orWhereHas('categoria', function ($query) use ($search) {
-                        $query->where('descripcion', 'like', "%$search%");
-                    });
+                    ->orWhere('nombre', 'like', "%$search%");
             });
         }
 
-
-        if ($tab != 'todas') {
-            $categoriaId = str_replace('categoria_', '', $tab);
-            $query->where('categoria_id', $categoriaId);
-        }
-
         $productos = $query->paginate(15);
-        $categorias = Categoria::all();
 
         if ($productos->count() == 0 && $productos->lastPage() > 1) {
-            return redirect()->route('producto.index', ['page' => $productos->lastPage() - 1, 'tab' => $tab, 'search' => $search]);
+            return redirect()->route('producto.index', [
+                'page' => $productos->lastPage() - 1,
+                'tab' => $tab,
+                'search' => $search
+            ]);
         }
 
-        return view('pages/producto.index', compact('productos', 'categorias', 'tab', 'search'));
+        return view('pages/producto.index', compact('productos', 'tab', 'search'));
     }
 
     /**
@@ -75,7 +66,6 @@ class ProductoController extends Controller
             'descripcion' => 'nullable|string',
             'stock' => 'required|integer|min:0',
             'tipo' => 'required|in:Artículo,Visita',
-            'categoria_id' => 'required|exists:categorias,id'
         ]);
 
         // Crea el nuevo producto en la base de datos
@@ -85,7 +75,6 @@ class ProductoController extends Controller
         $producto->descripcion = $validatedData['descripcion'];
         $producto->stock = $validatedData['stock'];
         $producto->tipo = $validatedData['tipo'];
-        $producto->categoria_id = $validatedData['categoria_id'];
         $producto->save();
 
         // Ejecuta el script solo si la validación ha sido exitosa
@@ -129,7 +118,6 @@ class ProductoController extends Controller
             'descripcion' => $request->descripcion,
             'stock' => $request->stock,
             'tipo' => $request->tipo,
-            'categoria_id' => $request->categoria_id,
         ]);
 
         return redirect()->back()->with('update_prod', 'Producto actualizado.');

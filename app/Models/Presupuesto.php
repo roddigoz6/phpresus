@@ -8,9 +8,11 @@ use Illuminate\Database\Eloquent\Model;
 class Presupuesto extends Model
 {
     use HasFactory;
+    protected $table = 'TPresupuestos';
 
     protected $fillable = [
         'cliente_id',
+        'proyecto_id',
         'precio_total',
         'aceptado',
         'eliminado',
@@ -26,9 +28,9 @@ class Presupuesto extends Model
         return $this->belongsTo(Cliente::class, 'cliente_id');
     }
 
-    public function orden()
+    public function proyecto()
     {
-        return $this->hasMany(Orden::class, 'presupuesto_id');
+        return $this->hasOne(Proyecto::class, 'proyecto_id');
     }
 
     public function productoPresupuestos()

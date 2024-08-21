@@ -13,14 +13,17 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('facturas', function (Blueprint $table) {
+        Schema::create('TPresupuestos', function (Blueprint $table) {
             $table->id();
-            //
-            $table->foreignId('orden_id')->constrained('ordenes');
+            $table->foreignId('cliente_id')->constrained('TClientes')->onDelete('cascade');
+            $table->string('proyecto_id');
+            $table->foreign('proyecto_id')->references('proyecto_id')->on('TProyectos')->onDelete('cascade');
+            $table->float('precio_total')->nullable();
+            $table->boolean('aceptado')->default(false);
             $table->boolean('eliminado')->default(false);
-            //
             $table->timestamps();
         });
+
     }
 
     /**
@@ -30,6 +33,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('facturas');
+        Schema::dropIfExists('TPresupuestos');
     }
 };
