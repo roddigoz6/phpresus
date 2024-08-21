@@ -1,12 +1,13 @@
 <x-default-layout>
-
-<div class="container mt-3">
-    <!-- Contenido de la página -->
-    <div class="row mb-2">
-        <div class="col d-flex align-items-center text-start">
-            <h2 class="align-center m-0">Clientes</h2>
+    @section('title')
+        Clientes
+    @endsection
+<div class="container">
+    <div class="row my-3 align-items-center">
+        <div class="col text-start">
+            <h2>Clientes</h2>
         </div>
-        <div class="col d-flex align-items-center justify-content-end text-end">
+        <div class="col text-end">
             <button type="button" class="btn btn-light-primary" data-bs-toggle="modal" data-bs-target="#crearClienteModal" data-bs-toggle="popover" data-bs-trigger="hover focus" title="Crear nuevo cliente">
                Agregar cliente <i class="fas fa-plus-circle"></i>
             </button>
@@ -24,8 +25,9 @@
 
                             <div class="col">
                                 <div class="header-modal">
-                                    <h4>Datos del cliente</h4>
+                                    <h4>Datos del cliente</span></h4>
                                 </div>
+
                                 <div class="row">
                                     <div class="col">
                                         <div class="">
@@ -214,7 +216,7 @@
                         <th class="icon-table">Correo</th>
                         <th class="icon-table">Número móvil</th>
                         <th class="icon-table">Establecido</th>
-                        <th class="icon-table">Fecha de ingreso</th>
+                        <th class="icon-table">Cliente desde</th>
                         <th class="icon-table">Acciones</th>
                     </tr>
                 </thead>
@@ -252,7 +254,7 @@
                                     Cliente establecido
                                 @endif
                             </td>
-                            <td class="align-middle">{{ $cliente->created_at }}</td>
+                            <td class="align-middle">{{ $cliente->created_at->format('d/m/Y H:i') }}</td>
                             <td class="align-middle">
                                 <!-- Botón para abrir el modal de edición -->
                                 <button type="button" class="btn btn-light-primary" data-bs-toggle="modal" data-bs-target="#editarClienteModal{{ $cliente->id }}">
@@ -326,7 +328,7 @@
                         <th class="icon-table">DNI</th>
                         <th class="icon-table">Correo</th>
                         <th class="icon-table">Número móvil</th>
-                        <th class="icon-table">Fecha de ingreso</th>
+                        <th class="icon-table">Cliente desde</th>
                         <th class="icon-table">Acciones</th>
                     </tr>
                 </thead>
@@ -357,7 +359,7 @@
                             </td>
 
                             <td class="align-middle">{{ $cliente->movil }}</td>
-                            <td class="align-middle">{{ $cliente->created_at }}</td>
+                            <td class="align-middle">{{ $cliente->created_at->format('d/m/Y H:i') }}</td>
                             <td class="align-middle">
                                 <!-- Botón para abrir el modal de edición -->
                                 <button type="button" class="btn btn-light-primary" data-bs-toggle="modal" data-bs-target="#editarClienteModal{{ $cliente->id }}">
@@ -431,7 +433,7 @@
                         <th class="icon-table">DNI</th>
                         <th class="icon-table">Correo</th>
                         <th class="icon-table">Número móvil</th>
-                        <th class="icon-table">Fecha de ingreso</th>
+                        <th class="icon-table">Cliente desde</th>
                         <th class="icon-table">Acciones</th>
                     </tr>
                 </thead>
@@ -462,7 +464,7 @@
                             </td>
 
                             <td class="align-middle">{{ $cliente->movil }}</td>
-                            <td class="align-middle">{{ $cliente->created_at }}</td>
+                            <td class="align-middle">{{ $cliente->created_at->format('d/m/Y H:i') }}</td>
                             <td class="align-middle">
                                 <!-- Botón para abrir el modal de edición -->
                                 <button type="button" class="btn btn-light-primary" data-bs-toggle="modal" data-bs-target="#editarClienteModal{{ $cliente->id }}">

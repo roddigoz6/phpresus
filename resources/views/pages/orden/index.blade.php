@@ -1,9 +1,11 @@
 <x-default-layout>
-
+    @section('title')
+        Órdenes
+    @endsection
 <div class="container">
     <div class="row my-3 align-items-center">
         <div class="col text-start">
-            <h2>Ordenes</h2>
+            <h2>Órdenes</h2>
         </div>
     </div>
 
@@ -65,7 +67,7 @@
                             <td class="align-middle">{{ $orden->cliente_nombre }} {{ $orden->cliente_apellido }}</td>
                             <td class="align-middle">{{ $orden->cliente_dni }}</td>
                             <td class="align-middle">{{ $orden->precio_total }}</td>
-                            <td class="align-middle">{{ $orden->created_at }}</td>
+                            <td class="align-middle">{{ $orden->created_at->format('d/m/Y H:i') }}</td>
                             <td class="align-middle">
                                 <a href="" class="btn btn-light-success" data-orden-id="{{ $orden->id }}" data-bs-toggle="popover" title="Generar factura"><i class="fa-solid fa-receipt"></i></a>
                                 <form id="delete-form-{{ $orden->id }}" action="{{ route('orden.destroy', $orden->id) }}" method="POST" style="display: inline;">
@@ -161,7 +163,7 @@
                         <td class="align-middle">{{ $orden->cliente_nombre }} {{ $orden->cliente_apellido }}</td>
                         <td class="align-middle">{{ $orden->cliente_dni }}</td>
                         <td class="align-middle">{{ $orden->precio_total }}</td>
-                        <td class="align-middle">{{ $orden->created_at }}</td>
+                        <td class="align-middle">{{ $orden->created_at->format('d/m/Y H:i') }}</td>
                         <td class="align-middle">
                             <a href="" class="btn btn-light-success create-order-btn" data-presupuesto-id="{{ $orden->id }}" data-bs-toggle="popover" title="Crear orden"><i class="fa-solid fa-check"></i></a>
                             <form id="delete-form-{{ $orden->id }}" action="{{ route('orden.destroy', $orden->id) }}" method="POST" style="display: inline;">
@@ -258,7 +260,7 @@
                         <td class="align-middle">{{ $orden->cliente_nombre }} {{ $orden->cliente_apellido }}</td>
                         <td class="align-middle">{{ $orden->cliente_dni }}</td>
                         <td class="align-middle">{{ $orden->precio_total }}</td>
-                        <td class="align-middle">{{ $orden->created_at }}</td>
+                        <td class="align-middle">{{ $orden->created_at->format('d/m/Y H:i') }}</td>
                         <td class="align-middle">
                             <a href="" class="btn btn-light-success create-order-btn" data-presupuesto-id="{{ $orden->id }}" data-bs-toggle="popover" title="Crear orden"><i class="fa-solid fa-check"></i></a>
                             <form id="delete-form-{{ $orden->id }}" action="{{ route('orden.destroy', $orden->id) }}" method="POST" style="display: inline;">

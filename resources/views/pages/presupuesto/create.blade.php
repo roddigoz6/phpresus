@@ -1,4 +1,8 @@
 <x-default-layout>
+    @section('title')
+        Nuevo presupuesto
+    @endsection
+
 <div class="container mt-3">
     <div class="row">
         <div class="col-md-4">
@@ -7,8 +11,8 @@
                     <h3 class="mb-0">Productos</h3>
                 </div>
                 <div class="col text-end">
-                    <button type="button" class="btn btn-light-primary" data-bs-toggle="modal" data-bs-target="#crearProductoModal" data-bs-toggle="popover" data-bs-trigger="hover focus" title="Crear un nuevo producto y agregar a la lista">
-                        Agregar producto <i class="fas fa-plus-circle"></i>
+                    <button type="button" class="btn btn-light-primary" data-bs-toggle="modal" data-bs-target="#crearProductoModal">
+                        Nuevo producto <i class="fas fa-plus-circle"></i>
                     </button>
                 </div>
             </div>
@@ -84,16 +88,20 @@
 
             <form method="GET" action="{{ route('presupuesto.getProductos') }}" id="search-form" class="d-flex">
                 <div class="input-group mb-3">
-                    <input type="text" name="search" id="search-input" class="form-control" placeholder="Buscar productos..." value="{{ request('search') }}">
+                    <input type="text" name="search" id="search-input" class="form-control" placeholder="Buscar productos..." value="{{ request('search') }}" style="border-radius:5px;">
                     <div class="input-group-append">
-                    <button class="btn btn-light-primary" id="search-button" type="button" data-bs-toggle="popover" data-bs-trigger="hover focus" title="Buscar producto por nombre">
+                    <button class="btn btn-light-primary mx-3" id="search-button" type="button" data-bs-toggle="popover" data-bs-trigger="hover focus" title="Buscar producto por nombre">
                         <i class="fas fa-search"></i>
                     </button>
                     </div>
+
+                    <input type="hidden" name="sort_by" id="sort_by-input" value="{{ $sort_by ?? 'nombre' }}">
+
                     <input type="hidden" name="order" id="order-input" value="{{ $order ?? 'asc' }}">
-                    <button type="button" id="orderButton" class="nav-link ms-2 d-flex align-items-center" data-bs-toggle="popover" data-bs-trigger="hover focus" title="Ordenar productos por nombre">
+                    <button type="button" id="orderButton" class="nav-link ms-2 d-flex align-items-center mx-3" data-bs-toggle="popover" data-bs-trigger="hover focus" title="Ordenar productos por nombre">
                         <i class="fa-solid fa-up-down"></i>
                     </button>
+
                     <input type="hidden" name="precio_order" id="precio_order-input" value="{{ $precio_order ?? 'asc' }}">
                     <button type="button" id="precioButton" class="nav-link ms-2 d-flex align-items-center" data-bs-toggle="popover" data-bs-trigger="hover focus" title="Ordenar productos por precio">
                         <i class="fa-solid fa-euro-sign"></i>
@@ -111,7 +119,7 @@
                     <h3 class="mb-0">Clientes</h3>
                 </div>
                 <div class="col text-end">
-                    <button type="button" class="btn btn-light-primary" data-bs-toggle="modal" data-bs-target="#crearClienteModal" data-bs-toggle="popover" data-bs-trigger="hover focus" title="Crear nuevo cliente y agregar a la lista">
+                    <button type="button" class="btn btn-light-primary" data-bs-toggle="modal" data-bs-target="#crearClienteModal">
                         Agregar cliente <i class="fas fa-plus-circle"></i>
                     </button>
                 </div>
@@ -622,6 +630,7 @@ function agregarProducto(productoId) {
 }
 
 $(document).ready(function() {
+
     $('#cliente').select2({
         placeholder: 'Seleccionar cliente',
         allowClear: true,
@@ -647,9 +656,31 @@ $(document).ready(function() {
         const markup = "<div>" + result.text + "</div>";
         return markup;
     }
-});
 
-$(document).ready(function() {
+    function cargarProductos(params = {}) {
+        const url = params.url || '{{ route('presupuesto.getProductos') }}';
+        const data = {
+            search: $('#search-input').val(),
+            order: $('#order-input').val(),
+            precio_order: $('#precio_order-input').val(),
+            sort_by: $('#sort_by-input').val(),
+            _token: '{{ csrf_token() }}'
+        };
+
+        $.ajax({
+            url: url,
+            method: 'GET',
+            data: data,
+            success: function(response) {
+                $('#productos-content').html(response.html);
+            },
+            error: function(xhr, status, error) {
+                alert('Error al cargar los productos.');
+                console.error(error);
+            }
+        });
+    }
+
     // Prevenir comportamiento por defecto del formulario
     $('#search-form').on('submit', function(e) {
         e.preventDefault();
@@ -666,6 +697,7 @@ $(document).ready(function() {
         const currentOrder = $('#order-input').val();
         const newOrder = currentOrder === 'asc' ? 'desc' : 'asc';
         $('#order-input').val(newOrder);
+        $('#sort_by-input').val('nombre');
         cargarProductos();
     });
 
@@ -674,11 +706,9 @@ $(document).ready(function() {
         const currentPrecioOrder = $('#precio_order-input').val();
         const newPrecioOrder = currentPrecioOrder === 'asc' ? 'desc' : 'asc';
         $('#precio_order-input').val(newPrecioOrder);
+        $('#sort_by-input').val('precio');
         cargarProductos();
     });
-
-    // Función para cargar productos al cargar la página
-    cargarProductos();
 
     // Función para cargar productos al hacer clic en la paginación
     $('#productos-container').on('click', '.pagination a', function (e) {
@@ -687,42 +717,15 @@ $(document).ready(function() {
         cargarProductos({ url: url });
     });
 
-    // Función para cargar productos utilizando AJAX
-    function cargarProductos(params = {}) {
-    const url = params.url || '{{ route('presupuesto.getProductos') }}';
-    //const url = (params.url || '{{ route('presupuesto.getProductos') }}').replace(/^http:/, 'https:');
-    const data = {
-        search: $('#search-input').val(),
-        order: $('#order-input').val(),
-        precio_order: $('#precio_order-input').val(),
-        _token: '{{ csrf_token() }}'
-    };
+    cargarProductos();
 
-    $.ajax({
-        url: url,
-        method: 'GET',
-        data: data,
-        success: function(response) {
-            $('#productos-content').html(response.html);
-            $('.pagination').html(response.pagination);
-        },
-        error: function(xhr, status, error) {
-            alert('Error al cargar los productos.');
-            console.error(error);
-        }
+    // Manejar el clic en los enlaces de paginación
+    $(document).on('click', '.pagination a', function(event) {
+        event.preventDefault();
+
+        const pageUrl = $(this).attr('href');
+        cargarProductos({ url: pageUrl });
     });
-}
-
-// Manejar el clic en los enlaces de paginación
-$(document).on('click', '.pagination a', function(event) {
-    event.preventDefault();
-
-    const pageUrl = $(this).attr('href');
-    cargarProductos({ url: pageUrl });
-});
-
-
-
 });
 </script>
 @endpush

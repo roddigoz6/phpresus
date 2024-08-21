@@ -49,6 +49,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::get('/productos/bajo-stock', [DashboardController::class, 'getProductosBajoStock'])->name('productos.bajo.stock');
 
+    Route::get('/user/{id}/getUltimaModif', [UserController::class, 'getUltimaModif'])->name('user.getUltimaModif');
+
 });
 
 Route::get('/error', function () {

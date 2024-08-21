@@ -68,17 +68,26 @@ class PresupuestoController extends Controller
             $search = $request->input('search');
             $order = $request->input('order', 'asc');
             $precio_order = $request->input('precio_order', 'asc');
+            $sortBy = $request->input('sort_by', 'nombre');
 
             $productosQuery = Producto::where('eliminado', false);
+
             if ($search) {
                 $productosQuery->where(function ($query) use ($search) {
-                    $query->where('nombre', 'like', '%' . $search . '%')
+                    $query->where('id', $search)
+                        ->orwhere('nombre', 'like', '%' . $search . '%')
                         ->orWhereHas('categoria', function ($query) use ($search) {
                             $query->where('nombre', 'like', '%' . $search . '%');
                         });
                 });
             }
-            $productosQuery->orderBy('precio', $precio_order);
+
+            if ($sortBy === 'precio') {
+                $productosQuery->orderBy('precio', $precio_order);
+            } else {
+                $productosQuery->orderBy('nombre', $order);
+            }
+
             $productos = $productosQuery->paginate(15);
 
             if ($request->ajax()) {
@@ -225,7 +234,7 @@ class PresupuestoController extends Controller
         }
 
         //dd($producto);
-        return redirect()->route('pages/presupuesto.index')->with('update_pres', 'Presupuesto actualizado.')->with('clear_storage', true);
+        return redirect()->route('presupuesto.index')->with('update_pres', 'Presupuesto actualizado.')->with('clear_storage', true);
     }
 
     public function download(Presupuesto $presupuesto, $sendByEmail = false)

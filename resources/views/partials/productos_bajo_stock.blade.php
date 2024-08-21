@@ -11,7 +11,11 @@
     <tbody>
     @foreach ($productosBajoStock as $producto)
         <tr>
-            <td><span class="badge badge-light-info fs-base">{{ $producto->id }}</span></td>
+            <td class="align-middle">
+                <div class="symbol symbol-35px symbol-circle">
+                    <span class="symbol-label bg-info text-inverse-info fw-bold">{{$producto->id}}</span>
+                </div>
+            </td>
             <td>{{ $producto->nombre }}</td>
             <td>{{ $producto->categoria->nombre }}</td>
             <td><span class="badge badge-light-danger fs-base">{{ $producto->stock }}</span></td>
@@ -60,8 +64,11 @@ if ($endPage - $startPage + 1 < $maxPagesToShow) {
             </li>
         @endif
     </ul>
-</div>
 
+</div>
+<div class="mt-3 text-center">
+    <a href="{{ route('producto.index') }}" class="btn btn-sm btn-dark fw-bold">Ir a productos</a>
+</div>
 @else
     <h3 class="text-center">
         No hay productos con menos de <span class="text-danger opacity-75-hover">5 unidades</span> en stock. :)

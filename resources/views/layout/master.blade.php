@@ -3,7 +3,7 @@
 <!--begin::Head-->
 <head>
     <base href=""/>
-    <title>{{ config('app.name', 'PhPresus') }}</title>
+    <title>{{ config('app.name', 'PhPresus') }} - @yield('title', '')</title>
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta charset="utf-8"/>
     <meta name="description" content=""/>
@@ -44,13 +44,26 @@
             border-radius: 15px;
             overflow: hidden;
         }
+
+        /*
         .modal-content{
             backdrop-filter: blur(5px)!important ;
             background-color: rgba(255, 255, 255, 0.7) !important;
         }
+
         .modal{
             backdrop-filter: blur(5px)!important ;
             background-color: rgba(255, 255, 255, 0.2) !important;
+        }
+        */
+        .element-id {
+            background-color: #C5B3E6;
+            color: #6f42c1;
+            transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
+        }
+        .element-id:hover{
+            background-color: #6f42c1;
+            color:#fff;
         }
         .header-modal
         {

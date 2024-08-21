@@ -1,12 +1,13 @@
 <x-default-layout>
-
-<div class="container mt-3">
-    <!-- Contenido de la página -->
-    <div class="row mb-2">
-        <div class="col d-flex align-items-center text-start">
-            <h2 class="align-center m-0">Categorías de productos</h2>
+    @section('title')
+        Categorías
+    @endsection
+<div class="container">
+    <div class="row my-3 align-items-center">
+        <div class="col text-start">
+            <h2>Categorías de productos</h2>
         </div>
-        <div class="col d-flex align-items-center justify-content-end text-end">
+        <div class="col text-end">
             <button type="button" class="btn btn-light-primary" data-bs-toggle="modal" data-bs-target="#crearCategoriaModal" data-bs-toggle="popover" data-bs-trigger="hover focus" title="Crear nueva categoría">
                 Nueva categoría <i class="fas fa-plus-circle"></i>
             </button>
@@ -60,7 +61,6 @@
         </div>
     </div>
 
-
     <!-- Formulario de búsqueda -->
     <form action="{{ route('categoria.index') }}" method="GET" class="mb-3">
         <div class="input-group">
@@ -88,7 +88,7 @@
                     </button>
                 </td>
                 <td class="align-middle">{{ $categoria->nombre }}</td>
-                <td class="align-middle">{{ $categoria->created_at }}</td>
+                <td class="align-middle">{{ $categoria->created_at->format('d/m/Y H:i') }}</td>
                 <td class="align-middle">
                     <form id="delete-form-{{ $categoria->id }}" action="{{ route('categoria.destroy', $categoria->id) }}" method="POST" style="display: inline;">
                         @csrf
@@ -106,12 +106,11 @@
     @php
     $totalPages = $categorias->lastPage();
     $currentPage = $categorias->currentPage();
-    $maxPagesToShow = 5; // Número máximo de enlaces de página a mostrar
+    $maxPagesToShow = 5;
 
     $startPage = max($currentPage - floor($maxPagesToShow / 2), 1);
     $endPage = min($startPage + $maxPagesToShow - 1, $totalPages);
 
-    // Ajuste para cuando hay menos de 10 páginas a mostrar al principio o al final
     if ($endPage - $startPage + 1 < $maxPagesToShow) {
         $startPage = max($endPage - $maxPagesToShow + 1, 1);
     }
@@ -169,13 +168,13 @@
                         <tbody>
                             @forelse ($categoria->productos as $producto)
                                 <tr>
-                                    <td> <span class="badge badge-light-info">{{ $producto->id }}</span></td>
-                                    <td>{{ $producto->nombre }}</td>
-                                    <td>{{ $producto->descripcion }}</td>
-                                    <td>{{ $producto->precio }}</td>
-                                    <td>
-                                        <span class="badge
-                                            {{ $producto->stock < 5 ? 'badge-light-danger' : 'badge-light-primary' }}">
+                                    <td class="align-middle"> <span class="badge px-4 fs-7 badge-light-info">{{ $producto->id }}</span></td>
+                                    <td class="align-middle">{{ $producto->nombre }}</td>
+                                    <td class="align-middle" style="max-width: 200px; overflow: hidden; text-overflow: ellipsis; text-align:justify;">{{ $producto->descripcion }}</td>
+                                    <td class="align-middle">{{ $producto->precio }}</td>
+                                    <td class="align-middle">
+                                        <span class="badge px-4 fs-7
+                                            {{ $producto->stock < 6 ? 'badge-light-danger' : 'badge-light-primary' }}">
                                             {{ $producto->stock }}
                                         </span>
                                     </td>

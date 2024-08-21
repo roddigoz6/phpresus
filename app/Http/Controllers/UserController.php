@@ -39,4 +39,12 @@ class UserController extends Controller
         return response()->json(['message' => 'Cuenta actualizada.']);
     }
 
+    public function getUltimaModif($id)
+    {
+        $user = User::find($id);
+        return response()->json([
+            'updated_at' => $user->updated_at->format('d/m/Y H:i'),
+        ]);
+    }
+
 }

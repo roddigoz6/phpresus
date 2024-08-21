@@ -13,9 +13,6 @@
                 <!-- Aquí se cargará el contenido con AJAX -->
             </div>
 
-            <div class="text-center mt-3">
-                <a href="{{ route('producto.index') }}" class="btn btn-sm btn-dark fw-bold">Ir a productos</a>
-            </div>
         </div>
     </div>
 </div>

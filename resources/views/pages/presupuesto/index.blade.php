@@ -1,360 +1,362 @@
 <x-default-layout>
-    <div class="container">
-        <div class="row my-3 align-items-center">
-            <div class="col text-start">
-                <h2>Presupuestos</h2>
-            </div>
-            <div class="col text-end">
-                <a href="{{ route('presupuesto.create') }}" class="btn btn-light-primary">Nuevo presupuesto <i
-                        class="fas fa-plus-circle"></i></a>
-            </div>
+    @section('title')
+        Presupuestos
+    @endsection
+<div class="container">
+    <div class="row my-3 align-items-center">
+        <div class="col text-start">
+            <h2>Presupuestos</h2>
         </div>
-
-        <form action="{{ route('presupuesto.index') }}" method="GET" class="mb-3">
-            <div class="input-group">
-                <input type="text" class="form-control" name="search" placeholder="Buscar por nombre de cliente">
-                <button class="btn btn-light-primary" type="submit"><i class="fas fa-search"></i></button>
-            </div>
-        </form>
-
-        <!-- Pestañas de navegación -->
-        <ul class="nav nav-tabs" id="presupuestoTabs" role="tablist">
-            <li class="nav-item" role="presentation">
-                <a class="nav-link active" id="all-tab" data-bs-toggle="tab" href="#all" role="tab"
-                    aria-controls="all" aria-selected="true">Todos</a>
-            </li>
-            <li class="nav-item" role="presentation">
-                <a class="nav-link" id="not-accepted-tab" data-bs-toggle="tab" href="#not-accepted" role="tab"
-                    aria-controls="not-accepted" aria-selected="false">No Aceptados</a>
-            </li>
-            <li class="nav-item" role="presentation">
-                <a class="nav-link" id="accepted-tab" data-bs-toggle="tab" href="#accepted" role="tab"
-                    aria-controls="accepted" aria-selected="false">Aceptados</a>
-            </li>
-        </ul>
-
-        <div class="tab-content mt-3" id="presupuestoTabsContent">
-            <!-- Todos los presupuestos -->
-            <div class="tab-pane fade {{ $tab == 'all' ? 'show active' : '' }}" id="all" role="tabpanel"
-                aria-labelledby="all-tab">
-                <table class="table table-light text-center table-hover rounded-table">
-                    <thead class="table-dark">
-                        <tr class="align-middle">
-                            <th class="icon-table">Id</th>
-                            <th class="icon-table">Cliente</th>
-                            <th class="icon-table">Precio total</th>
-                            <th class="icon-table">Estado de presupuesto</th>
-                            <th class="icon-table">Fecha de creación</th>
-                            <th class="icon-table">Acciones</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @if ($presupuestos->isEmpty())
-                            <tr>
-                                <td colspan="6" class="text-center">No hay presupuestos creados.</td>
-                            </tr>
-                        @else
-                            @foreach ($presupuestos as $presupuesto)
-                                <tr>
-                                    <td class="align-middle">
-                                        <button class="btn btn-light-info" data-bs-toggle="modal"
-                                            data-bs-target="#detallePresupuestoModal"
-                                            data-presupuesto-id="{{ $presupuesto->id }}" data-bs-toggle="popover"
-                                            title="Ver detalle de presupuesto">
-                                            {{ $presupuesto->id }}
-                                        </button>
-                                    </td>
-                                    <td class="align-middle">{{ $presupuesto->cliente->nombre }}</td>
-                                    <td class="align-middle">{{ $presupuesto->precio_total }}</td>
-                                    <td class="align-middle">
-                                        @if ($presupuesto->aceptado == 0)
-                                            Presupuesto no aceptado aún
-                                        @else
-                                            Presupuesto aceptado
-                                        @endif
-                                    </td>
-                                    <td class="align-middle">{{ $presupuesto->created_at }}</td>
-                                    <td class="align-middle">
-
-                                        <a href="{{ route('presupuesto.edit', $presupuesto->id) }}"
-                                            class="btn btn-light-primary" data-bs-toggle="popover"
-                                            title="Editar presupuesto"><i class="fa-solid fa-pen-to-square"></i></a>
-
-                                        <a href="" class="btn btn-light-success create-order-btn"
-                                            data-presupuesto-id="{{ $presupuesto->id }}" data-bs-toggle="popover"
-                                            title="Crear orden"><i class="fa-solid fa-check"></i></a>
-
-                                        <form action="{{ route('presupuesto.destroy', $presupuesto->id) }}"
-                                            method="POST" style="display: inline;">
-                                            @csrf
-                                            @method('DELETE')
-                                            <input type="hidden" name="page"
-                                                value="{{ $presupuestos->currentPage() }}">
-                                            <button type="button" class="btn btn-light-danger delete-btn"
-                                                data-presupuesto-id="{{ $presupuesto->id }}" data-bs-toggle="popover"
-                                                title="Eliminar presupuesto"><i class="fa-solid fa-trash"></i></button>
-                                        </form>
-                                    </td>
-                                </tr>
-                            @endforeach
-                        @endif
-                    </tbody>
-                </table>
-
-                @php
-                    $totalPages = $presupuestos->lastPage();
-                    $currentPage = $presupuestos->currentPage();
-                    $maxPagesToShow = 5; // Número máximo de enlaces de página a mostrar
-
-                    $startPage = max($currentPage - floor($maxPagesToShow / 2), 1);
-                    $endPage = min($startPage + $maxPagesToShow - 1, $totalPages);
-
-                    // Ajuste para cuando hay menos de 10 páginas a mostrar al principio o al final
-                    if ($endPage - $startPage + 1 < $maxPagesToShow) {
-                        $startPage = max($endPage - $maxPagesToShow + 1, 1);
-                    }
-                @endphp
-
-                <div class="d-flex justify-content-center">
-                    <ul class="pagination">
-                        @if ($startPage > 1)
-                            <li class="page-item">
-                                <a class="page-link" href="{{ $presupuestos->url(1) }}&tab=all">1</a>
-                            </li>
-                            @if ($startPage > 2)
-                                <li class="page-item disabled"><span class="page-link">...</span></li>
-                            @endif
-                        @endif
-
-                        @for ($i = $startPage; $i <= $endPage; $i++)
-                            <li class="page-item {{ $presupuestos->currentPage() == $i ? 'active' : '' }}">
-                                <a class="page-link"
-                                    href="{{ $presupuestos->url($i) }}&tab=all">{{ $i }}</a>
-                            </li>
-                        @endfor
-
-                        @if ($endPage < $totalPages)
-                            @if ($endPage < $totalPages - 1)
-                                <li class="page-item disabled"><span class="page-link">...</span></li>
-                            @endif
-                            <li class="page-item">
-                                <a class="page-link"
-                                    href="{{ $categorias->url($totalPages) }}&tab=all">{{ $totalPages }}</a>
-                            </li>
-                        @endif
-                    </ul>
-                </div>
-
-            </div>
-
-            <!-- Presupuestos no aceptados -->
-            <div <div class="tab-pane fade {{ $tab == 'not-accepted' ? 'show active' : '' }}" id="not-accepted"
-                role="tabpanel" aria-labelledby="not-accepted-tab">
-                <table class="table table-light text-center table-hover rounded-table">
-                    <thead class="table-dark">
-                        <tr class="align-middle">
-                            <th class="icon-table">Id</th>
-                            <th class="icon-table">Cliente</th>
-                            <th class="icon-table">Precio total</th>
-                            <th class="icon-table">Estado de presupuesto</th>
-                            <th class="icon-table">Fecha de creación</th>
-                            <th class="icon-table">Acciones</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @if ($presupuestos->where('aceptado', 0)->isEmpty())
-                            <tr>
-                                <td colspan="6" class="text-center">No hay presupuestos no aceptados.</td>
-                            </tr>
-                        @else
-                            @foreach ($presupuestos->where('aceptado', 0) as $presupuesto)
-                                <tr>
-                                    <td class="align-middle">
-                                        <button class="btn btn-light-info" data-bs-toggle="modal"
-                                            data-bs-target="#detallePresupuestoModal"
-                                            data-presupuesto-id="{{ $presupuesto->id }}" data-bs-toggle="popover"
-                                            title="Ver detalle de presupuesto">
-                                            {{ $presupuesto->id }}
-                                        </button>
-                                    </td>
-                                    <td class="align-middle">{{ $presupuesto->cliente->nombre }}</td>
-                                    <td class="align-middle">{{ $presupuesto->precio_total }}</td>
-                                    <td class="align-middle">presupuesto no aceptado aún</td>
-                                    <td class="align-middle">{{ $presupuesto->created_at }}</td>
-                                    <td class="align-middle">
-                                        <a href="" class="btn btn-light-primary" data-bs-toggle="popover"
-                                            title="Editar presupuesto"><i class="fa-solid fa-pen-to-square"></i></a>
-                                        <a href="" class="btn btn-light-success create-order-btn"
-                                            data-presupuesto-id="{{ $presupuesto->id }}" data-bs-toggle="popover"
-                                            title="Crear orden"><i class="fa-solid fa-check"></i></a>
-                                        <form id="delete-form-{{ $presupuesto->id }}"
-                                            action="{{ route('presupuesto.destroy', $presupuesto->id) }}"
-                                            method="POST" style="display: inline;">
-                                            @csrf
-                                            @method('DELETE')
-                                            <input type="hidden" name="page"
-                                                value="{{ $presupuestos->currentPage() }}">
-                                            <button type="button" class="btn btn-light-danger delete-btn"
-                                                data-presupuesto-id="{{ $presupuesto->id }}"><i
-                                                    class="fa-solid fa-trash"></i></button>
-                                        </form>
-                                    </td>
-                                </tr>
-                            @endforeach
-                        @endif
-                    </tbody>
-                </table>
-
-                @php
-                    $totalPages = $presupuestos->lastPage();
-                    $currentPage = $presupuestos->currentPage();
-                    $maxPagesToShow = 5; // Número máximo de enlaces de página a mostrar
-
-                    $startPage = max($currentPage - floor($maxPagesToShow / 2), 1);
-                    $endPage = min($startPage + $maxPagesToShow - 1, $totalPages);
-
-                    // Ajuste para cuando hay menos de 10 páginas a mostrar al principio o al final
-                    if ($endPage - $startPage + 1 < $maxPagesToShow) {
-                        $startPage = max($endPage - $maxPagesToShow + 1, 1);
-                    }
-                @endphp
-
-                <div class="d-flex justify-content-center">
-                    <ul class="pagination">
-                        @if ($startPage > 1)
-                            <li class="page-item">
-                                <a class="page-link" href="{{ $presupuestos->url(1) }}&tab=all">1</a>
-                            </li>
-                            @if ($startPage > 2)
-                                <li class="page-item disabled"><span class="page-link">...</span></li>
-                            @endif
-                        @endif
-
-                        @for ($i = $startPage; $i <= $endPage; $i++)
-                            <li class="page-item {{ $presupuestos->currentPage() == $i ? 'active' : '' }}">
-                                <a class="page-link"
-                                    href="{{ $presupuestos->url($i) }}&tab=all">{{ $i }}</a>
-                            </li>
-                        @endfor
-
-                        @if ($endPage < $totalPages)
-                            @if ($endPage < $totalPages - 1)
-                                <li class="page-item disabled"><span class="page-link">...</span></li>
-                            @endif
-                            <li class="page-item">
-                                <a class="page-link"
-                                    href="{{ $categorias->url($totalPages) }}&tab=all">{{ $totalPages }}</a>
-                            </li>
-                        @endif
-                    </ul>
-                </div>
-            </div>
-
-            <!-- Presupuestos aceptados -->
-            <div class="tab-pane fade {{ $tab == 'accepted' ? 'show active' : '' }}" id="accepted" role="tabpanel"
-                aria-labelledby="accepted-tab">
-                <table class="table table-light text-center table-hover rounded-table">
-                    <thead class="table-dark">
-                        <tr>
-                            <th class="icon-table">Id</th>
-                            <th class="icon-table">Cliente</th>
-                            <th class="icon-table">Precio total</th>
-                            <th class="icon-table">Estado de presupuesto</th>
-                            <th class="icon-table">Fecha de creación</th>
-                            <th class="icon-table">Acciones</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @if ($presupuestos->where('aceptado', 1)->isEmpty())
-                            <tr>
-                                <td colspan="6" class="text-center">No hay presupuestos aceptados.</td>
-                            </tr>
-                        @else
-                            @foreach ($presupuestos->where('aceptado', 1) as $presupuesto)
-                                <tr>
-                                    <td class="align-middle">
-                                        <button class="btn btn-light-info" data-bs-toggle="modal"
-                                            data-bs-target="#detallePresupuestoModal"
-                                            data-presupuesto-id="{{ $presupuesto->id }}" data-bs-toggle="popover"
-                                            title="Ver detalle de presupuesto">
-                                            {{ $presupuesto->id }}
-                                        </button>
-                                    </td class="align-middle">
-                                    <td class="align-middle">{{ $presupuesto->cliente->nombre }}</td>
-                                    <td class="align-middle">{{ $presupuesto->precio_total }}</td>
-                                    <td class="align-middle">Presupuesto aceptado</td>
-                                    <td class="align-middle">{{ $presupuesto->created_at }}</td>
-                                    <td class="align-middle">
-                                        <a href="" class="btn btn-light-primary" data-bs-toggle="popover"
-                                            title="Editar presupuesto"><i class="fa-solid fa-pen-to-square"></i></a>
-                                        <a href="" class="btn btn-light-success create-order-btn"
-                                            data-presupuesto-id="{{ $presupuesto->id }}" data-bs-toggle="popover"
-                                            title="Crear orden"><i class="fa-solid fa-check"></i></a>
-                                        <form id="delete-form-{{ $presupuesto->id }}"
-                                            action="{{ route('presupuesto.destroy', $presupuesto->id) }}"
-                                            method="POST" style="display: inline;">
-                                            @csrf
-                                            @method('DELETE')
-                                            <input type="hidden" name="page"
-                                                value="{{ $presupuestos->currentPage() }}">
-                                            <button type="button" class="btn btn-light-danger delete-btn"
-                                                data-presupuesto-id="{{ $presupuesto->id }}"><i
-                                                    class="fa-solid fa-trash"></i></button>
-                                        </form>
-                                    </td>
-                                </tr>
-                            @endforeach
-                        @endif
-                    </tbody>
-                </table>
-
-                @php
-                    $totalPages = $presupuestos->lastPage();
-                    $currentPage = $presupuestos->currentPage();
-                    $maxPagesToShow = 5; // Número máximo de enlaces de página a mostrar
-
-                    $startPage = max($currentPage - floor($maxPagesToShow / 2), 1);
-                    $endPage = min($startPage + $maxPagesToShow - 1, $totalPages);
-
-                    // Ajuste para cuando hay menos de 10 páginas a mostrar al principio o al final
-                    if ($endPage - $startPage + 1 < $maxPagesToShow) {
-                        $startPage = max($endPage - $maxPagesToShow + 1, 1);
-                    }
-                @endphp
-
-                <div class="d-flex justify-content-center">
-                    <ul class="pagination">
-                        @if ($startPage > 1)
-                            <li class="page-item">
-                                <a class="page-link" href="{{ $presupuestos->url(1) }}&tab=all">1</a>
-                            </li>
-                            @if ($startPage > 2)
-                                <li class="page-item disabled"><span class="page-link">...</span></li>
-                            @endif
-                        @endif
-
-                        @for ($i = $startPage; $i <= $endPage; $i++)
-                            <li class="page-item {{ $presupuestos->currentPage() == $i ? 'active' : '' }}">
-                                <a class="page-link"
-                                    href="{{ $presupuestos->url($i) }}&tab=all">{{ $i }}</a>
-                            </li>
-                        @endfor
-
-                        @if ($endPage < $totalPages)
-                            @if ($endPage < $totalPages - 1)
-                                <li class="page-item disabled"><span class="page-link">...</span></li>
-                            @endif
-                            <li class="page-item">
-                                <a class="page-link"
-                                    href="{{ $categorias->url($totalPages) }}&tab=all">{{ $totalPages }}</a>
-                            </li>
-                        @endif
-                    </ul>
-                </div>
-
-            </div>
+        <div class="col text-end">
+            <a href="{{ route('presupuesto.create') }}" class="btn btn-light-primary">Nuevo presupuesto <i class="fas fa-plus-circle"></i></a>
         </div>
     </div>
+
+    <form action="{{ route('presupuesto.index') }}" method="GET" class="mb-3">
+        <div class="input-group">
+            <input type="text" class="form-control" name="search" placeholder="Buscar por nombre de cliente">
+            <button class="btn btn-light-primary" type="submit"><i class="fas fa-search"></i></button>
+        </div>
+    </form>
+
+    <!-- Pestañas de navegación -->
+    <ul class="nav nav-tabs" id="presupuestoTabs" role="tablist">
+        <li class="nav-item" role="presentation">
+            <a class="nav-link active" id="all-tab" data-bs-toggle="tab" href="#all" role="tab"
+                aria-controls="all" aria-selected="true">Todos</a>
+        </li>
+        <li class="nav-item" role="presentation">
+            <a class="nav-link" id="not-accepted-tab" data-bs-toggle="tab" href="#not-accepted" role="tab"
+                aria-controls="not-accepted" aria-selected="false">No Aceptados</a>
+        </li>
+        <li class="nav-item" role="presentation">
+            <a class="nav-link" id="accepted-tab" data-bs-toggle="tab" href="#accepted" role="tab"
+                aria-controls="accepted" aria-selected="false">Aceptados</a>
+        </li>
+    </ul>
+
+    <div class="tab-content mt-3" id="presupuestoTabsContent">
+        <!-- Todos los presupuestos -->
+        <div class="tab-pane fade {{ $tab == 'all' ? 'show active' : '' }}" id="all" role="tabpanel"
+            aria-labelledby="all-tab">
+            <table class="table table-light text-center table-hover rounded-table">
+                <thead class="table-dark">
+                    <tr class="align-middle">
+                        <th class="icon-table">Id</th>
+                        <th class="icon-table">Cliente</th>
+                        <th class="icon-table">Precio total</th>
+                        <th class="icon-table">Estado de presupuesto</th>
+                        <th class="icon-table">Fecha de creación</th>
+                        <th class="icon-table">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if ($presupuestos->isEmpty())
+                        <tr>
+                            <td colspan="6" class="text-center">No hay presupuestos creados.</td>
+                        </tr>
+                    @else
+                        @foreach ($presupuestos as $presupuesto)
+                            <tr>
+                                <td class="align-middle">
+                                    <button class="btn btn-light-info" data-bs-toggle="modal"
+                                        data-bs-target="#detallePresupuestoModal"
+                                        data-presupuesto-id="{{ $presupuesto->id }}" data-bs-toggle="popover"
+                                        title="Ver detalle de presupuesto">
+                                        {{ $presupuesto->id }}
+                                    </button>
+                                </td>
+                                <td class="align-middle">{{ $presupuesto->cliente->nombre }}</td>
+                                <td class="align-middle">{{ $presupuesto->precio_total }}</td>
+                                <td class="align-middle">
+                                    @if ($presupuesto->aceptado == 0)
+                                        Presupuesto no aceptado aún
+                                    @else
+                                        Presupuesto aceptado
+                                    @endif
+                                </td>
+                                <td class="align-middle">{{ $presupuesto->created_at->format('d/m/Y H:i') }}</td>
+                                <td class="align-middle">
+
+                                    <a href="{{ route('presupuesto.edit', $presupuesto->id) }}"
+                                        class="btn btn-light-primary" data-bs-toggle="popover"
+                                        title="Editar presupuesto"><i class="fa-solid fa-pen-to-square"></i></a>
+
+                                    <a href="" class="btn btn-light-success create-order-btn"
+                                        data-presupuesto-id="{{ $presupuesto->id }}" data-bs-toggle="popover"
+                                        title="Crear orden"><i class="fa-solid fa-check"></i></a>
+
+                                    <form action="{{ route('presupuesto.destroy', $presupuesto->id) }}"
+                                        method="POST" style="display: inline;">
+                                        @csrf
+                                        @method('DELETE')
+                                        <input type="hidden" name="page"
+                                            value="{{ $presupuestos->currentPage() }}">
+                                        <button type="button" class="btn btn-light-danger delete-btn"
+                                            data-presupuesto-id="{{ $presupuesto->id }}" data-bs-toggle="popover"
+                                            title="Eliminar presupuesto"><i class="fa-solid fa-trash"></i></button>
+                                    </form>
+                                </td>
+                            </tr>
+                        @endforeach
+                    @endif
+                </tbody>
+            </table>
+
+            @php
+                $totalPages = $presupuestos->lastPage();
+                $currentPage = $presupuestos->currentPage();
+                $maxPagesToShow = 5; // Número máximo de enlaces de página a mostrar
+
+                $startPage = max($currentPage - floor($maxPagesToShow / 2), 1);
+                $endPage = min($startPage + $maxPagesToShow - 1, $totalPages);
+
+                // Ajuste para cuando hay menos de 10 páginas a mostrar al principio o al final
+                if ($endPage - $startPage + 1 < $maxPagesToShow) {
+                    $startPage = max($endPage - $maxPagesToShow + 1, 1);
+                }
+            @endphp
+
+            <div class="d-flex justify-content-center">
+                <ul class="pagination">
+                    @if ($startPage > 1)
+                        <li class="page-item">
+                            <a class="page-link" href="{{ $presupuestos->url(1) }}&tab=all">1</a>
+                        </li>
+                        @if ($startPage > 2)
+                            <li class="page-item disabled"><span class="page-link">...</span></li>
+                        @endif
+                    @endif
+
+                    @for ($i = $startPage; $i <= $endPage; $i++)
+                        <li class="page-item {{ $presupuestos->currentPage() == $i ? 'active' : '' }}">
+                            <a class="page-link"
+                                href="{{ $presupuestos->url($i) }}&tab=all">{{ $i }}</a>
+                        </li>
+                    @endfor
+
+                    @if ($endPage < $totalPages)
+                        @if ($endPage < $totalPages - 1)
+                            <li class="page-item disabled"><span class="page-link">...</span></li>
+                        @endif
+                        <li class="page-item">
+                            <a class="page-link"
+                                href="{{ $categorias->url($totalPages) }}&tab=all">{{ $totalPages }}</a>
+                        </li>
+                    @endif
+                </ul>
+            </div>
+
+        </div>
+
+        <!-- Presupuestos no aceptados -->
+        <div <div class="tab-pane fade {{ $tab == 'not-accepted' ? 'show active' : '' }}" id="not-accepted"
+            role="tabpanel" aria-labelledby="not-accepted-tab">
+            <table class="table table-light text-center table-hover rounded-table">
+                <thead class="table-dark">
+                    <tr class="align-middle">
+                        <th class="icon-table">Id</th>
+                        <th class="icon-table">Cliente</th>
+                        <th class="icon-table">Precio total</th>
+                        <th class="icon-table">Estado de presupuesto</th>
+                        <th class="icon-table">Fecha de creación</th>
+                        <th class="icon-table">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if ($presupuestos->where('aceptado', 0)->isEmpty())
+                        <tr>
+                            <td colspan="6" class="text-center">No hay presupuestos rechazados o por aceptar.</td>
+                        </tr>
+                    @else
+                        @foreach ($presupuestos->where('aceptado', 0) as $presupuesto)
+                            <tr>
+                                <td class="align-middle">
+                                    <button class="btn btn-light-info" data-bs-toggle="modal"
+                                        data-bs-target="#detallePresupuestoModal"
+                                        data-presupuesto-id="{{ $presupuesto->id }}" data-bs-toggle="popover"
+                                        title="Ver detalle de presupuesto">
+                                        {{ $presupuesto->id }}
+                                    </button>
+                                </td>
+                                <td class="align-middle">{{ $presupuesto->cliente->nombre }}</td>
+                                <td class="align-middle">{{ $presupuesto->precio_total }}</td>
+                                <td class="align-middle">presupuesto no aceptado aún</td>
+                                <td class="align-middle">{{ $presupuesto->created_at->format('d/m/Y H:i') }}</td>
+                                <td class="align-middle">
+                                    <a href="" class="btn btn-light-primary" data-bs-toggle="popover"
+                                        title="Editar presupuesto"><i class="fa-solid fa-pen-to-square"></i></a>
+                                    <a href="" class="btn btn-light-success create-order-btn"
+                                        data-presupuesto-id="{{ $presupuesto->id }}" data-bs-toggle="popover"
+                                        title="Crear orden"><i class="fa-solid fa-check"></i></a>
+                                    <form id="delete-form-{{ $presupuesto->id }}"
+                                        action="{{ route('presupuesto.destroy', $presupuesto->id) }}"
+                                        method="POST" style="display: inline;">
+                                        @csrf
+                                        @method('DELETE')
+                                        <input type="hidden" name="page"
+                                            value="{{ $presupuestos->currentPage() }}">
+                                        <button type="button" class="btn btn-light-danger delete-btn"
+                                            data-presupuesto-id="{{ $presupuesto->id }}"><i
+                                                class="fa-solid fa-trash"></i></button>
+                                    </form>
+                                </td>
+                            </tr>
+                        @endforeach
+                    @endif
+                </tbody>
+            </table>
+
+            @php
+                $totalPages = $presupuestos->lastPage();
+                $currentPage = $presupuestos->currentPage();
+                $maxPagesToShow = 5; // Número máximo de enlaces de página a mostrar
+
+                $startPage = max($currentPage - floor($maxPagesToShow / 2), 1);
+                $endPage = min($startPage + $maxPagesToShow - 1, $totalPages);
+
+                // Ajuste para cuando hay menos de 10 páginas a mostrar al principio o al final
+                if ($endPage - $startPage + 1 < $maxPagesToShow) {
+                    $startPage = max($endPage - $maxPagesToShow + 1, 1);
+                }
+            @endphp
+
+            <div class="d-flex justify-content-center">
+                <ul class="pagination">
+                    @if ($startPage > 1)
+                        <li class="page-item">
+                            <a class="page-link" href="{{ $presupuestos->url(1) }}&tab=all">1</a>
+                        </li>
+                        @if ($startPage > 2)
+                            <li class="page-item disabled"><span class="page-link">...</span></li>
+                        @endif
+                    @endif
+
+                    @for ($i = $startPage; $i <= $endPage; $i++)
+                        <li class="page-item {{ $presupuestos->currentPage() == $i ? 'active' : '' }}">
+                            <a class="page-link"
+                                href="{{ $presupuestos->url($i) }}&tab=all">{{ $i }}</a>
+                        </li>
+                    @endfor
+
+                    @if ($endPage < $totalPages)
+                        @if ($endPage < $totalPages - 1)
+                            <li class="page-item disabled"><span class="page-link">...</span></li>
+                        @endif
+                        <li class="page-item">
+                            <a class="page-link"
+                                href="{{ $categorias->url($totalPages) }}&tab=all">{{ $totalPages }}</a>
+                        </li>
+                    @endif
+                </ul>
+            </div>
+        </div>
+
+        <!-- Presupuestos aceptados -->
+        <div class="tab-pane fade {{ $tab == 'accepted' ? 'show active' : '' }}" id="accepted" role="tabpanel"
+            aria-labelledby="accepted-tab">
+            <table class="table table-light text-center table-hover rounded-table">
+                <thead class="table-dark">
+                    <tr>
+                        <th class="icon-table">Id</th>
+                        <th class="icon-table">Cliente</th>
+                        <th class="icon-table">Precio total</th>
+                        <th class="icon-table">Estado de presupuesto</th>
+                        <th class="icon-table">Fecha de creación</th>
+                        <th class="icon-table">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if ($presupuestos->where('aceptado', 1)->isEmpty())
+                        <tr>
+                            <td colspan="6" class="text-center">No hay presupuestos aceptados.</td>
+                        </tr>
+                    @else
+                        @foreach ($presupuestos->where('aceptado', 1) as $presupuesto)
+                            <tr>
+                                <td class="align-middle">
+                                    <button class="btn btn-light-info" data-bs-toggle="modal"
+                                        data-bs-target="#detallePresupuestoModal"
+                                        data-presupuesto-id="{{ $presupuesto->id }}" data-bs-toggle="popover"
+                                        title="Ver detalle de presupuesto">
+                                        {{ $presupuesto->id }}
+                                    </button>
+                                </td>
+                                <td class="align-middle">{{ $presupuesto->cliente->nombre }}</td>
+                                <td class="align-middle">{{ $presupuesto->precio_total }}</td>
+                                <td class="align-middle">Presupuesto aceptado</td>
+                                <td class="align-middle">{{ $presupuesto->created_at->format('d/m/Y H:i') }}</td>
+                                <td class="align-middle">
+                                    <a href="" class="btn btn-light-primary" data-bs-toggle="popover"
+                                        title="Editar presupuesto"><i class="fa-solid fa-pen-to-square"></i></a>
+                                    <a href="" class="btn btn-light-success create-order-btn"
+                                        data-presupuesto-id="{{ $presupuesto->id }}" data-bs-toggle="popover"
+                                        title="Crear orden"><i class="fa-solid fa-check"></i></a>
+                                    <form id="delete-form-{{ $presupuesto->id }}"
+                                        action="{{ route('presupuesto.destroy', $presupuesto->id) }}"
+                                        method="POST" style="display: inline;">
+                                        @csrf
+                                        @method('DELETE')
+                                        <input type="hidden" name="page"
+                                            value="{{ $presupuestos->currentPage() }}">
+                                        <button type="button" class="btn btn-light-danger delete-btn"
+                                            data-presupuesto-id="{{ $presupuesto->id }}"><i
+                                                class="fa-solid fa-trash"></i></button>
+                                    </form>
+                                </td>
+                            </tr>
+                        @endforeach
+                    @endif
+                </tbody>
+            </table>
+
+            @php
+                $totalPages = $presupuestos->lastPage();
+                $currentPage = $presupuestos->currentPage();
+                $maxPagesToShow = 5; // Número máximo de enlaces de página a mostrar
+
+                $startPage = max($currentPage - floor($maxPagesToShow / 2), 1);
+                $endPage = min($startPage + $maxPagesToShow - 1, $totalPages);
+
+                // Ajuste para cuando hay menos de 10 páginas a mostrar al principio o al final
+                if ($endPage - $startPage + 1 < $maxPagesToShow) {
+                    $startPage = max($endPage - $maxPagesToShow + 1, 1);
+                }
+            @endphp
+
+            <div class="d-flex justify-content-center">
+                <ul class="pagination">
+                    @if ($startPage > 1)
+                        <li class="page-item">
+                            <a class="page-link" href="{{ $presupuestos->url(1) }}&tab=all">1</a>
+                        </li>
+                        @if ($startPage > 2)
+                            <li class="page-item disabled"><span class="page-link">...</span></li>
+                        @endif
+                    @endif
+
+                    @for ($i = $startPage; $i <= $endPage; $i++)
+                        <li class="page-item {{ $presupuestos->currentPage() == $i ? 'active' : '' }}">
+                            <a class="page-link"
+                                href="{{ $presupuestos->url($i) }}&tab=all">{{ $i }}</a>
+                        </li>
+                    @endfor
+
+                    @if ($endPage < $totalPages)
+                        @if ($endPage < $totalPages - 1)
+                            <li class="page-item disabled"><span class="page-link">...</span></li>
+                        @endif
+                        <li class="page-item">
+                            <a class="page-link"
+                                href="{{ $categorias->url($totalPages) }}&tab=all">{{ $totalPages }}</a>
+                        </li>
+                    @endif
+                </ul>
+            </div>
+
+        </div>
+    </div>
+</div>
 
     <!-- Modal para ver el presupuesto -->
     <div class="modal fade" id="detallePresupuestoModal" tabindex="-1"

@@ -4,7 +4,7 @@
     <div class="header"
         style="background-color:#212529; color:white; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid black; padding: 10px; margin-bottom: 10px; border-radius:10px;">
         <h1 class="m-0" style="margin: 0; color:white; !important">PhPresus</h1>
-        <p class="date" style="margin: 0;">Fecha actual: {{ date('d-m-Y') }}</p>
+        <p class="date" style="margin: 0;">Fecha actual: {{ date('d/m/Y') }}</p>
     </div>
 
     <div class="details" style="display: flex; justify-content: space-between; ">
@@ -27,7 +27,7 @@
 
                 Fecha de orden:
                 <strong>
-                    {{ $orden->created_at->format('d-m-Y') }}
+                    {{ $orden->created_at->format('d/m/Y') }}
                 </strong>
 
                 Fecha de presupuesto:
@@ -35,7 +35,7 @@
                 @if ($orden->presupuesto===null)
                     Presupuesto eliminado.
                 @else
-                    {{ $orden->presupuesto->created_at->format('d-m-Y') }}
+                    {{ $orden->presupuesto->created_at->format('d/m/Y') }}
                 @endif
                 </strong>
             </p>
@@ -100,7 +100,7 @@
         </div>
     </div>
 
-        <p><strong>Productos en ordenjjj</strong></p>
+        <p><strong>Productos en orden</strong></p>
             <div class="table-responsive" style="width: 100%; overflow-x: auto; border-radius: 10px;">
                 <table class="table table-light text-center table-hover rounded-table" style="width: 100%; border-collapse: collapse; border-radius: 10px; overflow: hidden;">
                     <thead class="table-dark" style="background-color: #212529; color: white;">

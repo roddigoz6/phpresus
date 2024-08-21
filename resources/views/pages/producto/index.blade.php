@@ -1,13 +1,14 @@
 <x-default-layout>
-
+    @section('title')
+        Productos
+    @endsection
 <div class="container">
-
     <div class="row my-3 align-items-center">
         <div class="col text-start">
             <h2>Productos</h2>
         </div>
         <div class="col text-end">
-            <a href="" class="btn btn-light-primary" data-bs-toggle="modal" data-bs-target="#crearProductoModal">
+            <a class="btn btn-light-primary" data-bs-toggle="modal" data-bs-target="#crearProductoModal">
                 Ingresar nuevo producto <i class="fas fa-plus-circle"></i></a>
         </div>
     </div>
@@ -132,7 +133,7 @@
                                 @else
                                     <td class="align-middle">{{ $producto->stock }}</td>
                                 @endif
-                                <td class="align-middle">{{ $producto->created_at }}</td>
+                                <td class="align-middle">{{ $producto->created_at->format('d/m/Y H:i') }}</td>
                                 <td class="align-middle">
                                     <a href="#" class="btn btn-light-primary" data-bs-toggle="modal" data-bs-target="#editarProductoModal{{ $producto->id }}" data-bs-toggle="popover" title="Editar producto"><i class="fa-solid fa-pen-to-square"></i></a>
                                     <form id="delete-form-{{ $producto->id }}" action="{{ route('producto.destroy', $producto->id) }}" method="POST" style="display: inline;">

@@ -1,11 +1,6 @@
 <x-default-layout>
-
     @section('title')
-        Dashboard
-    @endsection
-
-    @section('breadcrumbs')
-        {{ Breadcrumbs::render('dashboard') }}
+        Panel de control
     @endsection
 
     <!--begin::Row-->

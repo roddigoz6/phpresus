@@ -33,13 +33,19 @@ class DashboardController extends Controller
         //Productos
         $productosDisponiblesCount = Producto::where('eliminado', false)->sum('stock');
         $productosMasPopulares = Producto::select('productos.*')
-            ->leftJoin('producto_presupuestos', 'productos.id', '=', 'producto_presupuestos.producto_id')
-            ->where('productos.eliminado', false)
-            ->selectRaw('COUNT(producto_presupuestos.id) as presupuestos_count')
-            ->groupBy('productos.id', 'productos.nombre', 'productos.descripcion', 'productos.stock', 'productos.precio') // Ajusta estos campos según tu modelo Producto
-            ->orderBy('presupuestos_count', 'desc')
-            ->take(5)
-            ->get();
+        ->leftJoin('producto_presupuestos', 'productos.id', '=', 'producto_presupuestos.producto_id')
+        ->leftJoin('presupuestos', 'producto_presupuestos.presupuesto_id', '=', 'presupuestos.id')
+        ->where('productos.eliminado', false)
+        ->where('presupuestos.eliminado', false)
+        ->selectRaw('COUNT(producto_presupuestos.id) as presupuestos_count')
+        ->groupBy('productos.id', 'productos.nombre', 'productos.descripcion', 'productos.stock', 'productos.precio')
+        ->orderBy('presupuestos_count', 'desc')
+        ->with(['producto_presupuestos.presupuesto' => function($query) {
+            $query->where('eliminado', false);
+        }])
+        ->take(5)
+        ->get();
+
 
         //Clientes
         $clientes = Cliente::where('eliminado', false)->get();
@@ -67,7 +73,7 @@ class DashboardController extends Controller
 
     public function getProductosBajoStock(Request $request)
     {
-        $productosBajoStock = Producto::where('stock', '<', 5)
+        $productosBajoStock = Producto::where('stock', '<', 6)
                                     ->where('eliminado', false)
                                     ->paginate(5);
 
