@@ -1,33 +1,32 @@
 <x-default-layout>
-    @section('title')
-        Clientes
-    @endsection
+@section('title')
+    Clientes
+@endsection
 <div class="container">
     <div class="row my-3 align-items-center">
         <div class="col text-start">
             <h2>Clientes</h2>
         </div>
         <div class="col text-end">
-            <button type="button" class="btn btn-light-primary" data-bs-toggle="modal" data-bs-target="#crearClienteModal" data-bs-toggle="popover" data-bs-trigger="hover focus" title="Crear nuevo cliente">
+            <button type="button" class="btn btn-light-primary" data-bs-toggle="modal" data-bs-target="#crearClienteModalIndex" data-bs-toggle="popover" data-bs-trigger="hover focus" title="Crear nuevo cliente">
                Agregar cliente <i class="fas fa-plus-circle"></i>
             </button>
         </div>
     </div>
 
     <!--Modal para agregar clientes-->
-    <div class="modal fade" id="crearClienteModal" tabindex="-1" aria-labelledby="crearClienteModalLabel" aria-hidden="true">
+    <div class="modal fade" id="crearClienteModalIndex" tabindex="-1" aria-labelledby="crearClienteModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-body">
                     <form action="{{ route('cliente.store') }}" method="POST">
                         @csrf
                         <div class="row">
-
                             <div class="col">
                                 <div class="header-modal">
                                     <h4>Datos del cliente</span></h4>
+                                    <input type="hidden" name="context" value="index">
                                 </div>
-
                                 <div class="row">
                                     <div class="col">
                                         <div class="">
@@ -798,6 +797,7 @@
         });
     });
 });
+
 </script>
 @endpush
 </x-default-layout>

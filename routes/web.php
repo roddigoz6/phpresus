@@ -44,8 +44,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/presupuesto/{presupuesto}/download', [PresupuestoController::class, 'download'])->name('presupuesto.download');
     Route::post('/presupuesto/send-mail/{presupuestoId}', [PresupuestoController::class, 'sendMail'])->name('presupuesto.sendMail');
 
-    Route::get('/orden/{orden}/download', [OrdenController::class, 'download'])->name('orden.download');
-    Route::post('/orden/send-mail/{ordenId}', [OrdenController::class, 'sendMail'])->name('orden.sendMail');
+    Route::get('/clientes/data', [ClienteController::class, 'getClientesData'])->name('clientes.data');
 
     Route::get('/productos/bajo-stock', [DashboardController::class, 'getProductosBajoStock'])->name('productos.bajo.stock');
 

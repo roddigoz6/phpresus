@@ -10,7 +10,6 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Producto;
 use App\Models\Cliente;
-use App\Models\Categoria;
 use Dompdf\Dompdf;
 use Dompdf\Options;
 use Illuminate\Support\Facades\Storage;
@@ -56,11 +55,13 @@ class PresupuestoController extends Controller
      */
     public function create(Request $request)
     {
-        $clientes = Cliente::where('eliminado', false)->get();
-        $categorias = Categoria::where('eliminado', false)->get();
 
-        return view('pages/presupuesto.create', compact('clientes', 'categorias'));
+        $cliente_id = $request->query('cliente_id');
+        $cliente = Cliente::findOrFail($cliente_id);
+
+        return view('pages.presupuesto.create', compact('cliente'));
     }
+
 
     public function getProductos(Request $request)
     {
@@ -72,27 +73,29 @@ class PresupuestoController extends Controller
 
             $productosQuery = Producto::where('eliminado', false);
 
+            // Si se incluye un término de búsqueda, filtra los productos por nombre o ID
             if ($search) {
                 $productosQuery->where(function ($query) use ($search) {
                     $query->where('id', $search)
-                        ->orwhere('nombre', 'like', '%' . $search . '%')
-                        ->orWhereHas('categoria', function ($query) use ($search) {
-                            $query->where('nombre', 'like', '%' . $search . '%');
-                        });
+                        ->orWhere('nombre', 'like', '%' . $search . '%');
                 });
             }
 
+            // Ordena los productos según el criterio seleccionado
             if ($sortBy === 'precio') {
                 $productosQuery->orderBy('precio', $precio_order);
             } else {
                 $productosQuery->orderBy('nombre', $order);
             }
 
+            // Pagina los resultados
             $productos = $productosQuery->paginate(15);
 
+            // Responde con HTML si la solicitud es AJAX, o con la vista completa si no lo es
             if ($request->ajax()) {
                 return response()->json([
-                    'html' => view('pages.presupuesto.productos', compact('productos', 'order', 'precio_order'))->render()                ]);
+                    'html' => view('pages.presupuesto.productos', compact('productos', 'order', 'precio_order'))->render(),
+                ]);
             }
 
             return view('pages.presupuesto.productos', compact('productos', 'order', 'precio_order'));

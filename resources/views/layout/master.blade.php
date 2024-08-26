@@ -56,6 +56,11 @@
             background-color: rgba(255, 255, 255, 0.2) !important;
         }
         */
+
+        .btn > i {
+            padding-right: 0 !important;
+        }
+
         .element-id {
             background-color: #C5B3E6;
             color: #6f42c1;
@@ -95,6 +100,203 @@
 @include('partials/theme-mode/_init')
 
 @yield('content')
+<!-- Modal -->
+<div class="modal fade" id="clienteModal" aria-labelledby="clienteModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="clienteModalLabel">Crear nuevo proyecto</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <div class="modal-body">
+
+                <button type="button" class="btn btn-light-primary" id="clienteNuevoBtn" data-bs-toggle="modal" data-bs-target="#crearClienteModal">Cliente nuevo <span class="menu-icon"><i class="fa-solid fa-user-plus"></i></span></button>
+                <button type="button" class="btn btn-light-info" id="clienteExistenteBtn">Cliente existente <i class="fa-solid fa-user-check"></i></button>
+
+                <div class="form-group mt-6" id="clienteSelectContainer" style="display: none;">
+                    <div class="row">
+                        <div class="col me-auto">
+                            <select data-dropdown-parent="#clienteModalLabel" id="cliente" name="cliente" class="form-control">
+                                <!-- Opciones del select se pueden cargar dinámicamente con JavaScript -->
+                            </select>
+                        </div>
+                        <div class="col col-auto">
+                            <button type="button" class="btn btn-light-primary" id="goToPresupuesto"><i class="fa-solid fa-arrow-right"></i></button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!--Modal para agregar clientes-->
+<div class="modal fade" id="crearClienteModal" tabindex="1" aria-labelledby="crearClienteModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-body">
+                <form id="createClientForm" action="{{ route('cliente.store') }}" method="POST">
+                    @csrf
+                    <div class="row">
+                        <div class="col">
+                            <div class="header-modal">
+                                <h4>Datos del cliente</h4>
+                                <input type="hidden" name="context" value="form">
+                            </div>
+                            <div class="row">
+                                <div class="col">
+                                    <div class="">
+                                        <label for="nombre">Nombre</label> <strong class="required"></strong>
+                                        <input type="text" class="form-control" id="nombre" name="nombre" required>
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <div class="">
+                                        <label for="apellido">Apellido</label> <strong class="required"></strong>
+                                        <input type="text" class="form-control" id="apellido" name="apellido" required>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col">
+                                    <div class="">
+                                        <label for="dni">DNI</label> <strong class="required"></strong>
+                                        <input type="text" class="form-control" id="dni" name="dni" required>
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <div>
+                                        <label for="movil">Móvil</label> <strong class="required"></strong>
+                                        <input type="text" class="form-control" id="movil" name="movil" required>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="">
+                                <label for="email">Correo Electrónico</label>
+                                <input type="email" class="form-control" id="email" name="email">
+                            </div>
+                            <div class="">
+                                <label for="direccion">Direccion</label> <strong class="required"></strong>
+                                <input type="text" class="form-control" id="direccion" name="direccion" required>
+                            </div>
+                            <div class="">
+                                <label for="cp">Código postal</label> <strong class="required"></strong>
+                                <input type="text" class="form-control" id="cp" name="cp" required>
+                            </div>
+                            <div class="row">
+                                <div class="col">
+                                    <div class="">
+                                        <label for="poblacion">Población</label> <strong class="required"></strong>
+                                        <input type="text" class="form-control" id="poblacion" name="poblacion" required>
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <div class="">
+                                        <label for="provincia">Provincia</label> <strong class="required"></strong>
+                                        <input type="text" class="form-control" id="provincia" name="provincia" required>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col">
+                                    <div class="">
+                                        <label for="fax">Fax</label>
+                                        <input type="text" class="form-control" id="fax" name="fax">
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <div>
+                                        <label for="cargo">Cargo</label>
+                                        <input type="text" class="form-control" id="cargo" name="cargo">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col">
+                            <div class="header-modal">
+                                <h4>Datos de envío</h4>
+                            </div>
+                            <div class="">
+                                <label for="contacto">Contacto</label>
+                                <input type="text" class="form-control" id="contacto" name="contacto">
+                            </div>
+                            <div class="">
+                                <label for="titular_nom">Nombre de titular</label>
+                                <input type="text" class="form-control" id="titular_nom" name="titular_nom">
+                            </div>
+                            <div class="">
+                                <label for="titular_ape">Apellido de titular</label>
+                                <input type="text" class="form-control" id="titular_ape" name="titular_ape">
+                            </div>
+                            <div class="">
+                                <label for="direccion_envio">Dirección de envío</label>
+                                <input type="text" class="form-control" id="direccion_envio" name="direccion_envio">
+                            </div>
+                            <div class="">
+                                <label for="cp_envio">Código postal de dirección de envío</label>
+                                <input type="text" class="form-control" id="cp_envio" name="cp_envio">
+                            </div>
+                            <div class="">
+                                <label for="poblacion_envio">Población de dirección de envío</label>
+                                <input type="text" class="form-control" id="poblacion_envio" name="poblacion_envio">
+                            </div>
+                            <div class="">
+                                <label for="provincia_envio">Provincia de dirección de envío</label>
+                                <input type="text" class="form-control" id="provincia_envio" name="provincia_envio">
+                            </div>
+
+                        </div>
+                        <div class="header-modal">
+                            <h4>Pago</h4>
+                        </div>
+                        <div class="">
+                            <label for="pago">Forma de pago</label>
+                            <select class="form-select" id="pago" name="pago">
+                                <option value="Ver condiciones">Ver condiciones</option>
+                                <option value="50% inicio, 50% fin">50% inicio, 50% fin</option>
+                                <option value="50% termino de obra, resto a 90 dias">50% termino de obra, resto a 90 días</option>
+                                <option value="50% comienzo de obra, resto a convenir">50% comienzo de obra, resto a convenir</option>
+                                <option value="Certificaciones quincenales">Certificaciones quincenales</option>
+                                <option value="Como siempre">Como siempre</option>
+                                <option value="Contado termino de obra">Contado termino de obra</option>
+                                <option value="Convenir">Convenir</option>
+                                <option value="Fin de ejercicio, 15 de diciembre">Fin de ejercicio, 15 de diciembre</option>
+                                <option value="Letra de 90 dias">Letra de 90 días</option>
+                                <option value="Letra a la vista">Letra a la vista</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="mt-3">Los campos <strong class="required"></strong> son requeridos.</div>
+                    <div class="d-flex justify-content-end">
+                        <button type="submit" class="btn btn-light-primary mt-3">Guardar <i class="fas fa-check-circle"></i></button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal de acción después de crear un cliente -->
+<div class="modal fade" id="postCreateClienteModal" tabindex="1" aria-labelledby="postCreateClienteModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="postCreateClienteModalLabel">Cliente creado con éxito</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>El cliente ha sido creado exitosamente. ¿Qué te gustaría hacer a continuación?</p>
+                <button type="button" class="btn btn-primary" id="goToPresupuestoBtn">Crear presupuesto</button>
+                <button type="button" class="btn btn-secondary" id="goToClientesBtn">Volver al listado de clientes</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 
 <!--begin::Javascript-->
 <!--begin::Global Javascript Bundle(mandatory for all pages)-->
@@ -148,6 +350,120 @@
             });
         });
     });
+
+    document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('submit', function(e) {
+        if (e.target && e.target.id === 'createClientForm') {
+            e.preventDefault(); // Evitar el envío tradicional del formulario
+
+            const formData = new FormData(e.target);
+            fetch(e.target.action, {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'X-CSRF-Token': formData.get('_token')
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.id) {
+                    const postCreateModal = new bootstrap.Modal(document.getElementById('postCreateClienteModal'));
+                    postCreateModal.show();
+
+                    document.getElementById('goToPresupuestoBtn').addEventListener('click', function() {
+                        window.location.href = `/presupuesto/create?cliente_id=${data.id}`;
+                    });
+
+                    document.getElementById('goToClientesBtn').addEventListener('click', function() {
+                        window.location.href = `/cliente`;
+                    });
+
+                    const crearClienteModal = bootstrap.Modal.getInstance(document.getElementById('crearClienteModal'));
+                    crearClienteModal.hide();
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        }
+    });
+});
+
+$(document).ready(function() {
+    // Inicializar select2 cuando se carga el documento
+    function initializeSelect2() {
+        $('#cliente').select2({
+            placeholder: 'Seleccionar cliente',
+            allowClear: true,
+            width: '100%',
+            language: {
+                noResults: function() {
+                    return 'No se encontraron clientes con ese nombre';
+                }
+            }
+        });
+    }
+
+    initializeSelect2();
+
+    $('#clienteExistenteBtn').on('click', function() {
+        $('#clienteSelectContainer').slideDown();
+
+        $.ajax({
+            url: '{{ route("clientes.data") }}',
+            method: 'GET',
+            success: function(data) {
+                $('#cliente').empty();
+                $('#cliente').select2({
+                    placeholder: 'Seleccionar cliente',
+                    allowClear: true,
+                    width: '100%',
+                    language: {
+                        noResults: function() {
+                            return 'No se encontraron clientes con ese nombre';
+                        }
+                    }
+                }).append(
+                    $.map(data, function(cliente) {
+                        return new Option(cliente.text, cliente.id, false, false);
+                    })
+                );
+                $('#cliente').val(null).trigger('change');
+            },
+            error: function(error) {
+                console.error('Error al cargar los clientes:', error);
+            }
+        });
+    });
+
+    $('#clienteNuevoBtn').on('click', function() {
+        $('#clienteSelectContainer').hide();
+    });
+
+    $('#goToPresupuesto').on('click', function() {
+        const clienteId = $('#cliente').val();
+        if (clienteId) {
+            window.location.href = `/presupuesto/create?cliente_id=${clienteId}`;
+        } else {
+            const Toast = Swal.mixin({
+                toast: true,
+                position: "top-end",
+                showConfirmButton: false,
+                timer: 3000,
+                timerProgressBar: true,
+                didOpen: (toast) => {
+                    toast.onmouseenter = Swal.stopTimer;
+                    toast.onmouseleave = Swal.resumeTimer;
+                }
+            });
+            Toast.fire({
+                icon: "error",
+                title: "Selecciona un cliente."
+            });
+        }
+    });
+});
 </script>
 
 @livewireScripts

@@ -63,7 +63,7 @@ class ProductoController extends Controller
         $validatedData = $request->validate([
             'nombre' => 'required|string|max:255',
             'precio' => 'required|numeric|min:0',
-            'descripcion' => 'nullable|string',
+            'leyenda' => 'nullable|string',
             'stock' => 'required|integer|min:0',
             'tipo' => 'required|in:Artículo,Visita',
         ]);
@@ -72,7 +72,7 @@ class ProductoController extends Controller
         $producto = new Producto();
         $producto->nombre = $validatedData['nombre'];
         $producto->precio = $validatedData['precio'];
-        $producto->descripcion = $validatedData['descripcion'];
+        $producto->leyenda = $validatedData['leyenda'];
         $producto->stock = $validatedData['stock'];
         $producto->tipo = $validatedData['tipo'];
         $producto->save();
@@ -115,7 +115,7 @@ class ProductoController extends Controller
         $producto->update([
             'nombre' => $request->nombre,
             'precio' => $request->precio,
-            'descripcion' => $request->descripcion,
+            'leyenda' => $request->leyenda,
             'stock' => $request->stock,
             'tipo' => $request->tipo,
         ]);

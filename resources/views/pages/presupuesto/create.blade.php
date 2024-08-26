@@ -35,8 +35,8 @@
                                     <input type="number" class="form-control" id="precio" name="precio" min="0" step="0.01" required>
                                 </div>
                                 <div class="">
-                                    <label for="descripcion">Descripción</label>
-                                    <textarea class="form-control" id="descripcion" name="descripcion" rows="3"></textarea>
+                                    <label for="leyenda">Leyenda</label>
+                                    <textarea class="form-control" id="leyenda" name="leyenda" rows="3"></textarea>
                                 </div>
                                 <div class="">
                                     <label for="stock">Stock</label> <strong class="required"></strong>
@@ -49,14 +49,7 @@
                                         <option value="Visita">Visita</option>
                                     </select>
                                 </div>
-                                <div class="">
-                                    <label for="categoria">Categoría</label> <strong class="required"></strong>
-                                    <select class="form-select" id="categoria" name="categoria_id" required>
-                                        @foreach($categorias as $categoria)
-                                            <option value="{{ $categoria->id }}">{{ $categoria->nombre }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
+
                                 <div class="mt-3">Los campos con <strong class="required"></strong> son requeridos.</div>
                                 <button type="submit" class="btn btn-primary mt-3" id="CreaProd">Ingresar nuevo producto</button>
                             </form>
@@ -114,197 +107,64 @@
         </div>
 
         <div class="col-md-8">
-            <div class="row align-items-center">
-                <div class="col">
-                    <h3 class="mb-0">Clientes</h3>
-                </div>
-                <div class="col text-end">
-                    <button type="button" class="btn btn-light-primary" data-bs-toggle="modal" data-bs-target="#crearClienteModal">
-                        Agregar cliente <i class="fas fa-plus-circle"></i>
-                    </button>
-                </div>
-            </div>
-
-            <!--Modal para agregar clientes-->
-            <div class="modal fade" id="crearClienteModal" tabindex="-1" aria-labelledby="crearClienteModalLabel" aria-hidden="true">
-                <div class="modal-dialog modal-lg modal-dialog-centered">
-                    <div class="modal-content">
-                        <div class="modal-body">
-                            <form action="{{ route('cliente.store') }}" method="POST">
-                                @csrf
-                                <div class="row">
-
-                                    <div class="col">
-                                        <div class="header-modal">
-                                            <h4>Datos del cliente</h4>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col">
-                                                <div class="">
-                                                    <label for="nombre">Nombre</label> <strong class="required"></strong>
-                                                    <input type="text" class="form-control" id="nombre" name="nombre" required>
-                                                </div>
-                                            </div>
-                                            <div class="col">
-                                                <div class="">
-                                                    <label for="apellido">Apellido</label> <strong class="required"></strong>
-                                                    <input type="text" class="form-control" id="apellido" name="apellido" required>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col">
-                                                <div class="">
-                                                    <label for="dni">DNI</label> <strong class="required"></strong>
-                                                    <input type="text" class="form-control" id="dni" name="dni" required>
-                                                </div>
-                                            </div>
-                                            <div class="col">
-                                                <div>
-                                                    <label for="movil">Móvil</label> <strong class="required"></strong>
-                                                    <input type="text" class="form-control" id="movil" name="movil" required>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="">
-                                            <label for="email">Correo Electrónico</label>
-                                            <input type="email" class="form-control" id="email" name="email">
-                                        </div>
-                                        <div class="">
-                                            <label for="direccion">Direccion</label> <strong class="required"></strong>
-                                            <input type="text" class="form-control" id="direccion" name="direccion" required>
-                                        </div>
-                                        <div class="">
-                                            <label for="cp">Código postal</label> <strong class="required"></strong>
-                                            <input type="text" class="form-control" id="cp" name="cp" required>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col">
-                                                <div class="">
-                                                    <label for="poblacion">Población</label> <strong class="required"></strong>
-                                                    <input type="text" class="form-control" id="poblacion" name="poblacion" required>
-                                                </div>
-                                            </div>
-                                            <div class="col">
-                                                <div class="">
-                                                    <label for="provincia">Provincia</label> <strong class="required"></strong>
-                                                    <input type="text" class="form-control" id="provincia" name="provincia" required>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col">
-                                                <div class="">
-                                                    <label for="fax">Fax</label>
-                                                    <input type="text" class="form-control" id="fax" name="fax">
-                                                </div>
-                                            </div>
-                                            <div class="col">
-                                                <div>
-                                                    <label for="cargo">Cargo</label>
-                                                    <input type="text" class="form-control" id="cargo" name="cargo">
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="col">
-                                        <div class="header-modal">
-                                            <h4>Datos de envío</h4>
-                                        </div>
-                                        <div class="">
-                                            <label for="contacto">Contacto</label>
-                                            <input type="text" class="form-control" id="contacto" name="contacto">
-                                        </div>
-                                        <div class="">
-                                            <label for="titular_nom">Nombre de titular</label>
-                                            <input type="text" class="form-control" id="titular_nom" name="titular_nom">
-                                        </div>
-                                        <div class="">
-                                            <label for="titular_ape">Apellido de titular</label>
-                                            <input type="text" class="form-control" id="titular_ape" name="titular_ape">
-                                        </div>
-                                        <div class="">
-                                            <label for="direccion_envio">Dirección de envío</label>
-                                            <input type="text" class="form-control" id="direccion_envio" name="direccion_envio">
-                                        </div>
-                                        <div class="">
-                                            <label for="cp_envio">Código postal de dirección de envío</label>
-                                            <input type="text" class="form-control" id="cp_envio" name="cp_envio">
-                                        </div>
-                                        <div class="">
-                                            <label for="poblacion_envio">Población de dirección de envío</label>
-                                            <input type="text" class="form-control" id="poblacion_envio" name="poblacion_envio">
-                                        </div>
-                                        <div class="">
-                                            <label for="provincia_envio">Provincia de dirección de envío</label>
-                                            <input type="text" class="form-control" id="provincia_envio" name="provincia_envio">
-                                        </div>
-
-                                    </div>
-                                    <div class="header-modal">
-                                        <h4>Pago</h4>
-                                    </div>
-                                    <div class="">
-                                        <label for="pago">Forma de pago</label>
-                                        <select class="form-select" id="pago" name="pago">
-                                            <option value="Ver condiciones">Ver condiciones</option>
-                                            <option value="50% inicio, 50% fin">50% inicio, 50% fin</option>
-                                            <option value="50% termino de obra, resto a 90 dias">50% termino de obra, resto a 90 días</option>
-                                            <option value="50% comienzo de obra, resto a convenir">50% comienzo de obra, resto a convenir</option>
-                                            <option value="Certificaciones quincenales">Certificaciones quincenales</option>
-                                            <option value="Como siempre">Como siempre</option>
-                                            <option value="Contado termino de obra">Contado termino de obra</option>
-                                            <option value="Convenir">Convenir</option>
-                                            <option value="Fin de ejercicio, 15 de diciembre">Fin de ejercicio, 15 de diciembre</option>
-                                            <option value="Letra de 90 dias">Letra de 90 días</option>
-                                            <option value="Letra a la vista">Letra a la vista</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="mt-3">Los campos <strong class="required"></strong> son requeridos.</div>
-                                <div class="d-flex justify-content-end">
-                                    <button type="submit" class="btn btn-light-primary mt-3">Guardar <i class="fas fa-check-circle"></i></button>
-                                </div>
-                            </form>
-                            @if (session('success_cli'))
-                                <script>
-                                    document.addEventListener('DOMContentLoaded', function() {
-                                        const Toast = Swal.mixin({
-                                            toast: true,
-                                            position: "top-end",
-                                            showConfirmButton: false,
-                                            timer: 3000,
-                                            timerProgressBar: true,
-                                            didOpen: (toast) => {
-                                                toast.onmouseenter = Swal.stopTimer;
-                                                toast.onmouseleave = Swal.resumeTimer;
-                                            }
-                                        });
-                                        Toast.fire({
-                                            icon: "success",
-                                            title: "Cliente agregado."
-                                        });
-                                    });
-                                </script>
-                            @endif
-                        </div>
-                    </div>
-                </div>
-            </div>
-
             <form action="{{ route('presupuesto.store') }}" method="POST" class="mb-3">
                 @csrf
-                <div class="input-group mb-3 mt-3">
-                    <select class="form-select select2" id="cliente" name="cliente_id" required>
-                        <option value="">Seleccionar cliente</option>
-                        @foreach($clientes as $cliente)
-                        <option value="{{ $cliente->id }}" {{ request('cliente_id') == $cliente->id ? 'selected' : '' }}>{{ $cliente->nombre }}</option>
-                        @endforeach
-                    </select>
+
+                <h3>Crear proyecto</h3>
+
+                <div class="col">
+                    <hr />
+                    <p class="mb-0">Datos del cliente</p>
+                    <div class="col form-group">
+
+                            Cliente: <strong>{{$cliente->nombre}}</strong>
+
+                            <strong>{{$cliente->apellido}}</strong>
+
+                    </div>
+
+                    <div class="col form-group">
+
+                            Contacto: <strong>{{$cliente->contacto}}</strong>
+
+
+
+                            Forma de pago de cliente: <strong>{{$cliente->pago ?: "No hay"}}</strong>
+
+                    </div>
                 </div>
 
-                <h3>Crear presupuesto</h3>
+
+                <div class="col">
+                    <hr />
+                    <p class="mb-0">Info del proyecto</p>
+
+                    <div>
+                        <input class="form-control" type="text" placeholder="Nombre del proyecto / Título de referencia">
+                    </div>
+
+                    <div>
+                        <label for="pago">Forma de pago</label>
+                            <select class="form-select" id="pago" name="pago">
+                                <option value="Ver condiciones">Ver condiciones</option>
+                                <option value="50% inicio, 50% fin">50% inicio, 50% fin</option>
+                                <option value="50% termino de obra, resto a 90 dias">50% termino de obra, resto a 90 días</option>
+                                <option value="50% comienzo de obra, resto a convenir">50% comienzo de obra, resto a convenir</option>
+                                <option value="Certificaciones quincenales">Certificaciones quincenales</option>
+                                <option value="Como siempre">Como siempre</option>
+                                <option value="Contado termino de obra">Contado termino de obra</option>
+                                <option value="Convenir">Convenir</option>
+                                <option value="Fin de ejercicio, 15 de diciembre">Fin de ejercicio, 15 de diciembre</option>
+                                <option value="Letra de 90 dias">Letra de 90 días</option>
+                                <option value="Letra a la vista">Letra a la vista</option>
+                            </select>
+                    </div>
+
+                    <hr />
+
+
+                </div>
+
                 <p>Arrastra aquí los productos para agregarlos al presupuesto.</p>
                 <div id="canvas" class="border p-2" style="min-height: 500px; overflow-y: auto;" ondrop="drop(event)" ondragover="allowDrop(event)">
                     <div id="lista-presupuesto" class="table-responsive">
@@ -312,6 +172,7 @@
                             <thead class="table-dark">
                                 <tr>
                                     <th class="icon-table">Nombre</th>
+                                    <th class="icon-table">Descripción</th>
                                     <th class="icon-table">Cantidad</th>
                                     <th class="icon-table">Precio x Unidad</th>
                                     <th class="icon-table">Precio</th>
@@ -329,14 +190,33 @@
 
                 <input type="hidden" id="precio_total" name="precio_total" value="0.00">
                 <input type="hidden" id="lista_productos" name="lista_productos" value="">
+
                 <div class="row mb-3">
-                    <div class="col text-start">
-                        <button type="submit" class="btn btn-light-primary" data-bs-toggle="popover" data-bs-trigger="hover focus" title="Crear el nuevo presupuesto con los datos en lista.">Guardar presupuesto <i class="fas fa-check-circle"></i></button>
+                    <div class="col col-auto me-auto">
+                        <!-- Contenedor flex para asegurar el tamaño uniforme de los botones -->
+                        <div class="btn-container d-flex gap-2">
+                            <button type="submit" class="btn btn-light-primary">
+                                Guardar presupuesto <i class="fas fa-check-circle"></i>
+                            </button>
+                            <button id="agregarCap" class="btn btn-light-success">
+                                Agregar capítulo <i class="fas fa-plus-circle"></i>
+                            </button>
+                        </div>
                     </div>
-                    <div class="col text-end">
-                        <button type="button" class="btn btn-light-danger" id="limpiarCanvas" data-bs-toggle="popover" data-bs-trigger="hover focus" title="Quitar todos los productos de la lista.">Quitar todos <i class="fas fa-trash"></i></button>
+<script>
+var agregarCap = document.getElementById("agregarCap");
+agregarCap.addEventListener('click', function(e) {
+    e.preventDefault();
+    alert("agregar capítulo al presupollo");
+});
+</script>
+                    <div class="col col-auto">
+                        <button type="button" class="btn btn-light-danger" id="limpiarCanvas" data-bs-toggle="popover" data-bs-trigger="hover focus" title="Quitar todos los productos de la lista.">
+                            Quitar todos <i class="fas fa-trash"></i>
+                        </button>
                     </div>
                 </div>
+
             </form>
 
             @if (session('success_pres'))
@@ -459,13 +339,13 @@ function drop2(event) {
     }
 
     actualizarOrdenProductos();
-}
+    }
 
-function actualizarListaProductos() {
-    const tableBody = $('#productos-table-body');
-    tableBody.empty();
+    function actualizarListaProductos() {
+        const tableBody = $('#productos-table-body');
+        tableBody.empty();
 
-    productosArrastrados.forEach((producto, index) => {
+        productosArrastrados.forEach((producto, index) => {
         const tr = $('<tr></tr>');
         tr.attr('data-producto-id', producto.id);
         tr.addClass('item');
@@ -482,18 +362,32 @@ function actualizarListaProductos() {
         const tdNombre = $('<td class="align-middle"></td>');
         tdNombre.text(producto.nombre);
 
+        const tdDesc = $('<td class="align-middle"></td>');
+        const descInput = $('<textarea></textarea>'); // Cambiado a textarea
+        descInput.attr({
+            value: producto.leyenda,
+            class: 'form-control',
+            rows: 2, // Ajustar el número de filas según sea necesario
+            cols: 30 // Ajustar el número de columnas según sea necesario
+        });
+        descInput.text(producto.leyenda); // Usar text en lugar de value para textarea
+        tdDesc.append(descInput);
+
         const tdCantidad = $('<td class="align-middle"></td>');
         const cantidadInput = $('<input>');
         cantidadInput.attr({
             type: 'number',
             value: producto.cantidad,
             min: 1,
-            max: producto.stock
+            max: producto.stock,
+            size: producto.cantidad.toString().length // Ajusta el tamaño al ancho del valor
         });
+
         cantidadInput.addClass('cantidad-producto form-control');
-        cantidadInput.on('change', function() {
+        cantidadInput.on('input', function() {
             const cantidad = parseInt($(this).val());
             producto.cantidad = cantidad;
+            $(this).attr('size', cantidad.toString().length); // Ajusta el ancho al nuevo valor
             tdPrecioTotal.text((cantidad * producto.precio).toFixed(2) + '€');
             actualizarPrecioTotal();
         });
@@ -505,13 +399,15 @@ function actualizarListaProductos() {
             type: 'number',
             value: producto.precio.toFixed(2),
             min: 0,
-            step: 0.01
+            step: 0.01,
+            size: producto.precio.toFixed(2).length // Ajusta el tamaño al ancho del valor
         });
 
         precioInput.addClass('input-precio-producto form-control');
-        precioInput.on('change', function() {
+        precioInput.on('input', function() {
             const precio = parseFloat($(this).val());
             producto.precio = precio;
+            $(this).attr('size', precio.toFixed(2).length); // Ajusta el ancho al nuevo valor
             tdPrecioTotal.text((producto.cantidad * precio).toFixed(2) + '€');
             actualizarPrecioTotal();
         });
@@ -534,16 +430,13 @@ function actualizarListaProductos() {
         });
         tdAcciones.append(eliminarBtn);
 
-        tr.append(tdNombre, tdCantidad, tdPrecio, tdPrecioTotal, tdAcciones, ordenInput);
+        tr.append(tdNombre, tdDesc, tdCantidad, tdPrecio, tdPrecioTotal, tdAcciones, ordenInput);
         tableBody.append(tr);
 
         tr.on('dragstart', function(e) {
             $(this).addClass('dragging');
 
             window.fila_original = tr;
-
-            //console.log("fila original"); DEV
-            //console.log(tr); DEV
 
             window.drop_function = 2;
             console.log("dragging!");
@@ -630,33 +523,6 @@ function agregarProducto(productoId) {
 }
 
 $(document).ready(function() {
-
-    $('#cliente').select2({
-        placeholder: 'Seleccionar cliente',
-        allowClear: true,
-        width: '100%',
-        language: {
-            noResults: function() {
-                return 'No se encontraron clientes con ese nombre';
-            }
-        },
-        escapeMarkup: function(markup) {
-            return markup;
-        },
-        templateResult: formatResult,
-        dropdownCssClass: 'custom-dropdown',
-        selectionCssClass: 'custom-selection'
-    });
-
-    function formatResult(result) {
-        if (!result.id) {
-            return result.text;
-        }
-
-        const markup = "<div>" + result.text + "</div>";
-        return markup;
-    }
-
     function cargarProductos(params = {}) {
         const url = params.url || '{{ route('presupuesto.getProductos') }}';
         const data = {
