@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('TProd_Pres', function (Blueprint $table) {
             $table->id();
             //
-            $table->foreignId('producto_id')->constrained('TProductos')->onDelete('cascade');
+            $table->foreignId('producto_id')->nullable()->constrained('TProductos')->onDelete('cascade');
             $table->foreignId('presupuesto_id')->constrained('TPresupuestos')->onDelete('cascade');
             $table->float('precio')->nullable();
             $table->integer('cantidad')->nullable();

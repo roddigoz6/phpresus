@@ -2,18 +2,21 @@
 
 namespace App\Http\Controllers;
 
-use App\Mail\PresupuestoEnviado;
-use App\Mail\Saludo;
-use App\Models\ProductoPresupuesto;
-use App\Models\Presupuesto;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+
+use App\Mail\Saludo;
+use App\Mail\PresupuestoEnviado;
+use App\Models\ProductoPresupuesto;
+use App\Models\Presupuesto;
+use App\Models\Proyecto;
 use App\Models\Producto;
 use App\Models\Cliente;
+
 use Dompdf\Dompdf;
 use Dompdf\Options;
+
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Log;
 
@@ -112,37 +115,49 @@ class PresupuestoController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
-    {
-        $validatedData = $request->validate([
-            'cliente_id' => 'required|exists:clientes,id',
-            'precio_total' => 'required|numeric|min:0',
-            'lista_productos' => 'required|json',
-        ]);
+{
+    $validatedData = $request->validate([
+        'cliente_id' => 'required|exists:TClientes,id',
+        'precio_total' => 'required|numeric|min:0',
+        'lista_productos' => 'required|json',
+    ]);
 
-        $presupuesto = new Presupuesto();
-        $presupuesto->cliente_id = $validatedData['cliente_id'];
-        $presupuesto->precio_total = $validatedData['precio_total'];
-        $presupuesto->save();
+    // Crear un nuevo proyecto
+    $proyecto = new Proyecto();
+    $proyecto->cliente_id = $validatedData['cliente_id'];
+    $proyecto->estado = 'Presupuestado';
+    $proyecto->pago = $request->input('pago');
+    $proyecto->save();
 
-        $productos = json_decode($validatedData['lista_productos'], true);
-        foreach ($productos as $producto) {
-            $presupuestoProducto = new ProductoPresupuesto();
-            $presupuestoProducto->presupuesto_id = $presupuesto->id;
-            $presupuestoProducto->producto_id = $producto['id'];
-            $presupuestoProducto->cantidad = $producto['cantidad'];
-            $presupuestoProducto->precio = $producto['precio'];
-            $presupuestoProducto->orden_prod = $request->input("orden_producto_{$producto['id']}");
-            $presupuestoProducto->save();
+    //dd($proyecto->proyecto_id); // Verifica que el proyecto se está guardando y tiene un ID
 
-            $productoModel = Producto::find($producto['id']);
-            if ($productoModel) {
-                $productoModel->precio = $producto['precio'];
-                $productoModel->save();
-            }
-        }
-        //dd($presupuestoProducto);
-        return redirect()->route('presupuesto.index')->with('success_pres', 'Presupuesto creado correctamente.');
+    // Crear el presupuesto
+    $presupuesto = new Presupuesto();
+    $presupuesto->cliente_id = $validatedData['cliente_id'];
+    $presupuesto->proyecto_id = $proyecto->proyecto_id; // Verifica que esto no sea NULL
+    $presupuesto->precio_total = $validatedData['precio_total'];
+    $presupuesto->save();
+
+    //dd($presupuesto); // Verifica que el presupuesto se está guardando correctamente
+
+    // Guardar los productos y capítulos asociados al presupuesto
+    $productos = json_decode($validatedData['lista_productos'], true);
+    foreach ($productos as $producto) {
+        $presupuestoProducto = new ProductoPresupuesto();
+        $presupuestoProducto->presupuesto_id = $presupuesto->id;
+        $presupuestoProducto->producto_id = $producto['id'] ?? null;
+        $presupuestoProducto->cantidad = $producto['cantidad'] ?? null;
+        $presupuestoProducto->precio = $producto['precio'] ?? null;
+        $presupuestoProducto->orden = $producto['orden'] ?? null;
+        $presupuestoProducto->descripcion = $producto['descripcion'] ?? null;
+        $presupuestoProducto->titulo = $producto['titulo'] ?? null;
+        $presupuestoProducto->tipo = $producto['tipo'];
+        $presupuestoProducto->save();
     }
+
+    return redirect()->route('presupuesto.index')->with('success_pres', 'Presupuesto y proyecto creados correctamente.');
+}
+
 
     /**
      * Display the specified resource.

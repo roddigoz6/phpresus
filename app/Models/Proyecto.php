@@ -19,6 +19,7 @@ class Proyecto extends Model
         'estado',
         'serie_ref',
         'num_ref',
+        'pago',
         'eliminado',
     ];
 

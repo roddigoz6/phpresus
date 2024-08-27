@@ -1,6 +1,6 @@
 <x-default-layout>
     @section('title')
-        Nuevo presupuesto
+        Crear presupuesto
     @endsection
 
 <div class="container mt-3">
@@ -18,7 +18,7 @@
             </div>
 
             <div class="modal fade" id="crearProductoModal" tabindex="-1" aria-labelledby="crearProductoModalLabel" aria-hidden="true">
-                <div class="modal-dialog">
+                <div class="modal-dialog modal-dialog-centered">
                     <div class="modal-content">
                         <div class="modal-body">
                             <form action="{{ route('producto.store') }}" method="POST">
@@ -117,19 +117,14 @@
                     <p class="mb-0">Datos del cliente</p>
                     <div class="col form-group">
 
-                            Cliente: <strong>{{$cliente->nombre}}</strong>
-
-                            <strong>{{$cliente->apellido}}</strong>
-
+                        Cliente: <strong>{{$cliente->nombre}} {{$cliente->apellido}}</strong>
+                        <input type="hidden" value="{{$cliente->id}}" id="cliente_id" name="cliente_id">
                     </div>
 
                     <div class="col form-group">
 
-                            Contacto: <strong>{{$cliente->contacto}}</strong>
-
-
-
-                            Forma de pago de cliente: <strong>{{$cliente->pago ?: "No hay"}}</strong>
+                        Contacto: <strong>{{$cliente->contacto ?: "No registrado" }}</strong>
+                        Forma de pago de cliente: <strong>{{$cliente->pago ?: "No registrado"}}</strong>
 
                     </div>
                 </div>
@@ -198,18 +193,12 @@
                             <button type="submit" class="btn btn-light-primary">
                                 Guardar presupuesto <i class="fas fa-check-circle"></i>
                             </button>
-                            <button id="agregarCap" class="btn btn-light-success">
+                            <button id="agregarCap" type="button" class="btn btn-light-success">
                                 Agregar capítulo <i class="fas fa-plus-circle"></i>
                             </button>
                         </div>
                     </div>
-<script>
-var agregarCap = document.getElementById("agregarCap");
-agregarCap.addEventListener('click', function(e) {
-    e.preventDefault();
-    alert("agregar capítulo al presupollo");
-});
-</script>
+
                     <div class="col col-auto">
                         <button type="button" class="btn btn-light-danger" id="limpiarCanvas" data-bs-toggle="popover" data-bs-trigger="hover focus" title="Quitar todos los productos de la lista.">
                             Quitar todos <i class="fas fa-trash"></i>
@@ -244,6 +233,32 @@ agregarCap.addEventListener('click', function(e) {
     </div>
 </div>
 
+
+<!-- Modal for Adding Capítulo -->
+<div class="modal fade" id="capituloModal" tabindex="-1" aria-labelledby="capituloModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="capituloModalLabel">Agregar Capítulo</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="mb-3">
+            <label for="capituloTitulo" class="form-label">Título</label>
+            <input type="text" class="form-control" id="capituloTitulo" placeholder="Ingrese el título del capítulo">
+          </div>
+          <!-- Description field can be optional or removed -->
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+          <button type="button" class="btn btn-primary" id="saveCapituloBtn">Guardar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
 @push('scripts')
 <script>
 let productosArrastrados = [];
@@ -261,8 +276,7 @@ function drag(event) {
 }
 
 function drop(event) {
-    if (window.drop_function != undefined && window.drop_function === 2) {
-        //console.log("CAMBIANDO A DROP2");
+    if (window.drop_function !== undefined && window.drop_function === 2) {
         drop2(event);
         return;
     }
@@ -307,7 +321,6 @@ function drop(event) {
 
 function drop2(event) {
     window.drop_function = 1;
-    //console.log("DEV: DROP-EVENT 2");
     event.preventDefault();
 
     const x = event.clientX;
@@ -320,137 +333,163 @@ function drop2(event) {
         const posicionOriginal = window.fila_original.index();
         const posicionDestino = fila_destino.index();
 
-        console.log('Posición original:', posicionOriginal);
-        console.log('Posición destino:', posicionDestino);
-
         if (posicionOriginal < posicionDestino) {
             fila_destino.after(window.fila_original);
         } else {
             fila_destino.before(window.fila_original);
         }
-
-        console.log('Elemento debajo del ratón:', $(elementoDebajoDelRaton));
-        console.log('Fila destino:', fila_destino);
-
-        // Aplicar estilo para confirmar la acción
-        //$(elementoDebajoDelRaton).css('border', '2px solid red');
     } else {
         console.log("No se puede soltar la fila sobre sí misma.");
     }
 
     actualizarOrdenProductos();
-    }
+}
 
-    function actualizarListaProductos() {
-        const tableBody = $('#productos-table-body');
-        tableBody.empty();
+function actualizarListaProductos() {
+    const tableBody = $('#productos-table-body');
+    tableBody.empty();
 
-        productosArrastrados.forEach((producto, index) => {
+    productosArrastrados.forEach((item, index) => {
         const tr = $('<tr></tr>');
-        tr.attr('data-producto-id', producto.id);
+        tr.attr('data-id', item.id || ''); // Usar el ID del item o dejar vacío si es capítulo
         tr.addClass('item');
         tr.attr('draggable', true);
+        tr.attr('data-tipo', item.tipo || ''); // Agregar tipo
 
         const ordenInput = $('<input>');
         ordenInput.attr({
             type: 'hidden',
             class: 'orden-producto',
-            name: `orden_producto_${producto.id}`,
+            name: `orden_producto_${item.id || ''}`,
             value: index + 1
         });
 
-        const tdNombre = $('<td class="align-middle"></td>');
-        tdNombre.text(producto.nombre);
+        if (item.tipo === 'capitulo') {
+            // Manejar capítulos
+            const tdTitulo = $('<td class="align-middle" colspan="2"></td>');
+            const strongTitulo = $('<strong></strong>').text(item.titulo || '');
+            tdTitulo.append(strongTitulo);
 
-        const tdDesc = $('<td class="align-middle"></td>');
-        const descInput = $('<textarea></textarea>'); // Cambiado a textarea
-        descInput.attr({
-            value: producto.leyenda,
-            class: 'form-control',
-            rows: 2, // Ajustar el número de filas según sea necesario
-            cols: 30 // Ajustar el número de columnas según sea necesario
-        });
-        descInput.text(producto.leyenda); // Usar text en lugar de value para textarea
-        tdDesc.append(descInput);
+            const tdDesc = $('<td class="align-middle" colspan="3"></td>');
+            const descInput = $('<textarea></textarea>');
+            descInput.attr({
+                value: item.descripcion || '',
+                class: 'form-control',
+                rows: 2,
+                cols: 30
+            });
+            descInput.text(item.descripcion || '');
+            tdDesc.append(descInput);
 
-        const tdCantidad = $('<td class="align-middle"></td>');
-        const cantidadInput = $('<input>');
-        cantidadInput.attr({
-            type: 'number',
-            value: producto.cantidad,
-            min: 1,
-            max: producto.stock,
-            size: producto.cantidad.toString().length // Ajusta el tamaño al ancho del valor
-        });
+            const tdAcciones = $('<td class="align-middle"></td>');
+            const eliminarBtn = $('<button></button>');
+            eliminarBtn.attr('type', 'button');
+            eliminarBtn.addClass('btn btn-danger btn-sm');
+            eliminarBtn.html('<i class="fa-solid fa-trash"></i>');
+            eliminarBtn.on('click', function() {
+                tr.remove();
+                productosArrastrados = productosArrastrados.filter(p => p.id !== item.id);
+                actualizarOrdenProductos();
+                actualizarPrecioTotal();
+            });
+            tdAcciones.append(eliminarBtn);
 
-        cantidadInput.addClass('cantidad-producto form-control');
-        cantidadInput.on('input', function() {
-            const cantidad = parseInt($(this).val());
-            producto.cantidad = cantidad;
-            $(this).attr('size', cantidad.toString().length); // Ajusta el ancho al nuevo valor
-            tdPrecioTotal.text((cantidad * producto.precio).toFixed(2) + '€');
-            actualizarPrecioTotal();
-        });
-        tdCantidad.append(cantidadInput);
+            tr.append(tdTitulo, tdDesc, tdAcciones, ordenInput);
+        } else {
+            // Manejar productos
+            const tdNombre = $('<td class="align-middle"></td>');
+            tdNombre.text(item.nombre || '');
 
-        const tdPrecio = $('<td class="align-middle"></td>');
-        const precioInput = $('<input>');
-        precioInput.attr({
-            type: 'number',
-            value: producto.precio.toFixed(2),
-            min: 0,
-            step: 0.01,
-            size: producto.precio.toFixed(2).length // Ajusta el tamaño al ancho del valor
-        });
+            const tdDesc = $('<td class="align-middle"></td>');
+            const descInput = $('<textarea></textarea>');
+            descInput.attr({
+                value: item.leyenda || '',
+                class: 'form-control',
+                rows: 2,
+                cols: 30
+            });
+            descInput.text(item.leyenda || '');
+            tdDesc.append(descInput);
 
-        precioInput.addClass('input-precio-producto form-control');
-        precioInput.on('input', function() {
-            const precio = parseFloat($(this).val());
-            producto.precio = precio;
-            $(this).attr('size', precio.toFixed(2).length); // Ajusta el ancho al nuevo valor
-            tdPrecioTotal.text((producto.cantidad * precio).toFixed(2) + '€');
-            actualizarPrecioTotal();
-        });
-        tdPrecio.append(precioInput);
+            const tdCantidad = $('<td class="align-middle"></td>');
+            const cantidadInput = $('<input>');
+            cantidadInput.attr({
+                type: 'number',
+                value: item.cantidad || 1,
+                min: 1,
+                max: item.stock || 0,
+                size: (item.cantidad || 1).toString().length
+            });
 
-        const tdPrecioTotal = $('<td class="align-middle"></td>');
-        tdPrecioTotal.addClass('precio-total-producto text-center');
-        tdPrecioTotal.text((producto.cantidad * producto.precio).toFixed(2) + '€');
+            cantidadInput.addClass('cantidad-producto form-control');
+            cantidadInput.on('input', function() {
+                const cantidad = parseInt($(this).val());
+                item.cantidad = cantidad;
+                $(this).attr('size', cantidad.toString().length);
+                tdPrecioTotal.text((cantidad * item.precio).toFixed(2) + '€');
+                actualizarPrecioTotal();
+            });
+            tdCantidad.append(cantidadInput);
 
-        const tdAcciones = $('<td class="align-middle"></td>');
-        const eliminarBtn = $('<button></button>');
-        eliminarBtn.attr('type', 'button');
-        eliminarBtn.addClass('btn btn-danger btn-sm');
-        eliminarBtn.html('<i class="fa-solid fa-trash"></i>');
-        eliminarBtn.on('click', function() {
-            tr.remove();
-            productosArrastrados = productosArrastrados.filter(p => p.id !== producto.id);
-            actualizarOrdenProductos();
-            actualizarPrecioTotal();
-        });
-        tdAcciones.append(eliminarBtn);
+            const tdPrecio = $('<td class="align-middle"></td>');
+            const precioInput = $('<input>');
+            precioInput.attr({
+                type: 'number',
+                value: item.precio.toFixed(2),
+                min: 0,
+                step: 0.01,
+                size: item.precio.toFixed(2).length
+            });
 
-        tr.append(tdNombre, tdDesc, tdCantidad, tdPrecio, tdPrecioTotal, tdAcciones, ordenInput);
+            precioInput.addClass('input-precio-producto form-control');
+            precioInput.on('input', function() {
+                const precio = parseFloat($(this).val());
+                item.precio = precio;
+                $(this).attr('size', precio.toFixed(2).length);
+                tdPrecioTotal.text((item.cantidad * precio).toFixed(2) + '€');
+                actualizarPrecioTotal();
+            });
+            tdPrecio.append(precioInput);
+
+            const tdPrecioTotal = $('<td class="align-middle"></td>');
+            tdPrecioTotal.addClass('precio-total-producto text-center');
+            tdPrecioTotal.text((item.cantidad * item.precio).toFixed(2) + '€');
+
+            const tdAcciones = $('<td class="align-middle"></td>');
+            const eliminarBtn = $('<button></button>');
+            eliminarBtn.attr('type', 'button');
+            eliminarBtn.addClass('btn btn-danger btn-sm');
+            eliminarBtn.html('<i class="fa-solid fa-trash"></i>');
+            eliminarBtn.on('click', function() {
+                tr.remove();
+                productosArrastrados = productosArrastrados.filter(p => p.id !== item.id);
+                actualizarOrdenProductos();
+                actualizarPrecioTotal();
+            });
+            tdAcciones.append(eliminarBtn);
+
+            tr.append(tdNombre, tdDesc, tdCantidad, tdPrecio, tdPrecioTotal, tdAcciones, ordenInput);
+        }
+
         tableBody.append(tr);
 
         tr.on('dragstart', function(e) {
             $(this).addClass('dragging');
-
             window.fila_original = tr;
-
             window.drop_function = 2;
-            console.log("dragging!");
-            e.originalEvent.dataTransfer.setData('text/plain', producto.id);
+            e.originalEvent.dataTransfer.setData('text/plain', item.id || '');
         });
 
         tr.on('dragend', function() {
-            console.log("dragend!");
             $(this).removeClass('dragging');
             actualizarOrdenProductos();
         });
     });
+
     actualizarPrecioTotal();
 }
+
+
 
 function actualizarOrdenProductos() {
     $('#productos-table-body tr').each((index, tr) => {
@@ -459,19 +498,57 @@ function actualizarOrdenProductos() {
     productosArrastrados.sort((a, b) => a.orden - b.orden);
 }
 
+
 function actualizarPrecioTotal() {
     let precioTotal = 0;
 
-    productosArrastrados.forEach(producto => {
-        const cantidad = parseInt(producto.cantidad);
-        const precioProducto = cantidad * producto.precio;
-        precioTotal += precioProducto;
+    productosArrastrados.forEach(item => {
+        if (item.tipo === 'linea') { // Solo sumar precios de tipo línea
+            const cantidad = parseInt(item.cantidad);
+            const precioProducto = cantidad * item.precio;
+            precioTotal += precioProducto;
+        }
     });
 
     document.getElementById("total").innerText = precioTotal.toFixed(2);
     document.getElementById("precio_total").value = precioTotal.toFixed(2);
     document.getElementById("lista_productos").value = JSON.stringify(productosArrastrados);
 }
+
+
+
+document.getElementById("agregarCap").addEventListener("click", function() {
+    // Show the modal
+    const myModal = new bootstrap.Modal(document.getElementById('capituloModal'), {});
+    myModal.show();
+});
+
+document.getElementById("saveCapituloBtn").addEventListener("click", function() {
+    const titulo = document.getElementById("capituloTitulo").value;
+
+    if (titulo) {
+        // Add the new capítulo with just the title
+        productosArrastrados.push({
+            id: null,  // ID can be omitted or set to null
+            titulo: titulo,
+            tipo: 'capitulo'
+        });
+
+        actualizarListaProductos();
+
+        // Hide the modal after adding the capítulo
+        const myModalEl = document.getElementById('capituloModal');
+        const modal = bootstrap.Modal.getInstance(myModalEl);
+        modal.hide();
+
+        // Clear the input field
+        document.getElementById("capituloTitulo").value = '';
+    } else {
+        alert("El título es requerido.");
+    }
+});
+
+
 
 document.getElementById("limpiarCanvas").addEventListener("click", function() {
     const tableBody = document.getElementById("productos-table-body");
