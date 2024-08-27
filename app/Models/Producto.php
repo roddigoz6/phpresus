@@ -25,7 +25,7 @@ class Producto extends Model
         'eliminado' => 'bool',
     ];
 
-    public function producto_presupuestos()
+    public function tprod_pres()
     {
         return $this->hasMany(ProductoPresupuesto::class, 'producto_id');
     }

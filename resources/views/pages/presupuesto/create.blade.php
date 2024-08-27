@@ -129,7 +129,6 @@
                     </div>
                 </div>
 
-
                 <div class="col">
                     <hr />
                     <p class="mb-0">Info del proyecto</p>
@@ -154,10 +153,7 @@
                                 <option value="Letra a la vista">Letra a la vista</option>
                             </select>
                     </div>
-
                     <hr />
-
-
                 </div>
 
                 <p>Arrastra aquí los productos para agregarlos al presupuesto.</p>
@@ -233,31 +229,26 @@
     </div>
 </div>
 
-
-<!-- Modal for Adding Capítulo -->
 <div class="modal fade" id="capituloModal" tabindex="-1" aria-labelledby="capituloModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="capituloModalLabel">Agregar Capítulo</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="capituloModalLabel">Agregar Capítulo</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col me-auto">
+                        <input type="text" class="form-control" id="capituloTitulo" placeholder="Ingrese el título del capítulo">
+                    </div>
+                    <div class="col col-auto">
+                        <button type="button" class="btn btn-light-primary" id="saveCapituloBtn">Guardar <i class="fa fa-check-circle"></i></button>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="modal-body">
-          <div class="mb-3">
-            <label for="capituloTitulo" class="form-label">Título</label>
-            <input type="text" class="form-control" id="capituloTitulo" placeholder="Ingrese el título del capítulo">
-          </div>
-          <!-- Description field can be optional or removed -->
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-          <button type="button" class="btn btn-primary" id="saveCapituloBtn">Guardar</button>
-        </div>
-      </div>
     </div>
-  </div>
-
-
+</div>
 
 @push('scripts')
 <script>
@@ -280,7 +271,7 @@ function drop(event) {
         drop2(event);
         return;
     }
-    console.log("DEV: DROP-EVENT 1");
+
     event.preventDefault();
     const data = event.dataTransfer.getData("text");
     const draggedElement = document.getElementById(data);
@@ -288,6 +279,8 @@ function drop(event) {
     const productoNombre = draggedElement.querySelector('.producto-nombre').textContent;
     const productoPrecio = parseFloat(draggedElement.querySelector('.producto-precio').textContent);
     const productoStock = parseInt(draggedElement.querySelector('.producto-stock').textContent);
+    const productoDescripcion = draggedElement.querySelector('.producto-descripcion') ?
+        draggedElement.querySelector('.producto-descripcion').textContent : ''; // Nueva línea para descripción
 
     const productoExistente = productosArrastrados.find(producto => producto.id === productoId);
     if (!productoExistente) {
@@ -296,25 +289,21 @@ function drop(event) {
             nombre: productoNombre,
             precio: productoPrecio,
             stock: productoStock,
-            cantidad: 1
+            cantidad: 1,
+            tipo: '',
+            orden: productosArrastrados.length + 1,
+            descripcion: productoDescripcion // Nueva línea para descripción
         });
-
         actualizarListaProductos();
     } else {
-        const Toast = Swal.mixin({
+        Swal.fire({
+            icon: "error",
+            title: "Ya agregaste este producto",
             toast: true,
             position: "top-end",
             showConfirmButton: false,
             timer: 3000,
-            timerProgressBar: true,
-            didOpen: (toast) => {
-                toast.onmouseenter = Swal.stopTimer;
-                toast.onmouseleave = Swal.resumeTimer;
-            }
-        });
-        Toast.fire({
-            icon: "error",
-            title: "Ya agregaste este producto"
+            timerProgressBar: true
         });
     }
 }
@@ -325,7 +314,6 @@ function drop2(event) {
 
     const x = event.clientX;
     const y = event.clientY;
-
     const elementoDebajoDelRaton = document.elementFromPoint(x, y);
     const fila_destino = $(elementoDebajoDelRaton).closest("tr");
 
@@ -338,11 +326,11 @@ function drop2(event) {
         } else {
             fila_destino.before(window.fila_original);
         }
+
+        actualizarOrdenProductos();
     } else {
         console.log("No se puede soltar la fila sobre sí misma.");
     }
-
-    actualizarOrdenProductos();
 }
 
 function actualizarListaProductos() {
@@ -351,34 +339,36 @@ function actualizarListaProductos() {
 
     productosArrastrados.forEach((item, index) => {
         const tr = $('<tr></tr>');
-        tr.attr('data-id', item.id || ''); // Usar el ID del item o dejar vacío si es capítulo
+        tr.attr('data-id', item.id || '');
         tr.addClass('item');
         tr.attr('draggable', true);
-        tr.attr('data-tipo', item.tipo || ''); // Agregar tipo
+        tr.attr('data-tipo', item.tipo || '');
 
+        // Input para el orden
         const ordenInput = $('<input>');
         ordenInput.attr({
             type: 'hidden',
             class: 'orden-producto',
             name: `orden_producto_${item.id || ''}`,
-            value: index + 1
+            value: item.orden || index + 1
         });
 
+        // Input para la descripción (si aplica)
+        const descInput = $('<textarea></textarea>');
+        descInput.attr({
+            name: `descripcion_producto_${item.id || ''}`,
+            class: 'form-control',
+            rows: 2,
+            cols: 30
+        });
+        descInput.text(item.descripcion || '');
+
         if (item.tipo === 'capitulo') {
-            // Manejar capítulos
             const tdTitulo = $('<td class="align-middle" colspan="2"></td>');
             const strongTitulo = $('<strong></strong>').text(item.titulo || '');
             tdTitulo.append(strongTitulo);
 
             const tdDesc = $('<td class="align-middle" colspan="3"></td>');
-            const descInput = $('<textarea></textarea>');
-            descInput.attr({
-                value: item.descripcion || '',
-                class: 'form-control',
-                rows: 2,
-                cols: 30
-            });
-            descInput.text(item.descripcion || '');
             tdDesc.append(descInput);
 
             const tdAcciones = $('<td class="align-middle"></td>');
@@ -396,19 +386,10 @@ function actualizarListaProductos() {
 
             tr.append(tdTitulo, tdDesc, tdAcciones, ordenInput);
         } else {
-            // Manejar productos
             const tdNombre = $('<td class="align-middle"></td>');
             tdNombre.text(item.nombre || '');
 
             const tdDesc = $('<td class="align-middle"></td>');
-            const descInput = $('<textarea></textarea>');
-            descInput.attr({
-                value: item.leyenda || '',
-                class: 'form-control',
-                rows: 2,
-                cols: 30
-            });
-            descInput.text(item.leyenda || '');
             tdDesc.append(descInput);
 
             const tdCantidad = $('<td class="align-middle"></td>');
@@ -418,9 +399,9 @@ function actualizarListaProductos() {
                 value: item.cantidad || 1,
                 min: 1,
                 max: item.stock || 0,
-                size: (item.cantidad || 1).toString().length
+                size: (item.cantidad || 1).toString().length,
+                name: `cantidad_producto_${item.id || ''}`
             });
-
             cantidadInput.addClass('cantidad-producto form-control');
             cantidadInput.on('input', function() {
                 const cantidad = parseInt($(this).val());
@@ -438,9 +419,9 @@ function actualizarListaProductos() {
                 value: item.precio.toFixed(2),
                 min: 0,
                 step: 0.01,
-                size: item.precio.toFixed(2).length
+                size: item.precio.toFixed(2).length,
+                name: `precio_producto_${item.id || ''}`
             });
-
             precioInput.addClass('input-precio-producto form-control');
             precioInput.on('input', function() {
                 const precio = parseFloat($(this).val());
@@ -450,6 +431,14 @@ function actualizarListaProductos() {
                 actualizarPrecioTotal();
             });
             tdPrecio.append(precioInput);
+
+            const tipoInput = $('<input>');
+            tipoInput.attr({
+                type: 'hidden',
+                class: 'tipo-producto',
+                name: `tipo_producto_${item.id || ''}`,
+                value: item.tipo || 'linea'
+            });
 
             const tdPrecioTotal = $('<td class="align-middle"></td>');
             tdPrecioTotal.addClass('precio-total-producto text-center');
@@ -468,7 +457,7 @@ function actualizarListaProductos() {
             });
             tdAcciones.append(eliminarBtn);
 
-            tr.append(tdNombre, tdDesc, tdCantidad, tdPrecio, tdPrecioTotal, tdAcciones, ordenInput);
+            tr.append(tdNombre, tdDesc, tdCantidad, tdPrecio, tdPrecioTotal, tdAcciones, ordenInput, tipoInput);
         }
 
         tableBody.append(tr);
@@ -489,22 +478,27 @@ function actualizarListaProductos() {
     actualizarPrecioTotal();
 }
 
-
-
 function actualizarOrdenProductos() {
     $('#productos-table-body tr').each((index, tr) => {
-        $(tr).find('.orden-producto').val(index + 1);
+        const productoId = $(tr).data('id');
+        const producto = productosArrastrados.find(p => p.id === productoId);
+        if (producto) {
+            producto.orden = index + 1;
+            $(tr).find('.orden-producto').val(index + 1);
+        }
     });
-    productosArrastrados.sort((a, b) => a.orden - b.orden);
-}
 
+    productosArrastrados.sort((a, b) => a.orden - b.orden);
+
+    document.getElementById("lista_productos").value = JSON.stringify(productosArrastrados);
+}
 
 function actualizarPrecioTotal() {
     let precioTotal = 0;
 
     productosArrastrados.forEach(item => {
-        if (item.tipo === 'linea') { // Solo sumar precios de tipo línea
-            const cantidad = parseInt(item.cantidad);
+        if (item.tipo != 'capitulo') {
+            const cantidad = item.cantidad;
             const precioProducto = cantidad * item.precio;
             precioTotal += precioProducto;
         }
@@ -512,13 +506,10 @@ function actualizarPrecioTotal() {
 
     document.getElementById("total").innerText = precioTotal.toFixed(2);
     document.getElementById("precio_total").value = precioTotal.toFixed(2);
-    document.getElementById("lista_productos").value = JSON.stringify(productosArrastrados);
 }
 
 
-
 document.getElementById("agregarCap").addEventListener("click", function() {
-    // Show the modal
     const myModal = new bootstrap.Modal(document.getElementById('capituloModal'), {});
     myModal.show();
 });
@@ -527,21 +518,21 @@ document.getElementById("saveCapituloBtn").addEventListener("click", function() 
     const titulo = document.getElementById("capituloTitulo").value;
 
     if (titulo) {
-        // Add the new capítulo with just the title
-        productosArrastrados.push({
-            id: null,  // ID can be omitted or set to null
+        const nuevoCap = {
+            id: null,
             titulo: titulo,
-            tipo: 'capitulo'
-        });
+            tipo: 'capitulo',
+            orden: productosArrastrados.length + 1,
+            descripcion: ''
+        };
 
+        productosArrastrados.push(nuevoCap);
         actualizarListaProductos();
 
-        // Hide the modal after adding the capítulo
         const myModalEl = document.getElementById('capituloModal');
         const modal = bootstrap.Modal.getInstance(myModalEl);
         modal.hide();
 
-        // Clear the input field
         document.getElementById("capituloTitulo").value = '';
     } else {
         alert("El título es requerido.");

@@ -118,7 +118,6 @@
                     <div class="row">
                         <div class="col me-auto">
                             <select data-dropdown-parent="#clienteModalLabel" id="cliente" name="cliente" class="form-control">
-                                <!-- Opciones del select se pueden cargar dinámicamente con JavaScript -->
                             </select>
                         </div>
                         <div class="col col-auto">

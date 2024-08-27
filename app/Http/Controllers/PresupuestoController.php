@@ -115,49 +115,46 @@ class PresupuestoController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
-{
-    $validatedData = $request->validate([
-        'cliente_id' => 'required|exists:TClientes,id',
-        'precio_total' => 'required|numeric|min:0',
-        'lista_productos' => 'required|json',
-    ]);
+    {
+        $validatedData = $request->validate([
+            'cliente_id' => 'required|exists:TClientes,id',
+            'precio_total' => 'required|numeric|min:0',
+            'lista_productos' => 'required|json',
+        ]);
 
-    // Crear un nuevo proyecto
-    $proyecto = new Proyecto();
-    $proyecto->cliente_id = $validatedData['cliente_id'];
-    $proyecto->estado = 'Presupuestado';
-    $proyecto->pago = $request->input('pago');
-    $proyecto->save();
+        $proyecto = new Proyecto();
+        $proyecto->cliente_id = $validatedData['cliente_id'];
+        $proyecto->estado = 'Presupuestado';
+        $proyecto->pago = $request->input('pago');
+        $proyecto->save();
 
-    //dd($proyecto->proyecto_id); // Verifica que el proyecto se está guardando y tiene un ID
+        $presupuesto = new Presupuesto();
+        $presupuesto->cliente_id = $validatedData['cliente_id'];
+        $presupuesto->proyecto_id = $proyecto->proyecto_id;
+        $presupuesto->precio_total = $validatedData['precio_total'];
+        $presupuesto->save();
 
-    // Crear el presupuesto
-    $presupuesto = new Presupuesto();
-    $presupuesto->cliente_id = $validatedData['cliente_id'];
-    $presupuesto->proyecto_id = $proyecto->proyecto_id; // Verifica que esto no sea NULL
-    $presupuesto->precio_total = $validatedData['precio_total'];
-    $presupuesto->save();
+        // Guardar los productos y capítulos asociados al presupuesto
+        $productos = json_decode($validatedData['lista_productos'], true);
 
-    //dd($presupuesto); // Verifica que el presupuesto se está guardando correctamente
+        dd($productos);
 
-    // Guardar los productos y capítulos asociados al presupuesto
-    $productos = json_decode($validatedData['lista_productos'], true);
-    foreach ($productos as $producto) {
-        $presupuestoProducto = new ProductoPresupuesto();
-        $presupuestoProducto->presupuesto_id = $presupuesto->id;
-        $presupuestoProducto->producto_id = $producto['id'] ?? null;
-        $presupuestoProducto->cantidad = $producto['cantidad'] ?? null;
-        $presupuestoProducto->precio = $producto['precio'] ?? null;
-        $presupuestoProducto->orden = $producto['orden'] ?? null;
-        $presupuestoProducto->descripcion = $producto['descripcion'] ?? null;
-        $presupuestoProducto->titulo = $producto['titulo'] ?? null;
-        $presupuestoProducto->tipo = $producto['tipo'];
-        $presupuestoProducto->save();
+        foreach ($productos as $producto) {
+            ProductoPresupuesto::create([
+                'presupuesto_id' => $request->presupuesto_id,
+                'producto_id' => $producto['id'] ?? '',
+                'cantidad' => $producto['cantidad'],
+                'precio' => $producto['precio'],
+                'orden' => $producto['orden'],
+                'descripcion' => $producto['descripcion'] ?? '',
+                'titulo' => $producto['titulo'],
+                'tipo' => $producto['tipo'],
+            ]);
+
+        }
+
+        return redirect()->route('presupuesto.index')->with('success_pres', 'Presupuesto y proyecto creados correctamente.');
     }
-
-    return redirect()->route('presupuesto.index')->with('success_pres', 'Presupuesto y proyecto creados correctamente.');
-}
-
 
     /**
      * Display the specified resource.
@@ -188,7 +185,6 @@ class PresupuestoController extends Controller
     public function edit(Presupuesto $presupuesto)
     {
         $clientes = Cliente::where('eliminado', false)->get();
-        $categorias = Categoria::where('eliminado', false)->get();
         $presupuesto->load('cliente', 'productoPresupuestos.producto');
 
         $productosArrastrados = $presupuesto->productoPresupuestos->map(function($pp) {
@@ -251,7 +247,6 @@ class PresupuestoController extends Controller
             }
         }
 
-        //dd($producto);
         return redirect()->route('presupuesto.index')->with('update_pres', 'Presupuesto actualizado.')->with('clear_storage', true);
     }
 
@@ -312,25 +307,6 @@ class PresupuestoController extends Controller
             return response()->json(['error' => 'Error al enviar el correo electrónico'], 500);
         }
     }
-
-    /* Envío correos de prueba
-    public function sendMail(Request $request, $presupuestoId)
-    {
-        // Validar y obtener el cliente desde el presupuesto
-        $presupuesto = Presupuesto::findOrFail($presupuestoId);
-        $clienteEmail = $presupuesto->cliente->email;
-
-        try {
-            // Enviar correo electrónico con el PDF adjunto
-            Mail::to($clienteEmail)
-                ->send(new Saludo($presupuesto->cliente->nombre));
-
-            return response()->json(['success' => true]);
-        } catch (\Exception $e) {
-            return response()->json(['error' => 'Error al enviar el correo electrónico'], 500);
-        }
-    }
-    */
 
     /**
      * Remove the specified resource from storage.

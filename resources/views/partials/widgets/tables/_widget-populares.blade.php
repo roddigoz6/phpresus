@@ -59,7 +59,7 @@
 
                         <td class="align-middle">
                             <div class="symbol-group symbol-hover flex-nowrap align-middle justify-content-center">
-                                @foreach($popular->producto_presupuestos->take(5) as $index => $productoPresupuesto)
+                                @foreach($popular->tprod_pres->take(5) as $index => $productoPresupuesto)
 
                                 @if ($productoPresupuesto->presupuesto && !$productoPresupuesto->presupuesto->eliminado)
                                     <div class="symbol symbol-35px symbol-circle" data-bs-toggle="tooltip" title="Presupuesto {{ $productoPresupuesto->presupuesto->id }}">
@@ -72,9 +72,9 @@
                                 @endif
                                 @endforeach
 
-                                @if($popular->producto_presupuestos->count() > 5)
+                                @if($popular->tprod_pres->count() > 5)
                                     @php
-                                        $remainingCount = $popular->producto_presupuestos->count() - 5;
+                                        $remainingCount = $popular->tprod_pres->count() - 5;
                                     @endphp
                                     <div class="symbol symbol-35px symbol-circle" data-bs-toggle="tooltip" data-bs-trigger="hover" title="{{ $remainingCount }} presupuestos más">
                                         <span class="symbol-label bg-secondary text-dark fs-8 fw-bold">+{{ $remainingCount }}</span>
