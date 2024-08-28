@@ -24,7 +24,7 @@ class ProductoFactory extends Factory
             'precio' => $this->faker->randomFloat(2, 5.99, 19.99),
             'leyenda' => $this->faker->sentence,
             'stock' => $this->faker->numberBetween(1,20),
-            'tipo' => $this->faker->randomElement(['articulo', 'visita']),
+            'tipo' => $this->faker->randomElement(['linea']),
             'eliminado' => false,
 
         ];

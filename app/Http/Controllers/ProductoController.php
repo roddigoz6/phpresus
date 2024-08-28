@@ -65,7 +65,7 @@ class ProductoController extends Controller
             'precio' => 'required|numeric|min:0',
             'leyenda' => 'nullable|string',
             'stock' => 'required|integer|min:0',
-            'tipo' => 'required|in:Artículo,Visita',
+            'tipo' => 'nullable|string',
         ]);
 
         // Crea el nuevo producto en la base de datos

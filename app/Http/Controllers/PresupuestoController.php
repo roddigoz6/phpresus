@@ -121,7 +121,7 @@ class PresupuestoController extends Controller
             'precio_total' => 'required|numeric|min:0',
             'lista_productos' => 'required|json',
         ]);
-
+dd($validatedData);
         $proyecto = new Proyecto();
         $proyecto->cliente_id = $validatedData['cliente_id'];
         $proyecto->estado = 'Presupuestado';
@@ -137,7 +137,7 @@ class PresupuestoController extends Controller
         // Guardar los productos y capítulos asociados al presupuesto
         $productos = json_decode($validatedData['lista_productos'], true);
 
-        dd($productos);
+
 
         foreach ($productos as $producto) {
             ProductoPresupuesto::create([

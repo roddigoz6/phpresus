@@ -11,10 +11,10 @@ use Illuminate\Support\Facades\Route;
 | PhPresus
 |--------------------------------------------------------------------------
 */
-use App\Http\Controllers\CategoriaController;
+use App\Http\Controllers\ProyectoController;
+use App\Http\Controllers\VisitaController;
 use App\Http\Controllers\ClienteController;
 use App\Http\Controllers\FacturaController;
-use App\Http\Controllers\OrdenController;
 use App\Http\Controllers\PresupuestoController;
 use App\Http\Controllers\ProductoController;
 use App\Http\Controllers\UserController;
@@ -31,11 +31,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::resource('/user-management/permissions', PermissionManagementController::class);
     });
 
-    Route::resource('categoria', CategoriaController::class);
     Route::resource('cliente', ClienteController::class);
     Route::resource('factura', FacturaController::class);
-    Route::resource('orden', OrdenController::class);
     Route::resource('presupuesto', PresupuestoController::class);
+    Route::resource('proyecto', ProyectoController::class);
+    Route::resource('visita', VisitaController::class);
     Route::resource('producto', ProductoController::class);
     Route::resource('user', UserController::class);
 

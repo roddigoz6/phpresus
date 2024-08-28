@@ -111,7 +111,7 @@
                             <tr>
                                 <td class="align-middle"><span class="badge badge-light-info fs-base">{{ $producto->id }}</span></td>
                                 <td class="align-middle">{{ $producto->nombre }}</td>
-                                <td class="align-middle">{{ $producto->descripcion }}</td>
+                                <td class="align-middle">{{ $producto->leyenda }}</td>
                                 <td class="align-middle">{{ $producto->precio }}</td>
                                 @if ($producto->stock<5)
                                     <td class="align-middle"><span class="badge badge-light-danger fs-base"> {{ $producto->stock }} </span></td>                                    </span></td>

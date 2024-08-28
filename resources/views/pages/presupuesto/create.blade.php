@@ -26,33 +26,28 @@
                                 <div class="modal-header">
                                     <h5 class="modal-title" id="crearProductoModalLabel">Nuevo producto</h5>
                                 </div>
-                                <div class="">
+                                <div class="mb-3">
                                     <label for="nombre">Nombre del Producto</label> <strong class="required"></strong>
                                     <input type="text" class="form-control" id="nombre" name="nombre" required>
                                 </div>
-                                <div class="">
+                                <div class="mb-3">
                                     <label for="precio">Precio</label> <strong class="required"></strong>
                                     <input type="number" class="form-control" id="precio" name="precio" min="0" step="0.01" required>
                                 </div>
-                                <div class="">
+                                <div class="mb-3">
                                     <label for="leyenda">Leyenda</label>
                                     <textarea class="form-control" id="leyenda" name="leyenda" rows="3"></textarea>
                                 </div>
-                                <div class="">
+                                <div class="mb-3">
                                     <label for="stock">Stock</label> <strong class="required"></strong>
                                     <input type="number" class="form-control" id="stock" name="stock" min="0" required>
                                 </div>
-                                <div class="">
-                                    <label for="tipo">Tipo</label> <strong class="required"></strong>
-                                    <select class="form-select" id="tipo" name="tipo" required>
-                                        <option value="Artículo">Artículo</option>
-                                        <option value="Visita">Visita</option>
-                                    </select>
-                                </div>
+                                <input type="hidden" id="tipo" name="tipo" value="linea" required>
 
                                 <div class="mt-3">Los campos con <strong class="required"></strong> son requeridos.</div>
                                 <button type="submit" class="btn btn-primary mt-3" id="CreaProd">Ingresar nuevo producto</button>
                             </form>
+
                             @if (session('success_prod'))
                                 <script>
                                     document.addEventListener('DOMContentLoaded', function() {
@@ -254,33 +249,65 @@
 <script>
 let productosArrastrados = [];
 
+// Función para limpiar productos del almacenamiento
 function limpiarProductos() {
     localStorage.removeItem('productosArrastrados');
 }
 
+// Función para permitir el evento de arrastre
 function allowDrop(event) {
     event.preventDefault();
 }
 
+// Función para manejar el evento de arrastre
 function drag(event) {
     event.dataTransfer.setData("text", event.target.id);
 }
 
+// Función para manejar el evento de soltado (drop)
 function drop(event) {
     if (window.drop_function !== undefined && window.drop_function === 2) {
         drop2(event);
         return;
     }
 
+    console.log("DEV: DROP-EVENT 1");
     event.preventDefault();
+
     const data = event.dataTransfer.getData("text");
     const draggedElement = document.getElementById(data);
-    const productoId = parseInt(draggedElement.querySelector('.producto-id').textContent);
-    const productoNombre = draggedElement.querySelector('.producto-nombre').textContent;
-    const productoPrecio = parseFloat(draggedElement.querySelector('.producto-precio').textContent);
-    const productoStock = parseInt(draggedElement.querySelector('.producto-stock').textContent);
-    const productoDescripcion = draggedElement.querySelector('.producto-descripcion') ?
-        draggedElement.querySelector('.producto-descripcion').textContent : ''; // Nueva línea para descripción
+
+    if (!draggedElement) {
+        console.error("Elemento arrastrado no encontrado.");
+        return;
+    }
+
+    // Obtener los elementos del producto
+    const productoIdElem = draggedElement.querySelector('.producto-id');
+    const productoNombreElem = draggedElement.querySelector('.producto-nombre');
+    const productoPrecioElem = draggedElement.querySelector('.producto-precio');
+    const productoStockElem = draggedElement.querySelector('.producto-stock');
+    const productoTipoElem = draggedElement.querySelector('.producto-tipo'); // Asegúrate de que el selector es correcto
+
+    if (!productoIdElem || !productoNombreElem || !productoPrecioElem || !productoStockElem || !productoTipoElem) {
+        console.error("Algunos elementos del producto no se encontraron.");
+        console.log("ID Element:", productoIdElem);
+        console.log("Nombre Element:", productoNombreElem);
+        console.log("Precio Element:", productoPrecioElem);
+        console.log("Stock Element:", productoStockElem);
+        console.log("Tipo Element:", productoTipoElem);
+        return;
+    }
+
+    const productoId = parseInt(productoIdElem.textContent.trim());
+    const productoNombre = productoNombreElem.textContent.trim();
+    const productoPrecio = parseFloat(productoPrecioElem.textContent.trim());
+    const productoStock = parseInt(productoStockElem.textContent.trim());
+    const productoTipo = productoTipoElem.textContent.trim(); // Asegúrate de que estás obteniendo el texto correctamente
+
+    if (!productoTipo) {
+        console.error("Tipo del producto es null o vacío.");
+    }
 
     const productoExistente = productosArrastrados.find(producto => producto.id === productoId);
     if (!productoExistente) {
@@ -290,30 +317,38 @@ function drop(event) {
             precio: productoPrecio,
             stock: productoStock,
             cantidad: 1,
-            tipo: '',
-            orden: productosArrastrados.length + 1,
-            descripcion: productoDescripcion // Nueva línea para descripción
+            tipo: productoTipo // Incluir el tipo
         });
+
         actualizarListaProductos();
     } else {
-        Swal.fire({
-            icon: "error",
-            title: "Ya agregaste este producto",
+        const Toast = Swal.mixin({
             toast: true,
             position: "top-end",
             showConfirmButton: false,
             timer: 3000,
-            timerProgressBar: true
+            timerProgressBar: true,
+            didOpen: (toast) => {
+                toast.onmouseenter = Swal.stopTimer;
+                toast.onmouseleave = Swal.resumeTimer;
+            }
+        });
+        Toast.fire({
+            icon: "error",
+            title: "Ya agregaste este producto"
         });
     }
 }
 
+// Función para manejar el reordenamiento con drop2
 function drop2(event) {
     window.drop_function = 1;
+    console.log("DEV: DROP-EVENT 2");
     event.preventDefault();
 
     const x = event.clientX;
     const y = event.clientY;
+
     const elementoDebajoDelRaton = document.elementFromPoint(x, y);
     const fila_destino = $(elementoDebajoDelRaton).closest("tr");
 
@@ -321,55 +356,90 @@ function drop2(event) {
         const posicionOriginal = window.fila_original.index();
         const posicionDestino = fila_destino.index();
 
+        console.log('Posición original:', posicionOriginal);
+        console.log('Posición destino:', posicionDestino);
+
         if (posicionOriginal < posicionDestino) {
             fila_destino.after(window.fila_original);
         } else {
             fila_destino.before(window.fila_original);
         }
 
-        actualizarOrdenProductos();
+        // Reordenar productosArrastrados
+        const productoId = window.fila_original.data('producto-id');
+        const producto = productosArrastrados.find(p => p.id === productoId);
+        if (producto) {
+            productosArrastrados = productosArrastrados.filter(p => p.id !== productoId);
+            productosArrastrados.splice(posicionDestino, 0, producto);
+        }
+
+        // Aplicar estilo para confirmar la acción
+        //$(elementoDebajoDelRaton).css('border', '2px solid red');
     } else {
         console.log("No se puede soltar la fila sobre sí misma.");
     }
+
+    actualizarOrdenProductos();
 }
 
+// Evento para mostrar el modal de capítulo
+$('#agregarCap').on('click', function() {
+    $('#capituloModal').modal('show');
+});
+
+// Evento para agregar un capítulo cuando se hace clic en "Guardar"
+$('#saveCapituloBtn').on('click', function() {
+    const tituloCapitulo = $('#capituloTitulo').val().trim();
+
+    if (tituloCapitulo === '') {
+        alert('El título del capítulo no puede estar vacío.');
+        return;
+    }
+
+    // Crear objeto capítulo y agregarlo a productosArrastrados
+    const nuevoCapitulo = {
+        id: null, // ID vacío o null para capítulos
+        titulo: tituloCapitulo,
+        tipo: 'capitulo',
+        orden: productosArrastrados.length + 1, // Orden basado en la cantidad actual
+        descripcion: '' // Puede ser rellenado o dejado vacío
+    };
+
+    productosArrastrados.push(nuevoCapitulo);
+
+    // Actualizar la tabla con el nuevo capítulo
+    actualizarListaProductos();
+
+    // Cerrar el modal
+    $('#capituloModal').modal('hide');
+    $('#capituloTitulo').val(''); // Limpiar el campo de título
+});
+
+// Función para actualizar la lista de productos y capítulos
 function actualizarListaProductos() {
     const tableBody = $('#productos-table-body');
     tableBody.empty();
 
-    productosArrastrados.forEach((item, index) => {
+    productosArrastrados.forEach((producto, index) => {
+        console.log('Producto:', producto);
+
         const tr = $('<tr></tr>');
-        tr.attr('data-id', item.id || '');
+        tr.attr('data-producto-id', producto.id);
         tr.addClass('item');
         tr.attr('draggable', true);
-        tr.attr('data-tipo', item.tipo || '');
 
-        // Input para el orden
-        const ordenInput = $('<input>');
-        ordenInput.attr({
-            type: 'hidden',
-            class: 'orden-producto',
-            name: `orden_producto_${item.id || ''}`,
-            value: item.orden || index + 1
-        });
-
-        // Input para la descripción (si aplica)
-        const descInput = $('<textarea></textarea>');
-        descInput.attr({
-            name: `descripcion_producto_${item.id || ''}`,
-            class: 'form-control',
-            rows: 2,
-            cols: 30
-        });
-        descInput.text(item.descripcion || '');
-
-        if (item.tipo === 'capitulo') {
-            const tdTitulo = $('<td class="align-middle" colspan="2"></td>');
-            const strongTitulo = $('<strong></strong>').text(item.titulo || '');
-            tdTitulo.append(strongTitulo);
-
-            const tdDesc = $('<td class="align-middle" colspan="3"></td>');
-            tdDesc.append(descInput);
+        if (producto.tipo === 'capitulo') {
+            // Para capítulos, solo muestra título y descripción
+            const tdTitulo = $('<td class="align-middle"></td>');
+            tdTitulo.text(producto.titulo);
+            const tdDescripcion = $('<td class="align-middle"></td>');
+            const descripcionInput = $('<textarea class="form-control"></textarea>');
+            descripcionInput.attr('name', `descripcion_capitulo_${index + 1}`);
+            descripcionInput.val(producto.descripcion || ''); // Asegúrate de que la descripción esté correctamente inicializada
+            descripcionInput.on('change', function() {
+                producto.descripcion = $(this).val();
+            });
+            tdDescripcion.append(descripcionInput);
 
             const tdAcciones = $('<td class="align-middle"></td>');
             const eliminarBtn = $('<button></button>');
@@ -378,36 +448,55 @@ function actualizarListaProductos() {
             eliminarBtn.html('<i class="fa-solid fa-trash"></i>');
             eliminarBtn.on('click', function() {
                 tr.remove();
-                productosArrastrados = productosArrastrados.filter(p => p.id !== item.id);
+                productosArrastrados = productosArrastrados.filter(p => p !== producto);
                 actualizarOrdenProductos();
-                actualizarPrecioTotal();
             });
             tdAcciones.append(eliminarBtn);
 
-            tr.append(tdTitulo, tdDesc, tdAcciones, ordenInput);
-        } else {
-            const tdNombre = $('<td class="align-middle"></td>');
-            tdNombre.text(item.nombre || '');
+            const ordenInput = $('<input>');
+            ordenInput.attr({
+                type: 'hidden',
+                class: 'orden-producto',
+                name: `orden_producto_${index + 1}`,
+                value: producto.orden
+            });
 
-            const tdDesc = $('<td class="align-middle"></td>');
-            tdDesc.append(descInput);
+            const tipoInput = $('<input>');
+            tipoInput.attr({
+                type: 'hidden',
+                class: 'tipo-producto',
+                name: `tipo_producto_${index + 1}`,
+                value: producto.tipo
+            });
+
+            tr.append(tdTitulo, tdDescripcion, tdAcciones, ordenInput, tipoInput);
+        } else {
+            // Para productos normales (línea)
+            const tdNombre = $('<td class="align-middle"></td>');
+            tdNombre.text(producto.nombre);
+
+            const tdDescripcion = $('<td class="align-middle"></td>');
+            const descripcionInput = $('<textarea class="form-control"></textarea>');
+            descripcionInput.attr('name', `descripcion_producto_${index + 1}`);
+            descripcionInput.val(producto.descripcion || '');
+            descripcionInput.on('change', function() {
+                producto.descripcion = $(this).val();
+            });
+            tdDescripcion.append(descripcionInput);
 
             const tdCantidad = $('<td class="align-middle"></td>');
             const cantidadInput = $('<input>');
             cantidadInput.attr({
                 type: 'number',
-                value: item.cantidad || 1,
+                value: producto.cantidad,
                 min: 1,
-                max: item.stock || 0,
-                size: (item.cantidad || 1).toString().length,
-                name: `cantidad_producto_${item.id || ''}`
+                max: producto.stock
             });
             cantidadInput.addClass('cantidad-producto form-control');
-            cantidadInput.on('input', function() {
+            cantidadInput.on('change', function() {
                 const cantidad = parseInt($(this).val());
-                item.cantidad = cantidad;
-                $(this).attr('size', cantidad.toString().length);
-                tdPrecioTotal.text((cantidad * item.precio).toFixed(2) + '€');
+                producto.cantidad = cantidad;
+                tdPrecioTotal.text((cantidad * producto.precio).toFixed(2) + '€');
                 actualizarPrecioTotal();
             });
             tdCantidad.append(cantidadInput);
@@ -416,33 +505,22 @@ function actualizarListaProductos() {
             const precioInput = $('<input>');
             precioInput.attr({
                 type: 'number',
-                value: item.precio.toFixed(2),
+                value: producto.precio.toFixed(2),
                 min: 0,
-                step: 0.01,
-                size: item.precio.toFixed(2).length,
-                name: `precio_producto_${item.id || ''}`
+                step: 0.01
             });
             precioInput.addClass('input-precio-producto form-control');
-            precioInput.on('input', function() {
+            precioInput.on('change', function() {
                 const precio = parseFloat($(this).val());
-                item.precio = precio;
-                $(this).attr('size', precio.toFixed(2).length);
-                tdPrecioTotal.text((item.cantidad * precio).toFixed(2) + '€');
+                producto.precio = precio;
+                tdPrecioTotal.text((producto.cantidad * precio).toFixed(2) + '€');
                 actualizarPrecioTotal();
             });
             tdPrecio.append(precioInput);
 
-            const tipoInput = $('<input>');
-            tipoInput.attr({
-                type: 'hidden',
-                class: 'tipo-producto',
-                name: `tipo_producto_${item.id || ''}`,
-                value: item.tipo || 'linea'
-            });
-
             const tdPrecioTotal = $('<td class="align-middle"></td>');
             tdPrecioTotal.addClass('precio-total-producto text-center');
-            tdPrecioTotal.text((item.cantidad * item.precio).toFixed(2) + '€');
+            tdPrecioTotal.text((producto.cantidad * producto.precio).toFixed(2) + '€');
 
             const tdAcciones = $('<td class="align-middle"></td>');
             const eliminarBtn = $('<button></button>');
@@ -451,22 +529,39 @@ function actualizarListaProductos() {
             eliminarBtn.html('<i class="fa-solid fa-trash"></i>');
             eliminarBtn.on('click', function() {
                 tr.remove();
-                productosArrastrados = productosArrastrados.filter(p => p.id !== item.id);
+                productosArrastrados = productosArrastrados.filter(p => p !== producto);
                 actualizarOrdenProductos();
                 actualizarPrecioTotal();
             });
             tdAcciones.append(eliminarBtn);
 
-            tr.append(tdNombre, tdDesc, tdCantidad, tdPrecio, tdPrecioTotal, tdAcciones, ordenInput, tipoInput);
+            const ordenInput = $('<input>');
+            ordenInput.attr({
+                type: 'hidden',
+                class: 'orden-producto',
+                name: `orden_producto_${index + 1}`,
+                value: index + 1
+            });
+
+            const tipoInput = $('<input>');
+            tipoInput.attr({
+                type: 'hidden',
+                class: 'tipo-producto',
+                name: `tipo_producto_${index + 1}`,
+                value: producto.tipo
+            });
+
+            tr.append(tdNombre, tdDescripcion, tdCantidad, tdPrecio, tdPrecioTotal, tdAcciones, ordenInput, tipoInput);
         }
 
         tableBody.append(tr);
 
+        // Hacer la fila arrastrable
         tr.on('dragstart', function(e) {
             $(this).addClass('dragging');
             window.fila_original = tr;
             window.drop_function = 2;
-            e.originalEvent.dataTransfer.setData('text/plain', item.id || '');
+            e.originalEvent.dataTransfer.setData('text/plain', producto.id);
         });
 
         tr.on('dragend', function() {
@@ -479,74 +574,89 @@ function actualizarListaProductos() {
 }
 
 function actualizarOrdenProductos() {
-    $('#productos-table-body tr').each((index, tr) => {
-        const productoId = $(tr).data('id');
-        const producto = productosArrastrados.find(p => p.id === productoId);
+    $('#productos-table-body tr').each(function(index) {
+        const productoId = $(this).data('producto-id') || null; // Manejar null para capítulos
+        const productoTipo = $(this).find('.tipo-producto').val();
+
+        console.log(`Procesando producto de tipo: ${productoTipo}, ID: ${productoId}`);
+
+        // Busca el producto o capítulo en la lista por su tipo y ID
+        const producto = productosArrastrados.find(p => p.id === productoId && p.tipo === productoTipo);
+
         if (producto) {
-            producto.orden = index + 1;
-            $(tr).find('.orden-producto').val(index + 1);
+            producto.orden = index + 1; // Actualiza el orden en el objeto
+            $(this).find('.orden-producto').val(producto.orden); // Actualiza el valor en el input oculto
+            console.log(`Orden actualizado para ${productoTipo} con ID ${productoId}: ${producto.orden}`);
+        } else {
+            console.log(`No se encontró producto o capítulo en la lista con tipo: ${productoTipo} y ID: ${productoId}`);
         }
     });
-
-    productosArrastrados.sort((a, b) => a.orden - b.orden);
-
-    document.getElementById("lista_productos").value = JSON.stringify(productosArrastrados);
 }
 
+
+
+
+// Función para actualizar el precio total
 function actualizarPrecioTotal() {
-    let precioTotal = 0;
-
-    productosArrastrados.forEach(item => {
-        if (item.tipo != 'capitulo') {
-            const cantidad = item.cantidad;
-            const precioProducto = cantidad * item.precio;
-            precioTotal += precioProducto;
+    let total = 0;
+    productosArrastrados.forEach(producto => {
+        if (producto.tipo !== 'capitulo') { // Los capítulos no afectan el precio total
+            total += producto.precio * producto.cantidad;
         }
     });
-
-    document.getElementById("total").innerText = precioTotal.toFixed(2);
-    document.getElementById("precio_total").value = precioTotal.toFixed(2);
+    // Actualiza el campo del precio total en la interfaz (si existe)
+    $('#precioTotal').text(total.toFixed(2) + '€');
 }
 
-
-document.getElementById("agregarCap").addEventListener("click", function() {
-    const myModal = new bootstrap.Modal(document.getElementById('capituloModal'), {});
-    myModal.show();
-});
-
-document.getElementById("saveCapituloBtn").addEventListener("click", function() {
-    const titulo = document.getElementById("capituloTitulo").value;
-
-    if (titulo) {
-        const nuevoCap = {
-            id: null,
-            titulo: titulo,
-            tipo: 'capitulo',
-            orden: productosArrastrados.length + 1,
-            descripcion: ''
-        };
-
-        productosArrastrados.push(nuevoCap);
-        actualizarListaProductos();
-
-        const myModalEl = document.getElementById('capituloModal');
-        const modal = bootstrap.Modal.getInstance(myModalEl);
-        modal.hide();
-
-        document.getElementById("capituloTitulo").value = '';
-    } else {
-        alert("El título es requerido.");
-    }
-});
-
-
-
+// Evento para limpiar la tabla
 document.getElementById("limpiarCanvas").addEventListener("click", function() {
     const tableBody = document.getElementById("productos-table-body");
     tableBody.innerHTML = "";
     productosArrastrados = [];
     actualizarPrecioTotal();
 });
+
+// Función para agregar un producto a la lista
+function agregarProducto(productoId) {
+    const productoElement = document.querySelector(`#producto-${productoId}`);
+
+    if (!productoElement) {
+        console.error('Producto no encontrado.');
+        return;
+    }
+
+    const productoNombre = productoElement.querySelector('.producto-nombre').textContent;
+    const productoPrecio = parseFloat(productoElement.querySelector('.producto-precio').textContent);
+    const productoStock = parseInt(productoElement.querySelector('.producto-stock').textContent);
+
+    const productoExistente = productosArrastrados.find(producto => producto.id === productoId);
+    if (productoExistente) {
+        const Toast = Swal.mixin({
+            toast: true,
+            position: "top-end",
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+                toast.onmouseenter = Swal.stopTimer;
+                toast.onmouseleave = Swal.resumeTimer;
+            }
+        });
+        Toast.fire({
+            icon: "error",
+            title: "Ya agregaste este producto"
+        });
+    } else {
+        productosArrastrados.push({
+            id: productoId,
+            nombre: productoNombre,
+            precio: productoPrecio,
+            stock: productoStock,
+            cantidad: 1
+        });
+    }
+    actualizarListaProductos();
+}
 
 
 function agregarProducto(productoId) {
@@ -589,6 +699,9 @@ function agregarProducto(productoId) {
     }
     actualizarListaProductos();
 }
+
+
+
 
 $(document).ready(function() {
     function cargarProductos(params = {}) {
