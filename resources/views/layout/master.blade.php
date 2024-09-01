@@ -91,6 +91,7 @@
             }
         }
     </style>
+
 </head>
 <!--end::Head-->
 
@@ -469,7 +470,5 @@ $(document).ready(function() {
 
 @stack('scripts')
 
-</body>
 <!--end::Body-->
-
 </html>

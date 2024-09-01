@@ -8,12 +8,15 @@ use Illuminate\Database\Eloquent\Model;
 class Visita extends Model
 {
     use HasFactory;
-    protected $table = 'TVisita';
+    protected $table = 'TVisitas';
 
     protected $fillable = [
         'proyecto_id',
-        'fecha_visita',
-        'hora_visita',
+        'descripcion',
+        'fecha_inicio',
+        'hora_inicio',
+        'fecha_fin',
+        'hora_fin',
         'contacto_visita',
         'prioridad',
         'eliminado',

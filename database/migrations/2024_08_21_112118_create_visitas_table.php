@@ -14,8 +14,11 @@ return new class extends Migration
         Schema::create('TVisitas', function (Blueprint $table) {
             $table->id();
             $table->string('proyecto_id')->references('proyecto_id')->on('TProyectos')->onDelete('cascade');
-            $table->date('fecha_visita');
-            $table->time('hora_visita');
+            $table->string('descripcion')->nullable();
+            $table->date('fecha_inicio');
+            $table->time('hora_inicio');
+            $table->date('fecha_fin')->nullable();
+            $table->time('hora_fin')->nullable();
             $table->string('contacto_visita')->nullable();
             $table->string('prioridad')->nullable();
             $table->boolean('eliminado')->default(false);

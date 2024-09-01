@@ -116,44 +116,54 @@ class PresupuestoController extends Controller
      */
     public function store(Request $request)
     {
-        $validatedData = $request->validate([
-            'cliente_id' => 'required|exists:TClientes,id',
-            'precio_total' => 'required|numeric|min:0',
-            'lista_productos' => 'required|json',
-        ]);
-dd($validatedData);
-        $proyecto = new Proyecto();
-        $proyecto->cliente_id = $validatedData['cliente_id'];
-        $proyecto->estado = 'Presupuestado';
-        $proyecto->pago = $request->input('pago');
-        $proyecto->save();
-
-        $presupuesto = new Presupuesto();
-        $presupuesto->cliente_id = $validatedData['cliente_id'];
-        $presupuesto->proyecto_id = $proyecto->proyecto_id;
-        $presupuesto->precio_total = $validatedData['precio_total'];
-        $presupuesto->save();
-
-        // Guardar los productos y capítulos asociados al presupuesto
-        $productos = json_decode($validatedData['lista_productos'], true);
-
-
-
-        foreach ($productos as $producto) {
-            ProductoPresupuesto::create([
-                'presupuesto_id' => $request->presupuesto_id,
-                'producto_id' => $producto['id'] ?? '',
-                'cantidad' => $producto['cantidad'],
-                'precio' => $producto['precio'],
-                'orden' => $producto['orden'],
-                'descripcion' => $producto['descripcion'] ?? '',
-                'titulo' => $producto['titulo'],
-                'tipo' => $producto['tipo'],
+        try {
+            // Validar los datos de entrada
+            $validatedData = $request->validate([
+                'cliente_id' => 'required|exists:TClientes,id',
+                'precio_total' => 'required|numeric|min:0',
+                'lista_productos' => 'required|json',
             ]);
 
-        }
+            // Crear un nuevo proyecto
+            $proyecto = new Proyecto();
+            $proyecto->cliente_id = $validatedData['cliente_id'];
+            $proyecto->estado = 'Presupuestado';
+            $proyecto->pago = $request->input('pago');
+            $proyecto->save();
 
-        return redirect()->route('presupuesto.index')->with('success_pres', 'Presupuesto y proyecto creados correctamente.');
+            // Crear un nuevo presupuesto asociado al proyecto
+            $presupuesto = new Presupuesto();
+            $presupuesto->cliente_id = $validatedData['cliente_id'];
+            $presupuesto->proyecto_id = $proyecto->proyecto_id;
+            $presupuesto->precio_total = $validatedData['precio_total'];
+            $presupuesto->save();
+
+            // Guardar los productos y capítulos asociados al presupuesto
+            $productos = json_decode($validatedData['lista_productos'], true);
+
+            foreach ($productos as $producto) {
+                ProductoPresupuesto::create([
+                    'presupuesto_id' => $presupuesto->id,
+                    'producto_id' => $producto['id'] ?? null,
+                    'cantidad' => $producto['cantidad'] ?? null,
+                    'precio' => $producto['precio'] ?? null,
+                    'orden' => $producto['orden'],
+                    'titulo' => $producto['titulo'] ?? null,
+                    'descripcion' => $producto['descripcion'] ?? null,
+                    'tipo' => $producto['tipo'],
+                ]);
+            }
+
+            // Devolver una respuesta JSON en caso de éxito
+            return response()->json(['success' => true, 'message' => 'Presupuesto creado correctamente.']);
+
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            // Capturar la excepción de validación y devolver un mensaje de error
+            return response()->json(['success' => false, 'message' => 'La validación falló.', 'errors' => $e->errors()], 422);
+        } catch (\Exception $e) {
+            // Capturar cualquier otra excepción y devolver un mensaje de error genérico
+            return response()->json(['success' => false, 'message' => 'Hubo un problema al guardar los datos.'], 500);
+        }
     }
 
     /**

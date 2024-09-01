@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('TProyectos', function (Blueprint $table) {
             $table->string('proyecto_id')->primary();
             $table->foreignId('cliente_id')->constrained('TClientes')->onDelete('cascade');
-            $table->string('estado')->nullable();
+            $table->enum('estado', ['Presupuestado', 'Visita', 'Realizado', 'Finalizado', 'Cobrado', 'Cerrado'])->nullable();
             $table->string('serie_ref')->nullable();
             $table->integer('num_ref')->nullable();
             $table->string('pago')->nullable();

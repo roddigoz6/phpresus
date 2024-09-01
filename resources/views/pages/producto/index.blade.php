@@ -114,7 +114,7 @@
                                 <td class="align-middle">{{ $producto->leyenda }}</td>
                                 <td class="align-middle">{{ $producto->precio }}</td>
                                 @if ($producto->stock<5)
-                                    <td class="align-middle"><span class="badge badge-light-danger fs-base"> {{ $producto->stock }} </span></td>                                    </span></td>
+                                    <td class="align-middle"><span class="badge badge-light-danger fs-base"> {{ $producto->stock }} </span></td>
                                 @else
                                     <td class="align-middle">{{ $producto->stock }}</td>
                                 @endif

@@ -102,7 +102,7 @@
         </div>
 
         <div class="col-md-8">
-            <form action="{{ route('presupuesto.store') }}" method="POST" class="mb-3">
+            <form id="presupuesto-form" method="POST" class="mb-3">
                 @csrf
 
                 <h3>Crear proyecto</h3>
@@ -171,15 +171,15 @@
                     </div>
                 </div>
 
-                <label for="total">Total:</label>
-                €<h3 id="total">0.00 </h3>
+                <label for="total">Precio total:</label>
 
-                <input type="hidden" id="precio_total" name="precio_total" value="0.00">
+                <h3 id="precio_total_display">0.00</h3>
+
+                <input type="hidden" id="precio_total_input" name="precio_total" value="0.00">
                 <input type="hidden" id="lista_productos" name="lista_productos" value="">
 
                 <div class="row mb-3">
                     <div class="col col-auto me-auto">
-                        <!-- Contenedor flex para asegurar el tamaño uniforme de los botones -->
                         <div class="btn-container d-flex gap-2">
                             <button type="submit" class="btn btn-light-primary">
                                 Guardar presupuesto <i class="fas fa-check-circle"></i>
@@ -199,27 +199,6 @@
 
             </form>
 
-            @if (session('success_pres'))
-                <script>
-                    document.addEventListener('DOMContentLoaded', function() {
-                        const Toast = Swal.mixin({
-                            toast: true,
-                            position: "top-end",
-                            showConfirmButton: false,
-                            timer: 3000,
-                            timerProgressBar: true,
-                            didOpen: (toast) => {
-                                toast.onmouseenter = Swal.stopTimer;
-                                toast.onmouseleave = Swal.resumeTimer;
-                            }
-                        });
-                        Toast.fire({
-                            icon: "success",
-                            title: "Presupuesto guardado."
-                        });
-                    });
-                </script>
-            @endif
         </div>
     </div>
 </div>
@@ -249,29 +228,25 @@
 <script>
 let productosArrastrados = [];
 
-// Función para limpiar productos del almacenamiento
 function limpiarProductos() {
     localStorage.removeItem('productosArrastrados');
 }
 
-// Función para permitir el evento de arrastre
 function allowDrop(event) {
     event.preventDefault();
 }
 
-// Función para manejar el evento de arrastre
 function drag(event) {
     event.dataTransfer.setData("text", event.target.id);
 }
 
-// Función para manejar el evento de soltado (drop)
 function drop(event) {
     if (window.drop_function !== undefined && window.drop_function === 2) {
         drop2(event);
         return;
     }
 
-    console.log("DEV: DROP-EVENT 1");
+    //console.log("DEV: DROP-EVENT 1");
     event.preventDefault();
 
     const data = event.dataTransfer.getData("text");
@@ -287,7 +262,7 @@ function drop(event) {
     const productoNombreElem = draggedElement.querySelector('.producto-nombre');
     const productoPrecioElem = draggedElement.querySelector('.producto-precio');
     const productoStockElem = draggedElement.querySelector('.producto-stock');
-    const productoTipoElem = draggedElement.querySelector('.producto-tipo'); // Asegúrate de que el selector es correcto
+    const productoTipoElem = draggedElement.querySelector('.producto-tipo');
 
     if (!productoIdElem || !productoNombreElem || !productoPrecioElem || !productoStockElem || !productoTipoElem) {
         console.error("Algunos elementos del producto no se encontraron.");
@@ -303,7 +278,7 @@ function drop(event) {
     const productoNombre = productoNombreElem.textContent.trim();
     const productoPrecio = parseFloat(productoPrecioElem.textContent.trim());
     const productoStock = parseInt(productoStockElem.textContent.trim());
-    const productoTipo = productoTipoElem.textContent.trim(); // Asegúrate de que estás obteniendo el texto correctamente
+    const productoTipo = productoTipoElem.textContent.trim();
 
     if (!productoTipo) {
         console.error("Tipo del producto es null o vacío.");
@@ -316,8 +291,10 @@ function drop(event) {
             nombre: productoNombre,
             precio: productoPrecio,
             stock: productoStock,
+            orden: productosArrastrados.length + 1,
+            descripcion: '',
             cantidad: 1,
-            tipo: productoTipo // Incluir el tipo
+            tipo: productoTipo
         });
 
         actualizarListaProductos();
@@ -365,7 +342,6 @@ function drop2(event) {
             fila_destino.before(window.fila_original);
         }
 
-        // Reordenar productosArrastrados
         const productoId = window.fila_original.data('producto-id');
         const producto = productosArrastrados.find(p => p.id === productoId);
         if (producto) {
@@ -373,8 +349,6 @@ function drop2(event) {
             productosArrastrados.splice(posicionDestino, 0, producto);
         }
 
-        // Aplicar estilo para confirmar la acción
-        //$(elementoDebajoDelRaton).css('border', '2px solid red');
     } else {
         console.log("No se puede soltar la fila sobre sí misma.");
     }
@@ -382,12 +356,11 @@ function drop2(event) {
     actualizarOrdenProductos();
 }
 
-// Evento para mostrar el modal de capítulo
+//Para agregar capítulos
 $('#agregarCap').on('click', function() {
     $('#capituloModal').modal('show');
 });
 
-// Evento para agregar un capítulo cuando se hace clic en "Guardar"
 $('#saveCapituloBtn').on('click', function() {
     const tituloCapitulo = $('#capituloTitulo').val().trim();
 
@@ -396,27 +369,25 @@ $('#saveCapituloBtn').on('click', function() {
         return;
     }
 
-    // Crear objeto capítulo y agregarlo a productosArrastrados
     const nuevoCapitulo = {
-        id: null, // ID vacío o null para capítulos
+        id: null,
         titulo: tituloCapitulo,
         tipo: 'capitulo',
-        orden: productosArrastrados.length + 1, // Orden basado en la cantidad actual
-        descripcion: '' // Puede ser rellenado o dejado vacío
+        orden: productosArrastrados.length + 1,
+        descripcion: ''
     };
 
     productosArrastrados.push(nuevoCapitulo);
 
-    // Actualizar la tabla con el nuevo capítulo
     actualizarListaProductos();
 
-    // Cerrar el modal
     $('#capituloModal').modal('hide');
-    $('#capituloTitulo').val(''); // Limpiar el campo de título
+    $('#capituloTitulo').val('');
 });
 
-// Función para actualizar la lista de productos y capítulos
 function actualizarListaProductos() {
+    console.log("FUN: actualizarListaProductos");
+
     const tableBody = $('#productos-table-body');
     tableBody.empty();
 
@@ -429,15 +400,18 @@ function actualizarListaProductos() {
         tr.attr('draggable', true);
 
         if (producto.tipo === 'capitulo') {
-            // Para capítulos, solo muestra título y descripción
-            const tdTitulo = $('<td class="align-middle"></td>');
+            const tdTitulo = $('<td class="align-middle" colspan="2"></td>');
             tdTitulo.text(producto.titulo);
-            const tdDescripcion = $('<td class="align-middle"></td>');
+            const tdDescripcion = $('<td class="align-middle" colspan="3"></td>');
             const descripcionInput = $('<textarea class="form-control"></textarea>');
             descripcionInput.attr('name', `descripcion_capitulo_${index + 1}`);
-            descripcionInput.val(producto.descripcion || ''); // Asegúrate de que la descripción esté correctamente inicializada
+            descripcionInput.val(producto.descripcion || '');
             descripcionInput.on('change', function() {
+                console.log("CP1", descripcionInput);
+                console.log(producto);
                 producto.descripcion = $(this).val();
+                document.getElementById("lista_productos").value = JSON.stringify(productosArrastrados);
+
             });
             tdDescripcion.append(descripcionInput);
 
@@ -471,17 +445,22 @@ function actualizarListaProductos() {
 
             tr.append(tdTitulo, tdDescripcion, tdAcciones, ordenInput, tipoInput);
         } else {
-            // Para productos normales (línea)
             const tdNombre = $('<td class="align-middle"></td>');
             tdNombre.text(producto.nombre);
 
             const tdDescripcion = $('<td class="align-middle"></td>');
             const descripcionInput = $('<textarea class="form-control"></textarea>');
-            descripcionInput.attr('name', `descripcion_producto_${index + 1}`);
+
+            descripcionInput.attr('name', `descripcion_capitulo_${index + 1}`);
             descripcionInput.val(producto.descripcion || '');
+
             descripcionInput.on('change', function() {
+                console.log("CP1", descripcionInput);
+                console.log(producto);
                 producto.descripcion = $(this).val();
+                document.getElementById("lista_productos").value = JSON.stringify(productosArrastrados);
             });
+
             tdDescripcion.append(descripcionInput);
 
             const tdCantidad = $('<td class="align-middle"></td>');
@@ -556,7 +535,6 @@ function actualizarListaProductos() {
 
         tableBody.append(tr);
 
-        // Hacer la fila arrastrable
         tr.on('dragstart', function(e) {
             $(this).addClass('dragging');
             window.fila_original = tr;
@@ -575,37 +553,46 @@ function actualizarListaProductos() {
 
 function actualizarOrdenProductos() {
     $('#productos-table-body tr').each(function(index) {
-        const productoId = $(this).data('producto-id') || null; // Manejar null para capítulos
+        const productoId = $(this).data('producto-id') || null;
         const productoTipo = $(this).find('.tipo-producto').val();
 
-        console.log(`Procesando producto de tipo: ${productoTipo}, ID: ${productoId}`);
+        //console.log(`Procesando producto de tipo: ${productoTipo}, ID: ${productoId}`);
 
-        // Busca el producto o capítulo en la lista por su tipo y ID
         const producto = productosArrastrados.find(p => p.id === productoId && p.tipo === productoTipo);
 
         if (producto) {
-            producto.orden = index + 1; // Actualiza el orden en el objeto
-            $(this).find('.orden-producto').val(producto.orden); // Actualiza el valor en el input oculto
-            console.log(`Orden actualizado para ${productoTipo} con ID ${productoId}: ${producto.orden}`);
+            producto.orden = index + 1;
+            $(this).find('.orden-producto').val(producto.orden);
+            //console.log(`Orden actualizado para ${productoTipo} con ID ${productoId}: ${producto.orden}`);
+        } else if (productoTipo === 'capitulo') {
+            const capitulo = productosArrastrados.find(p => p.tipo === 'capitulo' && p.id === null);
+            if (capitulo) {
+                capitulo.orden = index + 1;
+                $(this).find('.orden-producto').val(capitulo.orden);
+                //console.log(`Orden actualizado para capitulo: ${capitulo.titulo}, nuevo orden: ${capitulo.orden}`);
+            }
         } else {
             console.log(`No se encontró producto o capítulo en la lista con tipo: ${productoTipo} y ID: ${productoId}`);
         }
     });
+
+    productosArrastrados.sort((a, b) => a.orden - b.orden);
+
+    document.getElementById("lista_productos").value = JSON.stringify(productosArrastrados);
 }
-
-
-
 
 // Función para actualizar el precio total
 function actualizarPrecioTotal() {
     let total = 0;
     productosArrastrados.forEach(producto => {
-        if (producto.tipo !== 'capitulo') { // Los capítulos no afectan el precio total
+        if (producto.tipo !== 'capitulo') {
             total += producto.precio * producto.cantidad;
         }
     });
-    // Actualiza el campo del precio total en la interfaz (si existe)
-    $('#precioTotal').text(total.toFixed(2) + '€');
+
+    document.getElementById("precio_total_display").textContent = total.toFixed(2) + '€';
+    document.getElementById("precio_total_input").value = total.toFixed(2);
+    document.getElementById("lista_productos").value = JSON.stringify(productosArrastrados);
 }
 
 // Evento para limpiar la tabla
@@ -652,55 +639,107 @@ function agregarProducto(productoId) {
             nombre: productoNombre,
             precio: productoPrecio,
             stock: productoStock,
+            orden: ordenInput,
+            descripcion: descripcionInput,
             cantidad: 1
         });
+        console.log("reooksfjdescrip");
     }
     actualizarListaProductos();
 }
 
 
-function agregarProducto(productoId) {
-    const productoElement = document.querySelector(`#producto-${productoId}`);
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById('presupuesto-form');
+    const Toast = Swal.mixin({
+                    toast: true,
+                    position: 'top-end',
+                    showConfirmButton: false,
+                    timer: 3000,
+                    timerProgressBar: true,
+                    didOpen: (toast) => {
+                        toast.onmouseenter = Swal.stopTimer;
+                        toast.onmouseleave = Swal.resumeTimer;
+                    }
+                })
 
-    if (!productoElement) {
-        console.error('Producto no encontrado.');
-        return;
-    }
+    form.addEventListener('submit', function(event) {
+        event.preventDefault(); // Evita el envío tradicional del formulario
 
-    const productoNombre = productoElement.querySelector('.producto-nombre').textContent;
-    const productoPrecio = parseFloat(productoElement.querySelector('.producto-precio').textContent);
-    const productoStock = parseInt(productoElement.querySelector('.producto-stock').textContent);
+        // Obtener los valores del formulario
+        const listaProductosInput = document.getElementById('lista_productos');
+        const listaProductos = JSON.parse(listaProductosInput.value || '[]');
 
-    const productoExistente = productosArrastrados.find(producto => producto.id === productoId);
-    if (productoExistente) {
-        const Toast = Swal.mixin({
-            toast: true,
-            position: "top-end",
-            showConfirmButton: false,
-            timer: 3000,
-            timerProgressBar: true,
-            didOpen: (toast) => {
-                toast.onmouseenter = Swal.stopTimer;
-                toast.onmouseleave = Swal.resumeTimer;
+        // Verificar si el array de productos está vacío
+        if (listaProductos.length === 0) {
+
+            Toast.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'El presupuesto debe contener al menos un producto.'
+            });
+            return; // Detiene la ejecución si el array está vacío
+        }
+
+        var formData = new FormData(this);
+
+        $.ajax({
+            url: '{{ route('presupuesto.store') }}',
+            type: 'POST',
+            data: formData,
+            processData: false,
+            contentType: false,
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest',
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            success: function(data) {
+
+                if (data.success) {
+                    localStorage.setItem('successMessage', data.message || 'Presupuesto creado correctamente.');
+                    window.location.href = '{{ route('presupuesto.index') }}';
+
+                } else {
+                    Toast.fire({
+                        icon: 'error',
+                        title: data.message || 'Hubo un problema al crear el presupuesto.'
+                    });
+                    if (data.errors) {
+                        const Toast = Swal.mixin({
+                            toast: true,
+                            position: 'top-end',
+                            showConfirmButton: false,
+                            timer: 3000,
+                            timerProgressBar: true,
+                            didOpen: (toast) => {
+                                toast.onmouseenter = Swal.stopTimer;
+                                toast.onmouseleave = Swal.resumeTimer;
+                            }
+                        });
+                        Object.values(data.errors).forEach(errorMessages => {
+                            errorMessages.forEach(errorMessage => {
+                                Toast.fire({
+                                    icon: 'error',
+                                    title: 'Error',
+                                    text: errorMessage
+                                });
+                            });
+                        });
+                    }
+                }
+            },
+            error: function(xhr) {
+
+                console.error('Error:', xhr);
+                Toast.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'Hubo un problema al procesar la solicitud.'
+                });
             }
         });
-        Toast.fire({
-            icon: "error",
-            title: "Ya agregaste este producto"
-        });
-    } else {
-        productosArrastrados.push({
-            id: productoId,
-            nombre: productoNombre,
-            precio: productoPrecio,
-            stock: productoStock,
-            cantidad: 1
-        });
-    }
-    actualizarListaProductos();
-}
-
-
+    });
+});
 
 
 $(document).ready(function() {

@@ -50,6 +50,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::get('/user/{id}/getUltimaModif', [UserController::class, 'getUltimaModif'])->name('user.getUltimaModif');
 
+    Route::delete('/proyecto/{id}', [ProyectoController::class, 'destroy'])
+        ->where('id', '.*')
+        ->name('proyecto.destroy');
+
 });
 
 Route::get('/error', function () {
