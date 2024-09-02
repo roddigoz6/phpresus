@@ -26,9 +26,9 @@ class Visita extends Model
         'eliminado' => 'bool',
     ];
 
-    public function proyectos()
+    public function proyecto()
     {
-        return $this->hasMany(Proyecto::class, 'proyecto_id');
+        return $this->belongsTo(Proyecto::class, 'proyecto_id');
     }
 
 }

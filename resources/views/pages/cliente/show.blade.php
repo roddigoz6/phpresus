@@ -91,41 +91,4 @@
         </tbody>
     </table>
 
-    <!-- Tabla de Órdenes -->
-    <h5>Órdenes de <strong>{{$cliente->nombre}}</strong> : <strong>{{$countOrdenes}}</strong></h5>
-    @if ($countOrdenes!=0)
-    <p>
-        Cobradas:
-        <strong> {{ $countOrdenesCobradas }}</strong>
-        Por cobrar:
-        <strong> {{ $countOrdenesNoCobradas }}</strong>
-    </p>
-    @endif
-
-    <table class="table table-light text-center table-hover rounded-table">
-        <thead class="table-dark">
-            <tr>
-                <th>ID</th>
-                <th>Fecha</th>
-                <th>Precio Total</th>
-                <th>Cobrado</th>
-            </tr>
-        </thead>
-        <tbody>
-            @if ($cliente->ordenes->isEmpty())
-            <tr>
-                <td colspan="4">No hay ordenes registradas para este cliente.</td>
-            </tr>
-            @else
-            @foreach ($cliente->ordenes as $orden)
-            <tr>
-                <td><span class="badge px-4 fs-7 badge-light-info">{{ $orden->id }}</span></td>
-                <td>{{ $orden->created_at->format('d/m/Y') }}</td>
-                <td><strong>€{{ $orden->precio_total }}</strong></td>
-                <td>{{ $orden->cobrado ? 'Sí' : 'No' }}</td>
-            </tr>
-            @endforeach
-            @endif
-        </tbody>
-    </table>
 </div>

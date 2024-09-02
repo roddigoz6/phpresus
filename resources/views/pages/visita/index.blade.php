@@ -37,10 +37,15 @@
                 <i class="fa fa-star text-warning"></i>
             </a>
         </li>
-         <li class="nav-item" role="presentation">
+        <li class="nav-item" role="presentation">
             <a class="nav-link" id="baja-tab" data-bs-toggle="tab" href="#baja" role="tab"
                 aria-controls="baja" aria-selected="false">En prioridad baja
                 <i class="fa fa-star text-warning"></i>
+            </a>
+        </li>
+        <li class="nav-item" role="presentation">
+            <a class="nav-link" id="baja-tab" data-bs-toggle="tab" href="#baja" role="tab"
+                aria-controls="baja" aria-selected="false">Historial de visitas
             </a>
         </li>
     </ul>
@@ -54,6 +59,7 @@
                 <thead class="table-dark">
                     <tr class="align-middle">
                         <th class="icon-table">Proyecto a visitar</th>
+                        <th class="icon-table">Cliente</th>
                         <th class="icon-table">Fecha de visita</th>
                         <th class="icon-table">Fin de visita</th>
                         <th class="icon-table">Contacto</th>
@@ -73,13 +79,22 @@
                                     <tr class="text-center">
                                         <td class="align-middle">
                                             <button class="btn btn-light-success"
-                                                data-presupuesto-id="{{ $visita->proyecto_id }}" data-bs-toggle="popover"
-                                                title="Ver detalle de presupuesto">
+                                                data-presupuesto-id="{{ $visita->proyecto_id }}"
+                                                data-bs-toggle="popover"
+                                                data-bs-trigger="hover"
+                                                title="Móvil: {{ $visita->proyecto->cliente->movil }}&#10;Dirección: {{ $visita->proyecto->cliente->direccion}}&#10;Provincia: {{ $visita->proyecto->cliente->provincia}}">
                                                 {{ $visita->proyecto_id }}, {{$visita->proyecto->serie_ref ?? 'No registrado.'}}
                                             </button>
                                         </td>
+                                        <td class="align-middle">{{ $visita->proyecto->cliente->nombre }} {{ $visita->proyecto->cliente->apellido }}</td>
                                         <td class="align-middle">{{ $visita->fecha_inicio }} a las {{ $visita->hora_inicio }}</td>
-                                        <td class="align-middle">{{ $visita->fecha_fin }} a las {{ $visita->hora_fin }}</td>
+
+                                        @if ($visita->fecha_fin==null && $visita->hora_fin==null)
+                                            <td class="align-middle">Fecha de fin no registrada.</td>
+                                        @else
+                                            <td class="align-middle">{{ $visita->fecha_fin }} a las {{ $visita->hora_fin }}</td>
+                                        @endif
+
                                         <td class="align-middle">{{ $visita->contacto_visita }}</td>
                                         <td class="align-middle">
                                             <form id="delete-form-{{ $visita->id }}" action="{{ route('visita.destroy', $visita->id) }}" method="POST" style="display: inline;">
@@ -90,22 +105,29 @@
                                                 </button>
                                             </form>
                                         </td>
-
-
                                     </tr>
                                         @break
 
                                     @case('Media')
                                     <tr class="text-center">
                                         <td class="align-middle">
-                                            <button class="btn btn-light-warning"
-                                                data-presupuesto-id="{{ $visita->proyecto_id }}" data-bs-toggle="popover"
-                                                title="Ver detalle de presupuesto">
+                                            <button class="btn btn-light-success"
+                                                data-presupuesto-id="{{ $visita->proyecto_id }}"
+                                                data-bs-toggle="popover"
+                                                data-bs-trigger="hover"
+                                                title="Móvil: {{ $visita->proyecto->cliente->movil }}&#10;Dirección: {{ $visita->proyecto->cliente->direccion}}&#10;Provincia: {{ $visita->proyecto->cliente->provincia}}">
                                                 {{ $visita->proyecto_id }}, {{$visita->proyecto->serie_ref ?? 'No registrado.'}}
                                             </button>
                                         </td>
+                                        <td class="align-middle">{{ $visita->proyecto->cliente->nombre }} {{ $visita->proyecto->cliente->apellido }}</td>
                                         <td class="align-middle">{{ $visita->fecha_inicio }} a las {{ $visita->hora_inicio }}</td>
-                                        <td class="align-middle">{{ $visita->fecha_fin }} a las {{ $visita->hora_fin }}</td>
+
+                                        @if ($visita->fecha_fin==null && $visita->hora_fin==null)
+                                            <td class="align-middle">Fecha de fin no registrada.</td>
+                                        @else
+                                            <td class="align-middle">{{ $visita->fecha_fin }} a las {{ $visita->hora_fin }}</td>
+                                        @endif
+
                                         <td class="align-middle">{{ $visita->contacto_visita }}</td>
                                         <td class="align-middle">
                                             <form id="delete-form-{{ $visita->id }}" action="{{ route('visita.destroy', $visita->id) }}" method="POST" style="display: inline;">
@@ -116,22 +138,29 @@
                                                 </button>
                                             </form>
                                         </td>
-
-
                                     </tr>
                                         @break
 
                                     @case('Alta')
                                     <tr class="text-center">
                                         <td class="align-middle">
-                                            <button class="btn btn-light-danger"
-                                                data-presupuesto-id="{{ $visita->proyecto_id }}" data-bs-toggle="popover"
-                                                title="Ver detalle de presupuesto">
+                                            <button class="btn btn-light-success"
+                                                data-presupuesto-id="{{ $visita->proyecto_id }}"
+                                                data-bs-toggle="popover"
+                                                data-bs-trigger="hover"
+                                                title="Móvil: {{ $visita->proyecto->cliente->movil }}&#10;Dirección: {{ $visita->proyecto->cliente->direccion}}&#10;Provincia: {{ $visita->proyecto->cliente->provincia}}">
                                                 {{ $visita->proyecto_id }}, {{$visita->proyecto->serie_ref ?? 'No registrado.'}}
                                             </button>
                                         </td>
+                                        <td class="align-middle">{{ $visita->proyecto->cliente->nombre }} {{ $visita->proyecto->cliente->apellido }}</td>
                                         <td class="align-middle">{{ $visita->fecha_inicio }} a las {{ $visita->hora_inicio }}</td>
-                                        <td class="align-middle">{{ $visita->fecha_fin }} a las {{ $visita->hora_fin }}</td>
+
+                                        @if ($visita->fecha_fin==null && $visita->hora_fin==null)
+                                            <td class="align-middle">Fecha de fin no registrada.</td>
+                                        @else
+                                            <td class="align-middle">{{ $visita->fecha_fin }} a las {{ $visita->hora_fin }}</td>
+                                        @endif
+
                                         <td class="align-middle">{{ $visita->contacto_visita }}</td>
                                         <td class="align-middle">
                                             <form id="delete-form-{{ $visita->id }}" action="{{ route('visita.destroy', $visita->id) }}" method="POST" style="display: inline;">
@@ -142,17 +171,10 @@
                                                 </button>
                                             </form>
                                         </td>
-
-
                                     </tr>
                                         @break
 
                                     @default
-                                        <td class="align-middle">
-                                            <button class="btn btn-light-danger">
-                                                Estado desconocido
-                                            </button>
-                                        </td>
                                 @endswitch
                         @endforeach
                     @endif
@@ -212,6 +234,7 @@
                 <thead class="table-dark">
                     <tr class="align-middle">
                         <th class="icon-table">Proyecto a visitar</th>
+                        <th class="icon-table">Cliente</th>
                         <th class="icon-table">Fecha de visita</th>
                         <th class="icon-table">Fin de visita</th>
                         <th class="icon-table">Contacto</th>
@@ -219,22 +242,31 @@
                     </tr>
                 </thead>
                 <tbody>
-                @if ($visitas->isEmpty())
+                @if ($visitasBaja->isEmpty())
                     <tr>
-                        <td colspan="9" class="text-center">No hay visitas pendientes.</td>
+                        <td colspan="9" class="text-center">No hay visitas pendientes de baja prioridad.</td>
                     </tr>
                 @else
                     @foreach ($visitasBaja as $visita)
-                    <tr class="text-center bg-success">
+                    <tr class="text-center">
                         <td class="align-middle">
                             <button class="btn btn-light-success"
-                                data-presupuesto-id="{{ $visita->proyecto_id }}" data-bs-toggle="popover"
-                                title="Ver detalle de presupuesto">
+                                data-presupuesto-id="{{ $visita->proyecto_id }}"
+                                data-bs-toggle="popover"
+                                data-bs-trigger="hover"
+                                title="Móvil: {{ $visita->proyecto->cliente->movil }}&#10;Dirección: {{ $visita->proyecto->cliente->direccion}}&#10;Provincia: {{ $visita->proyecto->cliente->provincia}}">
                                 {{ $visita->proyecto_id }}, {{$visita->proyecto->serie_ref ?? 'No registrado.'}}
                             </button>
                         </td>
+                        <td class="align-middle">{{ $visita->proyecto->cliente->nombre }} {{ $visita->proyecto->cliente->apellido }}</td>
                         <td class="align-middle">{{ $visita->fecha_inicio }} a las {{ $visita->hora_inicio }}</td>
-                        <td class="align-middle">{{ $visita->fecha_fin }} a las {{ $visita->hora_fin }}</td>
+
+                        @if ($visita->fecha_fin==null && $visita->hora_fin==null)
+                            <td class="align-middle">Fecha de fin no registrada.</td>
+                        @else
+                            <td class="align-middle">{{ $visita->fecha_fin }} a las {{ $visita->hora_fin }}</td>
+                        @endif
+
                         <td class="align-middle">{{ $visita->contacto_visita }}</td>
                         <td class="align-middle">
                             <form id="delete-form-{{ $visita->id }}" action="{{ route('visita.destroy', $visita->id) }}" method="POST" style="display: inline;">
@@ -304,6 +336,7 @@
                 <thead class="table-dark">
                     <tr class="align-middle">
                         <th class="icon-table">Proyecto a visitar</th>
+                        <th class="icon-table">Cliente</th>
                         <th class="icon-table">Fecha de visita</th>
                         <th class="icon-table">Fin de visita</th>
                         <th class="icon-table">Contacto</th>
@@ -311,22 +344,31 @@
                     </tr>
                 </thead>
                 <tbody>
-                @if ($visitas->isEmpty())
+                @if ($visitasMedia->isEmpty())
                     <tr>
-                        <td colspan="9" class="text-center">No hay visitas pendientes.</td>
+                        <td colspan="9" class="text-center">No hay visitas pendientes de media prioridad.</td>
                     </tr>
                 @else
                     @foreach ($visitasMedia as $visita)
-                    <tr class="text-center bg-success">
+                    <tr class="text-center">
                         <td class="align-middle">
-                            <button class="btn btn-light-warning"
-                                data-presupuesto-id="{{ $visita->proyecto_id }}" data-bs-toggle="popover"
-                                title="Ver detalle de presupuesto">
+                            <button class="btn btn-light-success"
+                                data-presupuesto-id="{{ $visita->proyecto_id }}"
+                                data-bs-toggle="popover"
+                                data-bs-trigger="hover"
+                                title="Móvil: {{ $visita->proyecto->cliente->movil }}&#10;Dirección: {{ $visita->proyecto->cliente->direccion}}&#10;Provincia: {{ $visita->proyecto->cliente->provincia}}">
                                 {{ $visita->proyecto_id }}, {{$visita->proyecto->serie_ref ?? 'No registrado.'}}
                             </button>
                         </td>
+                        <td class="align-middle">{{ $visita->proyecto->cliente->nombre }} {{ $visita->proyecto->cliente->apellido }}</td>
                         <td class="align-middle">{{ $visita->fecha_inicio }} a las {{ $visita->hora_inicio }}</td>
-                        <td class="align-middle">{{ $visita->fecha_fin }} a las {{ $visita->hora_fin }}</td>
+
+                        @if ($visita->fecha_fin==null && $visita->hora_fin==null)
+                            <td class="align-middle">Fecha de fin no registrada.</td>
+                        @else
+                            <td class="align-middle">{{ $visita->fecha_fin }} a las {{ $visita->hora_fin }}</td>
+                        @endif
+
                         <td class="align-middle">{{ $visita->contacto_visita }}</td>
                         <td class="align-middle">
                             <form id="delete-form-{{ $visita->id }}" action="{{ route('visita.destroy', $visita->id) }}" method="POST" style="display: inline;">
@@ -402,9 +444,9 @@
                 </tr>
             </thead>
             <tbody>
-            @if ($visitas->isEmpty())
+            @if ($visitasAlta->isEmpty())
                 <tr>
-                    <td colspan="9" class="text-center">No hay visitas pendientes.</td>
+                    <td colspan="9" class="text-center">No hay visitas pendientes de alta prioridad.</td>
                 </tr>
             @else
                 @foreach ($visitasAlta as $visita)

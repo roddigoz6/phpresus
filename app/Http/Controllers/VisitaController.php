@@ -69,21 +69,35 @@ class VisitaController extends Controller
      */
     public function store(Request $request)
     {
+
         //dd($request->all());
-        // Validar los datos recibidos
         $validatedData = $request->validate([
             'proyecto_id' => 'required|exists:TProyectos,proyecto_id',
-            'descripcion' => 'string|max:255',
+            'descripcion' => 'nullable|string|max:255',
             'fecha_inicio' => 'required|date',
             'hora_inicio' => 'required|date_format:H:i',
             'fecha_fin' => 'nullable|date|after_or_equal:fecha_inicio',
-            'hora_fin' => 'nullable|date_format:H:i|after:hora_inicio',
+            'hora_fin' => [
+                'nullable',
+                'date_format:H:i',
+                function ($attribute, $value, $fail) use ($request) {
+                    $fechaInicio = $request->input('fecha_inicio');
+                    $fechaFin = $request->input('fecha_fin');
+                    $horaInicio = $request->input('hora_inicio');
+
+                    if ($fechaInicio === $fechaFin && $value <= $horaInicio) {
+                        $fail('La hora de fin debe ser posterior a la hora de inicio cuando la fecha de fin es la misma que la fecha de inicio.');
+                    }
+                },
+            ],
             'contacto_visita' => 'required|string|max:255',
             'prioridad' => 'required|string|max:10',
         ]);
 
+        //dd($validatedData);
         // Crear la visita con los datos validados
         $visita = Visita::create([
+
             'proyecto_id' => $validatedData['proyecto_id'],
             'descripcion' => $validatedData['descripcion'],
             'fecha_inicio' => $validatedData['fecha_inicio'],

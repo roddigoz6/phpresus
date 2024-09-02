@@ -19,8 +19,7 @@ return new class extends Migration
             $table->string('proyecto_id');
             $table->foreign('proyecto_id')->references('proyecto_id')->on('TProyectos')->onDelete('cascade');
             $table->float('precio_total')->nullable();
-            $table->string('pago')->nullable();
-            $table->boolean('aceptado')->default(false);
+$table->boolean('aceptado')->default(false);
             $table->boolean('eliminado')->default(false);
             $table->timestamps();
         });

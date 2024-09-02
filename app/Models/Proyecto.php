@@ -44,6 +44,11 @@ class Proyecto extends Model
         return $this->hasOne(Presupuesto::class, 'proyecto_id');
     }
 
+    public function visitas()
+    {
+        return $this->hasMany(Visita::class, 'proyecto_id');
+    }
+
     public function cliente()
     {
         return $this->belongsTo(Cliente::class, 'cliente_id');

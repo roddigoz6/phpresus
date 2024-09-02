@@ -15,38 +15,22 @@
                         <input type="text" class="form-control" id="descripcion" name="descripcion" value="" placeholder="Motivo de la visita">
                     </div>
 
-
-
-
-
-
-                        <div class="col">
-                            <div class="mb-3">
-                                <label for="kt_datepicker" class="form-label">Fecha y Hora de Inicio</label>
-                                <input class="form-control form-control-solid" placeholder="Escoge una fecha y hora" id="kt_datepicker"/>
-                                <input type="hidden" id="fecha_inicio" name="fecha_inicio">
-                                <input type="hidden" id="hora_inicio" name="hora_inicio">
-                            </div>
+                    <div class="col">
+                        <div class="mb-3">
+                            <label for="kt_datepicker1" class="form-label">Fecha y Hora de inicio</label>
+                            <input class="form-control form-control-solid" placeholder="Escoge una fecha y hora" id="kt_datepicker1"/>
+                            <input type="hidden" id="fecha_inicio" name="fecha_inicio">
+                            <input type="hidden" id="hora_inicio" name="hora_inicio">
                         </div>
+                    </div>
 
-
-
-                    <div class="row">
-
-                        <div class="col">
-                            <div class="mb-3">
-                                <label for="fecha_fin" class="form-label">Fecha de Fin</label>
-                                <input type="date" class="form-control" id="fecha_fin" name="fecha_fin">
-                            </div>
+                    <div class="col">
+                        <div class="mb-3">
+                            <label for="kt_datepicker2" class="form-label">Fecha y Hora de fin</label>
+                            <input class="form-control form-control-solid" placeholder="Escoge una fecha y hora" id="kt_datepicker2"/>
+                            <input type="hidden" id="fecha_fin" name="fecha_fin">
+                            <input type="hidden" id="hora_fin" name="hora_fin">
                         </div>
-
-                        <div class="col col-auto">
-                            <div class="mb-3">
-                                <label for="hora_fin" class="form-label">Hora de Fin</label>
-                                <input type="time" class="form-control" id="hora_fin" name="hora_fin">
-                            </div>
-                        </div>
-
                     </div>
 
                     <div class="row">
@@ -108,7 +92,7 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 document.addEventListener('DOMContentLoaded', function() {
-    flatpickr("#kt_datepicker", {
+    flatpickr("#kt_datepicker1", {
         enableTime: true,
         dateFormat: "Y-m-d H:i",
         onChange: function(selectedDates, dateStr, instance) {
@@ -118,6 +102,21 @@ document.addEventListener('DOMContentLoaded', function() {
             // Actualizar los campos de fecha y hora
             document.getElementById('fecha_inicio').value = date;
             document.getElementById('hora_inicio').value = time;
+        }
+    });
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+    flatpickr("#kt_datepicker2", {
+        enableTime: true,
+        dateFormat: "Y-m-d H:i",
+        onChange: function(selectedDates, dateStr, instance) {
+            // Separar fecha y hora del string seleccionado
+            const [date, time] = dateStr.split(' ');
+
+            // Actualizar los campos de fecha y hora
+            document.getElementById('fecha_fin').value = date;
+            document.getElementById('hora_fin').value = time;
         }
     });
 });

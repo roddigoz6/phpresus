@@ -6,45 +6,40 @@
 	</div>
 
     <div class="menu-item px-3">
-		<a href="" class="menu-link px-3">
-            <span class="menu-title">Generar factura</span>
-            <span><i class="fa-solid fa-receipt"></i></span>
-        </a>
-	</div>
-
-	<div class="menu-item px-3">
 		<a href="{{ route('presupuesto.edit', $proyecto->presupuesto->id) }}" class="menu-link px-3">
             <span class="menu-title">Editar proyecto</span>
             <span><i class="fa-solid fa-pen-to-square"></i></span>
         </a>
 	</div>
 
-    <div class="menu-item px-3">
-		<a href="" class="menu-link px-3" data-bs-toggle="modal" data-bs-target="#visitaModal">
-            <span class="menu-title">Asignar visita </span>
-            <span><i class="fa-solid fa-calendar-check"></i></span>
-        </a>
-	</div>
+	@if ($proyecto->estado=='presupuesto_aceptado')
+        <div class="menu-item px-3">
+            <a href="" class="menu-link px-3" data-bs-toggle="modal" data-bs-target="#visitaModal">
+                <span class="menu-title">Asignar visita </span>
+                <span><i class="fa-solid fa-calendar-check"></i></span>
+            </a>
+        </div>
 
-    <div class="menu-item px-3">
-		<a href="" class="menu-link px-3">
-            <span class="menu-title">Finalizar proyecto</span>
-            <span><i class="fa-solid fa-circle-stop"></i></span>
-        </a>
-	</div>
+        <div class="menu-item px-3">
+            <a href="" class="menu-link px-3">
+                <span class="menu-title">Generar factura</span>
+                <span><i class="fa-solid fa-receipt"></i></span>
+            </a>
+        </div>
 
-    <div class="menu-item px-3">
-		<a href="{{ route('visita.store') }}" class="menu-link px-3">
-            <span class="menu-title">Cerrar proyecto</span>
-            <span><i class="fa-solid fa-circle-xmark"></i></span>
-        </a>
-	</div>
+        <div class="menu-item px-3">
+            <a href="{{ route('visita.store') }}" class="menu-link px-3">
+                <span class="menu-title">Cerrar proyecto</span>
+                <span><i class="fa-solid fa-circle-xmark"></i></span>
+            </a>
+        </div>
+    @endif
 
     <div class="menu-item px-3">
 		<form id="delete-form-{{ $proyecto->proyecto_id }}" action="{{ route('proyecto.destroy', $proyecto->proyecto_id) }}" method="POST" style="display: inline;">
             @csrf
             @method('DELETE')
-            <button type="button" class="btn btn-light-danger delete-btn" data-proyecto-id="{{ $proyecto->proyecto_id }}" data-bs-toggle="popover" title="Eliminar proyecto">
+            <button type="button" class="btn btn-light-danger delete-btn" data-proyecto-id="{{ $proyecto->proyecto_id }}">
                 Eliminar proyecto <i class="fa-solid fa-trash"></i>
             </button>
         </form>

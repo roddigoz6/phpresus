@@ -14,7 +14,6 @@ class Presupuesto extends Model
         'cliente_id',
         'proyecto_id',
         'precio_total',
-        'pago',
         'aceptado',
         'eliminado',
     ];

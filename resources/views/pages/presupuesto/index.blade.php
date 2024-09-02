@@ -43,7 +43,6 @@
                 <thead class="table-dark">
                     <tr class="align-middle">
                         <th class="icon-table">Proyecto</th>
-                        <th class="icon-table">Id</th>
                         <th class="icon-table">Cliente</th>
                         <th class="icon-table">Precio total</th>
                         <th class="icon-table">Estado de presupuesto</th>
@@ -61,17 +60,9 @@
                             <tr>
                                 <td class="align-middle">
                                     <button class="btn btn-light-info"
-                                        data-presupuesto-id="{{ $presupuesto->proyecto->id }}" data-bs-toggle="popover"
+                                        data-presupuesto-id="{{ $presupuesto->proyecto->id }}" data-bs-toggle="popover" data-bs-trigger="hover"
                                         title="Ver detalle de presupuesto">
                                         {{ $presupuesto->proyecto->proyecto_id }}
-                                    </button>
-                                </td>
-                                <td class="align-middle">
-                                    <button class="btn btn-light-info" data-bs-toggle="modal"
-                                        data-bs-target="#detallePresupuestoModal"
-                                        data-presupuesto-id="{{ $presupuesto->id }}" data-bs-toggle="popover"
-                                        title="Ver detalle de presupuesto">
-                                        {{ $presupuesto->id }}
                                     </button>
                                 </td>
                                 <td class="align-middle">{{ $presupuesto->cliente->nombre }}</td>
@@ -86,12 +77,14 @@
                                 <td class="align-middle">{{ $presupuesto->created_at->format('d/m/Y H:i') }}</td>
                                 <td class="align-middle">
 
+                                    <!--
                                     <a href="{{ route('presupuesto.edit', $presupuesto->id) }}"
                                         class="btn btn-light-primary" data-bs-toggle="popover"
                                         title="Editar presupuesto"><i class="fa-solid fa-pen-to-square"></i></a>
+                                    -->
 
                                     <a href="" class="btn btn-light-success create-order-btn"
-                                        data-presupuesto-id="{{ $presupuesto->id }}" data-bs-toggle="popover"
+                                        data-presupuesto-id="{{ $presupuesto->id }}" data-bs-toggle="popover" data-bs-trigger="hover"
                                         title="Aceptar presupuesto"><i class="fa-solid fa-check"></i>
                                     </a>
 
@@ -102,7 +95,7 @@
                                         <input type="hidden" name="page"
                                             value="{{ $presupuestos->currentPage() }}">
                                         <button type="button" class="btn btn-light-danger delete-btn"
-                                            data-presupuesto-id="{{ $presupuesto->id }}" data-bs-toggle="popover"
+                                            data-presupuesto-id="{{ $presupuesto->id }}" data-bs-toggle="popover" data-bs-trigger="hover"
                                             title="Eliminar presupuesto"><i class="fa-solid fa-trash"></i></button>
                                     </form>
                                 </td>
@@ -165,7 +158,6 @@
                 <thead class="table-dark">
                     <tr class="align-middle">
                         <th class="icon-table">Proyecto</th>
-                        <th class="icon-table">Id</th>
                         <th class="icon-table">Cliente</th>
                         <th class="icon-table">Precio total</th>
                         <th class="icon-table">Estado de presupuesto</th>
@@ -188,21 +180,15 @@
                                         {{ $presupuesto->proyecto->proyecto_id }}
                                     </button>
                                 </td>
-                                <td class="align-middle">
-                                    <button class="btn btn-light-info" data-bs-toggle="modal"
-                                        data-bs-target="#detallePresupuestoModal"
-                                        data-presupuesto-id="{{ $presupuesto->id }}" data-bs-toggle="popover"
-                                        title="Ver detalle de presupuesto">
-                                        {{ $presupuesto->id }}
-                                    </button>
-                                </td>
                                 <td class="align-middle">{{ $presupuesto->cliente->nombre }}</td>
                                 <td class="align-middle">{{ $presupuesto->precio_total }}</td>
                                 <td class="align-middle">presupuesto no aceptado aún</td>
                                 <td class="align-middle">{{ $presupuesto->created_at->format('d/m/Y H:i') }}</td>
                                 <td class="align-middle">
+                                    <!--
                                     <a href="" class="btn btn-light-primary" data-bs-toggle="popover"
                                         title="Editar presupuesto"><i class="fa-solid fa-pen-to-square"></i></a>
+                                    -->
                                     <a href="" class="btn btn-light-success create-order-btn"
                                         data-presupuesto-id="{{ $presupuesto->id }}" data-bs-toggle="popover"
                                         title="Crear orden"><i class="fa-solid fa-check"></i></a>
@@ -276,7 +262,6 @@
                 <thead class="table-dark">
                     <tr>
                         <th class="icon-table">Proyecto</th>
-                        <th class="icon-table">Id</th>
                         <th class="icon-table">Cliente</th>
                         <th class="icon-table">Precio total</th>
                         <th class="icon-table">Estado de presupuesto</th>
@@ -299,21 +284,15 @@
                                         {{ $presupuesto->proyecto->proyecto_id }}
                                     </button>
                                 </td>
-                                <td class="align-middle">
-                                    <button class="btn btn-light-info" data-bs-toggle="modal"
-                                        data-bs-target="#detallePresupuestoModal"
-                                        data-presupuesto-id="{{ $presupuesto->id }}" data-bs-toggle="popover"
-                                        title="Ver detalle de presupuesto">
-                                        {{ $presupuesto->id }}
-                                    </button>
-                                </td>
                                 <td class="align-middle">{{ $presupuesto->cliente->nombre }}</td>
                                 <td class="align-middle">{{ $presupuesto->precio_total }}</td>
                                 <td class="align-middle">Presupuesto aceptado</td>
                                 <td class="align-middle">{{ $presupuesto->created_at->format('d/m/Y H:i') }}</td>
                                 <td class="align-middle">
+                                    <!--
                                     <a href="" class="btn btn-light-primary" data-bs-toggle="popover"
                                         title="Editar presupuesto"><i class="fa-solid fa-pen-to-square"></i></a>
+                                    -->
                                     <a href="" class="btn btn-light-success create-order-btn"
                                         data-presupuesto-id="{{ $presupuesto->id }}" data-bs-toggle="popover"
                                         title="Crear orden"><i class="fa-solid fa-check"></i></a>

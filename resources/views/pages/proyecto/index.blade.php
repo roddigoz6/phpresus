@@ -1,8 +1,11 @@
+
 <x-default-layout>
+
     @section('title')
         Proyectos
     @endsection
 <div class="container">
+
     <div class="row my-3 align-items-center">
         <div class="col text-start">
             <h2>Proyectos</h2>
@@ -23,28 +26,20 @@
                 aria-controls="all" aria-selected="true">Todos</a>
         </li>
         <li class="nav-item" role="presentation">
-            <a class="nav-link" id="presupuestos-tab" data-bs-toggle="tab" href="#presupuestos" role="tab"
-                aria-controls="presupuestos" aria-selected="false">Prespuestados</a>
+            <a class="nav-link bg-info text-white" id="presupuestos-tab" data-bs-toggle="tab" href="#presupuestos" role="tab"
+                aria-controls="presupuestos" aria-selected="false">Presupuestados </a>
         </li>
         <li class="nav-item" role="presentation">
-            <a class="nav-link" id="visita-tab" data-bs-toggle="tab" href="#visita" role="tab"
-                aria-controls="visita" aria-selected="false">Visita Asignada</a>
+            <a class="nav-link bg-primary text-white" id="presAcept-tab" data-bs-toggle="tab" href="#presAcept" role="tab"
+                aria-controls="presAcept" aria-selected="false">Presupuestos Aceptados</a>
         </li>
         <li class="nav-item" role="presentation">
-            <a class="nav-link" id="realizado-tab" data-bs-toggle="tab" href="#realizado" role="tab"
-                aria-controls="realizado" aria-selected="false">Realizando</a>
+            <a class="nav-link bg-warning text-white" id="facturaPorCobr-tab" data-bs-toggle="tab" href="#facturaPorCobr" role="tab"
+                aria-controls="facturaPorCobr" aria-selected="false">Facturas por cobrar</a>
         </li>
         <li class="nav-item" role="presentation">
-            <a class="nav-link" id="finalizado-tab" data-bs-toggle="tab" href="#finalizado" role="tab"
-                aria-controls="finalizado" aria-selected="false">Finalizados</a>
-        </li>
-        <li class="nav-item" role="presentation">
-            <a class="nav-link" id="cobrado-tab" data-bs-toggle="tab" href="#cobrado" role="tab"
-                aria-controls="cobrado" aria-selected="false">Cobrados</a>
-        </li>
-        <li class="nav-item" role="presentation">
-            <a class="nav-link" id="cerrado-tab" data-bs-toggle="tab" href="#cerrado" role="tab"
-                aria-controls="cerrado" aria-selected="false">Cerrados</a>
+            <a class="nav-link bg-success text-white" id="facturaCobr-tab" data-bs-toggle="tab" href="#facturaCobr" role="tab"
+                aria-controls="facturaCobr" aria-selected="false">Factura cobradas</a>
         </li>
     </ul>
 
@@ -56,13 +51,12 @@
             <table class="table table-light text-center table-hover rounded-table">
                 <thead class="table-dark">
                     <tr class="align-middle">
-                        <th class="icon-table">Id</th>
-                        <th class="icon-table">Serie de referencia</th>
-                        <th class="icon-table">Número de referencia</th>
+                        <th class="icon-table">Proyecto</th>
+                        <th class="icon-table">Título/Seria de referencia</th>
                         <th class="icon-table">Cliente</th>
-                        <th class="icon-table">Estado de proyecto</th>
                         <th class="icon-table">Precio total</th>
                         <th class="icon-table">Forma de pago</th>
+                        <th class="icon-table">Visita asignada</th>
                         <th class="icon-table">Fecha de creación</th>
                         <th class="icon-table">Acciones</th>
                     </tr>
@@ -75,81 +69,110 @@
                     @else
                         @foreach ($proyectos as $proyecto)
                             <tr class="text-center">
-                                <td class="align-middle">
-                                    <button class="btn btn-light-info"
-                                        data-presupuesto-id="{{ $proyecto->proyecto_id }}" data-bs-toggle="popover"
-                                        title="Ver detalle de presupuesto">
-                                        {{ $proyecto->proyecto_id }}
-                                    </button>
-                                </td>
-                                <td class="align-middle">{{ $proyecto->serie_ref ?? 'No registrado'}}</td>
-                                <td class="align-middle">{{ $proyecto->num_ref ?? 'No registrado' }}</td>
-                                <td class="align-middle">{{ $proyecto->cliente->nombre }} {{ $proyecto->cliente->apellido }}</td>
-
                                 @switch($proyecto->estado)
-                                    @case('Presupuestado')
+                                    @case('presupuestado')
                                         <td class="align-middle">
-                                            <button class="btn btn-light-info">
-                                                {{ $proyecto->estado }}
+                                            <button class="btn btn-light-secondary"
+                                                data-presupuesto-id="{{ $proyecto->proyecto_id }}"
+                                                data-bs-toggle="popover"
+                                                data-bs-trigger="hover"
+                                                title="Ver detalle del proyecto">
+                                                {{ $proyecto->proyecto_id }}
+                                                <span class="badge badge-info">P</span>
                                             </button>
                                         </td>
                                         @break
 
-                                    @case('Visita')
+                                    @case('presupuesto_aceptado')
                                         <td class="align-middle">
-                                            <button class="btn btn-light-warning">
-                                                {{ $proyecto->estado }}
+                                            <button class="btn btn-light-secondary"
+                                                data-presupuesto-id="{{ $proyecto->proyecto_id }}"
+                                                data-bs-toggle="popover"
+                                                data-bs-trigger="hover"
+                                                title="Ver detalle del proyecto">
+                                                {{ $proyecto->proyecto_id }}
+                                                <span class="badge badge-primary">A</span>
                                             </button>
                                         </td>
                                         @break
 
-                                    @case('Realizado')
+                                    @case('facturado_pendiente_cobro')
                                         <td class="align-middle">
-                                            <button class="btn btn-light-primary">
-                                                {{ $proyecto->estado }}
+                                            <button class="btn btn-light-secondary"
+                                                data-presupuesto-id="{{ $proyecto->proyecto_id }}"
+                                                data-bs-toggle="popover"
+                                                data-bs-trigger="hover"
+                                                title="Ver detalle del proyecto">
+                                                {{ $proyecto->proyecto_id }}
+                                                <span class="badge badge-warning">C</span>
                                             </button>
                                         </td>
                                         @break
 
-                                    @case('Finalizado')
+                                    @case('factura_cobrada')
                                         <td class="align-middle">
-                                            <button class="btn btn-light-secondary">
-                                                {{ $proyecto->estado }}
-                                            </button>
-                                        </td>
-                                        @break
-
-                                    @case('Cobrado')
-                                        <td class="align-middle">
-                                            <button class="btn btn-light-success">
-                                                {{ $proyecto->estado }}
-                                            </button>
-                                        </td>
-                                        @break
-
-                                    @case('Cerrado')
-                                        <td class="align-middle">
-                                            <button class="btn btn-light-dark">
-                                                {{ $proyecto->estado }}
+                                            <button class="btn btn-light-secondary"
+                                                data-presupuesto-id="{{ $proyecto->proyecto_id }}"
+                                                data-bs-toggle="popover"
+                                                data-bs-trigger="hover"
+                                                title="Ver detalle del proyecto">
+                                                {{ $proyecto->proyecto_id }}
+                                                <span class="badge badge-success">F</span>
                                             </button>
                                         </td>
                                         @break
 
                                     @default
-                                        <td class="align-middle">
-                                            <button class="btn btn-light-danger">
-                                                Estado desconocido
-                                            </button>
-                                        </td>
+
                                 @endswitch
 
-                                <td class="align-middle">{{ $proyecto->presupuesto->precio_total }}</td>
+                                <td class="align-middle"> {{ $proyecto->serie_ref ?? 'No registrado' }} - {{ $proyecto->num_ref ?? 'No registrado' }} </td>
+                                <td class="align-middle">
+                                    <a
+                                        class="item-link"
+                                        type="button"
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#clienteProyectoModal"
+                                        data-nombre="{{ $proyecto->cliente->nombre }}"
+                                        data-apellido="{{ $proyecto->cliente->apellido }}"
+                                        data-dni="{{ $proyecto->cliente->dni }}"
+                                        data-email="{{ $proyecto->cliente->email }}"
+                                        data-movil="{{ $proyecto->cliente->movil }}"
+                                        data-contacto="{{ $proyecto->cliente->contacto }}"
+                                        data-direccion="{{ $proyecto->cliente->direccion }}"
+                                        data-cp="{{ $proyecto->cliente->cp }}"
+                                        data-poblacion="{{ $proyecto->cliente->poblacion }}"
+                                        data-provincia="{{ $proyecto->cliente->provincia }}"
+                                        data-fax="{{ $proyecto->cliente->fax }}"
+                                        data-cargo="{{ $proyecto->cliente->cargo }}"
+                                        data-titular-nom="{{ $proyecto->cliente->titular_nom }}"
+                                        data-titular-ape="{{ $proyecto->cliente->titular_ape }}"
+                                        data-direccion-envio="{{ $proyecto->cliente->direccion_envio }}"
+                                        data-cp-envio="{{ $proyecto->cliente->cp_envio }}"
+                                        data-poblacion-envio="{{ $proyecto->cliente->poblacion_envio }}"
+                                        data-provincia-envio="{{ $proyecto->cliente->provincia_envio }}"
+                                        data-pago="{{ $proyecto->cliente->pago }}"
+                                        data-establecido="{{ $proyecto->cliente->establecido }}">
+                                        {{ $proyecto->cliente->nombre }} {{ $proyecto->cliente->apellido }}
+                                    </a>
+                                </td>
+
+                                <td class="align-middle">€{{ $proyecto->presupuesto->precio_total }}</td>
                                 <td class="align-middle">{{ $proyecto->pago }}</td>
+
+                                <td class="align-middle">
+                                    @if($proyecto->visitas->isEmpty())
+                                        No hay visitas
+                                    @else
+                                        <a href="{{route('visita.index')}}" class="btn btn-light-primary">Sí, ir a visitas</a>
+                                    @endif
+                                </td>
+
                                 <td class="align-middle">{{ $proyecto->created_at->format('d/m/Y H:i') }}</td>
 
                                 <td class="align-middle">
                                     <div class="card-toolbar">
-                                        <button type="button" class="btn btn-sm btn-icon btn-active-light-primary me-n3" data-kt-menu-trigger="{default: 'click', lg: 'hover'}" data-kt-menu-placement="bottom-end">{!! getIcon('setting-3', 'fs-2') !!}</button>
+                                        <button type="button" class="btn btn-sm btn-icon btn-light-primary me-n3" data-kt-menu-trigger="{default: 'click', lg: 'hover'}" data-kt-menu-placement="bottom-end"><i class="fa-solid fa-bars"></i></button>
                                         @include('partials/menus/_acciones_proyecto')
                                     </div>
                                 </td>
@@ -498,7 +521,61 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
+document.addEventListener('DOMContentLoaded', function() {
+    var clienteModal = document.getElementById('clienteProyectoModal');
+
+    clienteModal.addEventListener('show.bs.modal', function(event) {
+        var button = event.relatedTarget; // Botón que activó el modal
+
+        // Recopilar datos del cliente desde los atributos `data-*` del botón
+        var clienteContent = `
+            <div class="row mt-3 mx-3">
+                <div class="col">
+                    <p><strong>Nombre:</strong> ${button.getAttribute('data-nombre') || "<span class='badge px-4 fs-7 badge-light-warning'>No registrado</span>"}</p>
+                    <p><strong>Apellido:</strong> ${button.getAttribute('data-apellido') || "<span class='badge px-4 fs-7 badge-light-warning'>No registrado</span>"}</p>
+                    <p><strong>DNI:</strong> ${button.getAttribute('data-dni') || "<span class='badge px-4 fs-7 badge-light-warning'>No registrado</span>"}</p>
+                    <p><strong>Email:</strong> ${button.getAttribute('data-email') || "<span class='badge px-4 fs-7 badge-light-warning'>No registrado</span>"}</p>
+                    <p><strong>Número Móvil:</strong> ${button.getAttribute('data-movil') || "<span class='badge px-4 fs-7 badge-light-warning'>No registrado</span>"}</p>
+                    <p><strong>Contacto:</strong> ${button.getAttribute('data-contacto') || "<span class='badge px-4 fs-7 badge-light-warning'>No registrado</span>"}</p>
+                </div>
+                <div class="col">
+                    <p><strong>Dirección:</strong> ${button.getAttribute('data-direccion') || "<span class='badge px-4 fs-7 badge-light-warning'>No registrado</span>"}</p>
+                    <p><strong>Código Postal:</strong> ${button.getAttribute('data-cp') || "<span class='badge px-4 fs-7 badge-light-warning'>No registrado</span>"}</p>
+                    <p><strong>Población:</strong> ${button.getAttribute('data-poblacion') || "<span class='badge px-4 fs-7 badge-light-warning'>No registrado</span>"}</p>
+                    <p><strong>Provincia:</strong> ${button.getAttribute('data-provincia') || "<span class='badge px-4 fs-7 badge-light-warning'>No registrado</span>"}</p>
+                    <p><strong>Fax:</strong> ${button.getAttribute('data-fax') || "<span class='badge px-4 fs-7 badge-light-warning'>No registrado</span>"}</p>
+                    <p><strong>Cargo:</strong> ${button.getAttribute('data-cargo') || "<span class='badge px-4 fs-7 badge-light-warning'>No registrado</span>"}</p>
+                </div>
+            </div>
+            <div class="row mt-3 mx-3">
+                <div class="col">
+                    <p><strong>Titular Nombre:</strong> ${button.getAttribute('data-titular-nom') || "<span class='badge px-4 fs-7 badge-light-warning'>No registrado</span>"}</p>
+                    <p><strong>Titular Apellido:</strong> ${button.getAttribute('data-titular-ape') || "<span class='badge px-4 fs-7 badge-light-warning'>No registrado</span>"}</p>
+                    <p><strong>Dirección de Envío:</strong> ${button.getAttribute('data-direccion-envio') || "<span class='badge px-4 fs-7 badge-light-warning'>No registrado</span>"}</p>
+                </div>
+                <div class="col">
+                    <p><strong>Código Postal de Envío:</strong> ${button.getAttribute('data-cp-envio') || "<span class='badge px-4 fs-7 badge-light-warning'>No registrado</span>"}</p>
+                    <p><strong>Población de Envío:</strong> ${button.getAttribute('data-poblacion-envio') || "<span class='badge px-4 fs-7 badge-light-warning'>No registrado</span>"}</p>
+                    <p><strong>Provincia de Envío:</strong> ${button.getAttribute('data-provincia-envio') || "<span class='badge px-4 fs-7 badge-light-warning'>No registrado</span>"}</p>
+                </div>
+            </div>
+            <div class="row mt-3 mx-3">
+                <div class="col">
+                    <p><strong>Forma de Pago:</strong> ${button.getAttribute('data-pago') || "<span class='badge px-4 fs-7 badge-light-warning'>No registrado</span>"}</p>
+                </div>
+                <div class="col">
+                    <p><strong>Establecido:</strong> ${button.getAttribute('data-establecido') || "<span class='badge px-4 fs-7 badge-light-warning'>No registrado</span>"}</p>
+                </div>
+            </div>
+        `;
+
+        // Actualizar el contenido del modal
+        var clienteContentDiv = clienteModal.querySelector('#clienteContent');
+        clienteContentDiv.innerHTML = clienteContent;
+    });
+});
 
 </script>
 @endpush
+@include('partials/modals/_cliente-proyecto')
 </x-default-layout>

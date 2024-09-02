@@ -135,17 +135,17 @@
                     <div>
                         <label for="pago">Forma de pago</label>
                             <select class="form-select" id="pago" name="pago">
-                                <option value="Ver condiciones">Ver condiciones</option>
-                                <option value="50% inicio, 50% fin">50% inicio, 50% fin</option>
-                                <option value="50% termino de obra, resto a 90 dias">50% termino de obra, resto a 90 días</option>
-                                <option value="50% comienzo de obra, resto a convenir">50% comienzo de obra, resto a convenir</option>
-                                <option value="Certificaciones quincenales">Certificaciones quincenales</option>
-                                <option value="Como siempre">Como siempre</option>
-                                <option value="Contado termino de obra">Contado termino de obra</option>
-                                <option value="Convenir">Convenir</option>
-                                <option value="Fin de ejercicio, 15 de diciembre">Fin de ejercicio, 15 de diciembre</option>
-                                <option value="Letra de 90 dias">Letra de 90 días</option>
-                                <option value="Letra a la vista">Letra a la vista</option>
+                                <option value="Ver condiciones" {{ $cliente->pago == 'Ver condiciones' ? 'selected' : '' }}>Ver condiciones</option>
+                                <option value="50% inicio, 50% fin" {{ $cliente->pago == '50% inicio, 50% fin' ? 'selected' : '' }}>50% inicio, 50% fin</option>
+                                <option value="50% termino de obra, resto a 90 dias" {{ $cliente->pago == '50% termino de obra, resto a 90 días' ? 'selected' : '' }}>50% termino de obra, resto a 90 días</option>
+                                <option value="50% comienzo de obra, resto a convenir" {{ $cliente->pago == '50% comienzo de obra, resto a convenir' ? 'selected' : '' }}>50% comienzo de obra, resto a convenir</option>
+                                <option value="Certificaciones quincenales" {{ $cliente->pago == 'Certificaciones quincenales' ? 'selected' : '' }}>Certificaciones quincenales</option>
+                                <option value="Como siempre" {{ $cliente->pago == 'Como siempre' ? 'selected' : '' }}>Como siempre</option>
+                                <option value="Contado termino de obra" {{ $cliente->pago == 'Contado termino de obra' ? 'selected' : '' }}>Contado termino de obra</option>
+                                <option value="Convenir" {{ $cliente->pago == 'Convenir' ? 'selected' : '' }}>Convenir</option>
+                                <option value="Fin de ejercicio, 15 de diciembre" {{ $cliente->pago == 'Fin de ejercicio, 15 de diciembre' ? 'selected' : '' }}>Fin de ejercicio, 15 de diciembre</option>
+                                <option value="Letra de 90 dias" {{ $cliente->pago == 'Letra de 90 días' ? 'selected' : '' }}>Letra de 90 días</option>
+                                <option value="Letra a la vista" {{ $cliente->pago == 'Letra a la vista' ? 'selected' : '' }}>Letra a la vista</option>
                             </select>
                     </div>
                     <hr />
