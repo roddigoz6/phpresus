@@ -54,6 +54,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
         ->where('id', '.*')
         ->name('proyecto.destroy');
 
+    Route::post('/proyecto/{id}', [ProyectoController::class, 'aceptar'])
+        ->where('id', '.*')
+        ->name('proyecto.aceptar');
+
 });
 
 Route::get('/error', function () {

@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('serie_ref')->nullable();
             $table->integer('num_ref')->nullable();
             $table->string('pago')->nullable();
+            $table->boolean('cerrado')->default(false);
             $table->boolean('eliminado')->default(false);
             $table->timestamps();
         });

@@ -30,7 +30,7 @@ class Presupuesto extends Model
 
     public function proyecto()
     {
-        return $this->hasOne(Proyecto::class, 'proyecto_id');
+        return $this->belongsTo(Proyecto::class, 'proyecto_id');
     }
 
     public function productoPresupuestos()

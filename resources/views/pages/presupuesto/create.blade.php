@@ -128,8 +128,14 @@
                     <hr />
                     <p class="mb-0">Info del proyecto</p>
 
-                    <div>
-                        <input class="form-control" type="text" placeholder="Nombre del proyecto / Título de referencia">
+                    <div class="row">
+                        <div class="col">
+                            <input class="form-control" type="text" name="serie_ref" placeholder="Nombre del proyecto / serie de referencia">
+                        </div>
+
+                        <div class="col">
+                            <input class="form-control" type="text" name="num_ref" placeholder="Número de referencia">
+                        </div>
                     </div>
 
                     <div>

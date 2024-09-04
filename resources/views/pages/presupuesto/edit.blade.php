@@ -49,14 +49,6 @@
                                             <option value="Visita">Visita</option>
                                         </select>
                                     </div>
-                                    <div class="">
-                                        <label for="categoria">Categoría</label> <strong class="required"></strong>
-                                        <select class="form-select" id="categoria" name="categoria_id" required>
-                                            @foreach($categorias as $categoria)
-                                                <option value="{{ $categoria->id }}">{{ $categoria->nombre }}</option>
-                                            @endforeach
-                                        </select>
-                                    </div>
                                     <div class="mt-3">Los campos con <strong class="required"></strong> son requeridos.</div>
                                     <button type="submit" class="btn btn-primary mt-3" id="CreaProd">Ingresar nuevo producto</button>
                                 </form>
@@ -109,192 +101,16 @@
 
             </div>
 
+
+
             <div class="col-md-8">
-                <div class="row align-items-center">
-                    <div class="col">
-                        <h3 class="mb-0">Clientes</h3>
-                    </div>
-                    <div class="col text-end">
-                        <button type="button" class="btn btn-light-primary" data-bs-toggle="modal"
-                            data-bs-target="#crearClienteModal" data-bs-toggle="popover" data-bs-trigger="hover focus"
-                            title="Crear nuevo cliente y agregar a la lista">
-                            Agregar cliente <i class="fas fa-plus-circle"></i>
-                        </button>
-                    </div>
-                </div>
-
-                <!--Agregar clientes-->
-                <div class="modal fade" id="crearClienteModal" tabindex="-1" aria-labelledby="crearClienteModalLabel" aria-hidden="true">
-                    <div class="modal-dialog modal-lg modal-dialog-centered">
-                        <div class="modal-content">
-                            <div class="modal-body">
-                                <form action="{{ route('cliente.store') }}" method="POST">
-                                    @csrf
-                                    <div class="row">
-
-                                        <div class="col">
-                                            <div class="header-modal">
-                                                <h4>Datos del cliente</h4>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col">
-                                                    <div class="">
-                                                        <label for="nombre">Nombre</label> <strong class="required"></strong>
-                                                        <input type="text" class="form-control" id="nombre" name="nombre" required>
-                                                    </div>
-                                                </div>
-                                                <div class="col">
-                                                    <div class="">
-                                                        <label for="apellido">Apellido</label> <strong class="required"></strong>
-                                                        <input type="text" class="form-control" id="apellido" name="apellido" required>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col">
-                                                    <div class="">
-                                                        <label for="dni">DNI</label> <strong class="required"></strong>
-                                                        <input type="text" class="form-control" id="dni" name="dni" required>
-                                                    </div>
-                                                </div>
-                                                <div class="col">
-                                                    <div>
-                                                        <label for="movil">Móvil</label> <strong class="required"></strong>
-                                                        <input type="text" class="form-control" id="movil" name="movil" required>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="">
-                                                <label for="email">Correo Electrónico</label>
-                                                <input type="email" class="form-control" id="email" name="email">
-                                            </div>
-                                            <div class="">
-                                                <label for="direccion">Direccion</label> <strong class="required"></strong>
-                                                <input type="text" class="form-control" id="direccion" name="direccion" required>
-                                            </div>
-                                            <div class="">
-                                                <label for="cp">Código postal</label> <strong class="required"></strong>
-                                                <input type="text" class="form-control" id="cp" name="cp" required>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col">
-                                                    <div class="">
-                                                        <label for="poblacion">Población</label> <strong class="required"></strong>
-                                                        <input type="text" class="form-control" id="poblacion" name="poblacion" required>
-                                                    </div>
-                                                </div>
-                                                <div class="col">
-                                                    <div class="">
-                                                        <label for="provincia">Provincia</label> <strong class="required"></strong>
-                                                        <input type="text" class="form-control" id="provincia" name="provincia" required>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col">
-                                                    <div class="">
-                                                        <label for="fax">Fax</label>
-                                                        <input type="text" class="form-control" id="fax" name="fax">
-                                                    </div>
-                                                </div>
-                                                <div class="col">
-                                                    <div>
-                                                        <label for="cargo">Cargo</label>
-                                                        <input type="text" class="form-control" id="cargo" name="cargo">
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="col">
-                                            <div class="header-modal">
-                                                <h4>Datos de envío</h4>
-                                            </div>
-                                            <div class="">
-                                                <label for="contacto">Contacto</label>
-                                                <input type="text" class="form-control" id="contacto" name="contacto">
-                                            </div>
-                                            <div class="">
-                                                <label for="titular_nom">Nombre de titular</label>
-                                                <input type="text" class="form-control" id="titular_nom" name="titular_nom">
-                                            </div>
-                                            <div class="">
-                                                <label for="titular_ape">Apellido de titular</label>
-                                                <input type="text" class="form-control" id="titular_ape" name="titular_ape">
-                                            </div>
-                                            <div class="">
-                                                <label for="direccion_envio">Dirección de envío</label>
-                                                <input type="text" class="form-control" id="direccion_envio" name="direccion_envio">
-                                            </div>
-                                            <div class="">
-                                                <label for="cp_envio">Código postal de dirección de envío</label>
-                                                <input type="text" class="form-control" id="cp_envio" name="cp_envio">
-                                            </div>
-                                            <div class="">
-                                                <label for="poblacion_envio">Población de dirección de envío</label>
-                                                <input type="text" class="form-control" id="poblacion_envio" name="poblacion_envio">
-                                            </div>
-                                            <div class="">
-                                                <label for="provincia_envio">Provincia de dirección de envío</label>
-                                                <input type="text" class="form-control" id="provincia_envio" name="provincia_envio">
-                                            </div>
-
-                                        </div>
-                                        <div class="header-modal">
-                                            <h4>Pago</h4>
-                                        </div>
-                                        <div class="">
-                                            <label for="pago">Forma de pago</label>
-                                            <select class="form-select" id="pago" name="pago">
-                                                <option value="Ver condiciones">Ver condiciones</option>
-                                                <option value="50% inicio, 50% fin">50% inicio, 50% fin</option>
-                                                <option value="50% termino de obra, resto a 90 dias">50% termino de obra, resto a 90 días</option>
-                                                <option value="50% comienzo de obra, resto a convenir">50% comienzo de obra, resto a convenir</option>
-                                                <option value="Certificaciones quincenales">Certificaciones quincenales</option>
-                                                <option value="Como siempre">Como siempre</option>
-                                                <option value="Contado termino de obra">Contado termino de obra</option>
-                                                <option value="Convenir">Convenir</option>
-                                                <option value="Fin de ejercicio, 15 de diciembre">Fin de ejercicio, 15 de diciembre</option>
-                                                <option value="Letra de 90 dias">Letra de 90 días</option>
-                                                <option value="Letra a la vista">Letra a la vista</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="mt-3">Los campos <strong class="required"></strong> son requeridos.</div>
-                                    <div class="d-flex justify-content-end">
-                                        <button type="submit" class="btn btn-light-primary mt-3">Guardar <i class="fas fa-check-circle"></i></button>
-                                    </div>
-                                </form>
-                                @if (session('success_cli'))
-                                    <script>
-                                        document.addEventListener('DOMContentLoaded', function() {
-                                            const Toast = Swal.mixin({
-                                                toast: true,
-                                                position: "top-end",
-                                                showConfirmButton: false,
-                                                timer: 3000,
-                                                timerProgressBar: true,
-                                                didOpen: (toast) => {
-                                                    toast.onmouseenter = Swal.stopTimer;
-                                                    toast.onmouseleave = Swal.resumeTimer;
-                                                }
-                                            });
-                                            Toast.fire({
-                                                icon: "success",
-                                                title: "Cliente agregado."
-                                            });
-                                        });
-                                    </script>
-                                @endif
-                            </div>
-                        </div>
-                    </div>
-                </div>
 
                 <form action="{{ route('presupuesto.update', $presupuesto->id) }}" method="POST" class="mb-3">
                     @csrf
                     @method('PUT')
                     <div class="input-group mb-3 mt-3">
+                        <h3>Editar proyecto {{ $proyecto->proyecto_id }}, cliente {{ $presupuesto->cliente->nombre }}.</h3>
+
                         <select class="form-select select2" id="cliente" name="cliente_id" required>
                             <option value="">Seleccionar cliente</option>
                             @foreach ($clientes as $cliente)
@@ -305,7 +121,21 @@
                         </select>
                     </div>
 
-                    <h3>Editar presupuesto {{ $presupuesto->id }}, cliente {{ $presupuesto->cliente->nombre }}.</h3>
+                    <div class="col">
+                        <hr />
+                        <p class="mb-0">Datos del cliente</p>
+                        <div class="col form-group">
+                            Cliente: <strong>{{ $presupuesto->cliente->nombre }} {{ $presupuesto->cliente->apellido }}</strong>
+                            <input type="hidden" value="{{ $presupuesto->cliente->id }}" id="cliente_id" name="cliente_id">
+                        </div>
+
+                        <div class="col form-group">
+                            Contacto: <strong>{{ $presupuesto->cliente->contacto ?: 'No registrado' }}</strong><br>
+                            Forma de pago de cliente: <strong>{{ $presupuesto->cliente->pago ?: 'No registrado' }}</strong>
+                        </div>
+                    </div>
+
+
                     <p>Arrastra aquí los productos para agregarlos al presupuesto.</p>
 
                     <div id="canvas" class="border p-2" style="min-height: 300px; overflow-y: auto;"
@@ -370,10 +200,11 @@
             </div>
         </div>
     </div>
+
     @push('scripts')
     <script>
         $(document).ready(function() {
-            // console.log(productosArrastrados);
+            console.log(productosArrastrados);
             actualizarListaProductos();
         });
 
@@ -413,7 +244,11 @@
                     nombre: productoNombre,
                     precio: productoPrecio,
                     stock: productoStock,
-                    cantidad: 1
+                    cantidad: 1,
+                    orden_prod: productosArrastrados.length + 1,
+                    tipo: '', // Agregar un valor predeterminado o lo que sea apropiado
+                    titulo: '', // Agregar un valor predeterminado o lo que sea apropiado
+                    descripcion: ''
                 });
 
                 actualizarListaProductos();

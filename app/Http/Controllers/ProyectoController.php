@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
 use App\Models\Cliente;
 use App\Models\Proyecto;
 use App\Models\Presupuesto;
@@ -18,54 +19,67 @@ class ProyectoController extends Controller
         $search = $request->input('search');
         $tab = $request->input('tab', 'all');
 
+        // Consulta base para proyectos activos
         $query = Proyecto::where('eliminado', false)
                     ->with('cliente');
 
         if ($search) {
-
             $query->whereHas('cliente', function($q) use ($search) {
                 $q->where('nombre', 'like', "%$search%");
             });
         }
 
+        // Proyectos activos
         $proyectos = $query->paginate(15);
-        $proyectosPresupuesto = Proyecto::where('eliminado', false)
-                                    ->where('estado', 'Presupuestado')
-                                    ->with('cliente')
-                                    ->paginate(15);
-        $proyectosVisita = Proyecto::where('eliminado', false)
-                                    ->where('estado', 'Visita')
-                                    ->with('cliente')
-                                    ->paginate(15);
-        $proyectosRealizado = Proyecto::where('eliminado', false)
-                                    ->where('estado', 'Realizado')
-                                    ->with('cliente')
-                                    ->paginate(15);
-        $proyectosFinalizado = Proyecto::where('eliminado', false)
-                                    ->where('estado', 'Finalizado')
-                                    ->with('cliente')
-                                    ->paginate(15);
-        $proyectosCobrado = Proyecto::where('eliminado', false)
-                                    ->where('estado', 'Cobrado')
-                                    ->with('cliente')
-                                    ->paginate(15);
-        $proyectosCerrado = Proyecto::where('eliminado', false)
-                                    ->where('estado', 'Cerrado')
+
+        // Proyectos por estado
+        $proyectosPresupuestado = Proyecto::where('eliminado', false)
+                                        ->where('estado', 'presupuestado')
+                                        ->with('cliente')
+                                        ->paginate(15);
+
+        $proyectosPresupuestoAceptado = Proyecto::where('eliminado', false)
+                                                ->where('estado', 'presupuesto_aceptado')
+                                                ->with('cliente')
+                                                ->paginate(15);
+
+        $proyectosFacturadoPendienteCobro = Proyecto::where('eliminado', false)
+                                                    ->where('estado', 'facturado_pendiente_cobro')
+                                                    ->with('cliente')
+                                                    ->paginate(15);
+
+        $proyectosFacturaCobrada = Proyecto::where('eliminado', false)
+                                            ->where('estado', 'factura_cobrada')
+                                            ->with('cliente')
+                                            ->paginate(15);
+
+        // Nuevos proyectos cerrados
+        $proyectosCerrado = Proyecto::where('cerrado', true)
+                                    ->where('eliminado', false)
                                     ->with('cliente')
                                     ->paginate(15);
 
+        // Configuración para visitas de la semana
+        $inicioSemana = Carbon::now()->startOfWeek();
+        $finSemana = Carbon::now()->endOfWeek();
+
+        $visitas = Visita::whereBetween('fecha_inicio', [$inicioSemana, $finSemana])->get();
+        $rangoSemana = $inicioSemana->translatedFormat('d \d\e F') . ' al ' . $finSemana->translatedFormat('d \d\e F');
+
+        // Redirección si no hay proyectos en la primera página y hay más páginas
         if ($proyectos->count() == 0 && $proyectos->lastPage() > 1) {
             return redirect()->route('proyecto.index', ['page' => $proyectos->lastPage() - 1, 'tab' => $tab]);
         }
 
         return view('pages/proyecto.index', compact(
+            'visitas',
             'proyectos',
-            'proyectosPresupuesto',
-            'proyectosVisita',
-            'proyectosRealizado',
-            'proyectosFinalizado',
-            'proyectosCobrado',
+            'proyectosPresupuestado',
+            'proyectosPresupuestoAceptado',
+            'proyectosFacturadoPendienteCobro',
+            'proyectosFacturaCobrada',
             'proyectosCerrado',
+            'rangoSemana',
             'tab'
         ));
     }
@@ -109,6 +123,48 @@ class ProyectoController extends Controller
     {
         //
     }
+
+    public function aceptar(Request $request, $id)
+    {
+        // Obtén el proyecto por ID
+        $proyecto = Proyecto::with(['presupuesto', 'cliente'])->find($id);
+
+        if (!$proyecto) {
+            return response()->json(['success' => false, 'message' => 'Proyecto no encontrado.'], 404);
+        }
+
+        try {
+            // Buscar el presupuesto relacionado al proyecto y actualizar su campo aceptado a true
+            $presupuesto = $proyecto->presupuesto;
+            if ($presupuesto) {
+                $presupuesto->aceptado = true;
+                $presupuesto->save();
+            } else {
+                return response()->json(['success' => false, 'message' => 'Presupuesto no encontrado.'], 404);
+            }
+
+            // Buscar el cliente relacionado y actualizar su campo establecido a true
+            $cliente = $proyecto->cliente;
+            if ($cliente) {
+                $cliente->establecido = true;
+                $cliente->save();
+            } else {
+                return response()->json(['success' => false, 'message' => 'Cliente no encontrado.'], 404);
+            }
+
+            // Actualizar el estado del proyecto a 'presupuesto_aceptado'
+            $proyecto->estado = 'presupuesto_aceptado';
+            $proyecto->save();
+
+            // Retornar una respuesta exitosa
+            return response()->json(['success' => true, 'message' => 'El proyecto y el presupuesto han sido aceptados correctamente.']);
+
+        } catch (\Exception $e) {
+            // Retornar una respuesta de error
+            return response()->json(['success' => false, 'message' => 'Hubo un problema al aceptar el presupuesto: ' . $e->getMessage()], 500);
+        }
+    }
+
 
     /**
      * Remove the specified resource from storage.

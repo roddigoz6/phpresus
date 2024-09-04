@@ -91,7 +91,6 @@
             }
         }
     </style>
-
 </head>
 <!--end::Head-->
 
@@ -285,12 +284,12 @@
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="postCreateClienteModalLabel">Cliente creado con éxito</h5>
+                <h5 class="modal-title" id="postCreateClienteModalLabel">Cliente creado</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <p>El cliente ha sido creado exitosamente. ¿Qué te gustaría hacer a continuación?</p>
-                <button type="button" class="btn btn-primary" id="goToPresupuestoBtn">Crear presupuesto</button>
+                <p>El cliente ha sido creado. ¿Qué te gustaría hacer?</p>
+                <button type="button" class="btn btn-primary" id="goToPresupuestoBtn">Crear proyecto</button>
                 <button type="button" class="btn btn-secondary" id="goToClientesBtn">Volver al listado de clientes</button>
             </div>
         </div>

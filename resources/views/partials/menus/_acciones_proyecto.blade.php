@@ -5,6 +5,16 @@
 		<div class="menu-content text-muted pb-2 px-3 fs-7 text-uppercase">Gestionar proyecto: {{ $proyecto->proyecto_id }}</div>
 	</div>
 
+    @if ($proyecto->estado == 'presupuestado')
+    <div class="menu-item px-3">
+        <a href="#" class="menu-link px-3 aceptar-proyecto-btn" data-proyecto-id="{{ $proyecto->id }}">
+            <span class="menu-title">Aceptar proyecto</span>
+            <span><i class="fa-solid fa-circle-check"></i></span>
+        </a>
+    </div>
+
+    @endif
+
     <div class="menu-item px-3">
 		<a href="{{ route('presupuesto.edit', $proyecto->presupuesto->id) }}" class="menu-link px-3">
             <span class="menu-title">Editar proyecto</span>
@@ -12,27 +22,33 @@
         </a>
 	</div>
 
-	@if ($proyecto->estado=='presupuesto_aceptado')
-        <div class="menu-item px-3">
-            <a href="" class="menu-link px-3" data-bs-toggle="modal" data-bs-target="#visitaModal">
-                <span class="menu-title">Asignar visita </span>
-                <span><i class="fa-solid fa-calendar-check"></i></span>
-            </a>
-        </div>
+    @if ($proyecto->estado != 'presupuestado')
+    <div class="menu-item px-3">
+        <a href="#" class="menu-link px-3"
+        data-bs-toggle="modal"
+        data-bs-target="#visitaModal"
+        data-proyecto-id="{{ $proyecto->proyecto_id }}"
+        data-serie-ref="{{ $proyecto->serie_ref ?? 'Serie no registrada.' }}"
+        data-contacto="{{ $proyecto->cliente->contacto ?? 'Contacto no disponible' }}">
+            <span class="menu-title">Asignar visita</span>
+            <span><i class="fa-solid fa-calendar-check"></i></span>
+        </a>
+    </div>
 
-        <div class="menu-item px-3">
-            <a href="" class="menu-link px-3">
-                <span class="menu-title">Generar factura</span>
-                <span><i class="fa-solid fa-receipt"></i></span>
-            </a>
-        </div>
 
-        <div class="menu-item px-3">
-            <a href="{{ route('visita.store') }}" class="menu-link px-3">
-                <span class="menu-title">Cerrar proyecto</span>
-                <span><i class="fa-solid fa-circle-xmark"></i></span>
-            </a>
-        </div>
+    <div class="menu-item px-3">
+        <a href="" class="menu-link px-3">
+            <span class="menu-title">Generar factura</span>
+            <span><i class="fa-solid fa-receipt"></i></span>
+        </a>
+    </div>
+
+    <div class="menu-item px-3">
+        <a href="{{ route('visita.store') }}" class="menu-link px-3">
+            <span class="menu-title">Cerrar proyecto</span>
+            <span><i class="fa-solid fa-circle-xmark"></i></span>
+        </a>
+    </div>
     @endif
 
     <div class="menu-item px-3">
@@ -66,5 +82,25 @@
             }
         });
     });
-</script>
 
+    document.addEventListener('DOMContentLoaded', function() {
+    const visitaModal = document.getElementById('visitaModal');
+
+    visitaModal.addEventListener('show.bs.modal', function(event) {
+        const button = event.relatedTarget; // El botón que abrió el modal
+        const proyectoId = button.getAttribute('data-proyecto-id');
+        const serieRef = button.getAttribute('data-serie-ref');
+        const contacto = button.getAttribute('data-contacto');
+
+        // Actualiza los elementos en el modal con los valores capturados
+        const modalTitle = visitaModal.querySelector('.modal-title strong');
+        const proyectoInput = visitaModal.querySelector('input[name="proyecto_id"]');
+        const contactoInput = visitaModal.querySelector('input[name="contacto_visita"]');
+
+        modalTitle.textContent = `${proyectoId} - ${serieRef}`;
+        proyectoInput.value = proyectoId;
+        contactoInput.value = contacto;
+    });
+});
+
+</script>

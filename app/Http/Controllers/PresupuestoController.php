@@ -122,12 +122,16 @@ class PresupuestoController extends Controller
                 'cliente_id' => 'required|exists:TClientes,id',
                 'precio_total' => 'required|numeric|min:0',
                 'lista_productos' => 'required|json',
+                'serie_ref' => 'required|string|max:255',
+                'num_ref' => 'required|string|max:255'
             ]);
 
             // Crear un nuevo proyecto
             $proyecto = new Proyecto();
             $proyecto->cliente_id = $validatedData['cliente_id'];
             $proyecto->estado = 'Presupuestado';
+            $proyecto->serie_ref = $validatedData['serie_ref'];
+            $proyecto->num_ref = $validatedData['num_ref'];
             $proyecto->pago = $request->input('pago');
             $proyecto->save();
 
@@ -195,23 +199,28 @@ class PresupuestoController extends Controller
     public function edit(Presupuesto $presupuesto)
     {
         $clientes = Cliente::where('eliminado', false)->get();
-        $presupuesto->load('cliente', 'productoPresupuestos.producto');
+
+        $presupuesto->load('cliente', 'productoPresupuestos.producto', 'proyecto');
+
+        $proyecto = $presupuesto->proyecto;
 
         $productosArrastrados = $presupuesto->productoPresupuestos->map(function($pp) {
             return [
-                'id' => $pp->producto->id,
-                'nombre' => $pp->producto->nombre,
-                'cantidad' => $pp->cantidad,
-                'precio' => $pp->precio,
+                'id' => optional($pp->producto)->id,
+                'nombre' => optional($pp->producto)->nombre,
+                'cantidad' => optional($pp->producto)->cantidad,
+                'precio' => optional($pp->producto)->precio,
                 'orden_prod' => $pp->orden_prod,
-                'stock' => $pp->producto->stock,
+                'stock' => optional($pp->producto)->stock,
+                'tipo' => $pp->tipo,
+                'titulo' => optional($pp->producto)->titulo,
+                'descripcion' => optional($pp->producto)->descripcion,
             ];
         });
 
         $productosArrastrados = $productosArrastrados->sortBy('orden_prod')->values();
 
-       //dd($productosArrastrados);
-        return view('pages/presupuesto.edit', compact('presupuesto', 'clientes', 'categorias', 'productosArrastrados'));
+        return view('pages/presupuesto.edit', compact('presupuesto', 'proyecto', 'clientes', 'productosArrastrados'));
     }
 
     /**

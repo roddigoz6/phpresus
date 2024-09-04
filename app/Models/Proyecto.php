@@ -20,7 +20,8 @@ class Proyecto extends Model
         'serie_ref',
         'num_ref',
         'pago',
-        'eliminado',
+        'cerrado',
+        'eliminado'
     ];
 
     protected static function boot()
@@ -36,6 +37,7 @@ class Proyecto extends Model
     }
 
     protected $casts = [
+        'cerrado' => 'bool',
         'eliminado' => 'bool',
     ];
 
