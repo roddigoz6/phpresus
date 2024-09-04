@@ -117,13 +117,14 @@ class PresupuestoController extends Controller
     public function store(Request $request)
     {
         try {
+            //dd($request);
             // Validar los datos de entrada
             $validatedData = $request->validate([
                 'cliente_id' => 'required|exists:TClientes,id',
                 'precio_total' => 'required|numeric|min:0',
                 'lista_productos' => 'required|json',
-                'serie_ref' => 'required|string|max:255',
-                'num_ref' => 'required|string|max:255'
+                'serie_ref' => 'string|max:255|nullable',
+                'num_ref' => 'string|max:255|nullable'
             ]);
 
             // Crear un nuevo proyecto
@@ -149,6 +150,7 @@ class PresupuestoController extends Controller
                 ProductoPresupuesto::create([
                     'presupuesto_id' => $presupuesto->id,
                     'producto_id' => $producto['id'] ?? null,
+                    'capitulo_id' => $producto['capitulo_id'] ?? null,
                     'cantidad' => $producto['cantidad'] ?? null,
                     'precio' => $producto['precio'] ?? null,
                     'orden' => $producto['orden'],
@@ -158,14 +160,11 @@ class PresupuestoController extends Controller
                 ]);
             }
 
-            // Devolver una respuesta JSON en caso de éxito
             return response()->json(['success' => true, 'message' => 'Presupuesto creado correctamente.']);
 
         } catch (\Illuminate\Validation\ValidationException $e) {
-            // Capturar la excepción de validación y devolver un mensaje de error
             return response()->json(['success' => false, 'message' => 'La validación falló.', 'errors' => $e->errors()], 422);
         } catch (\Exception $e) {
-            // Capturar cualquier otra excepción y devolver un mensaje de error genérico
             return response()->json(['success' => false, 'message' => 'Hubo un problema al guardar los datos.'], 500);
         }
     }
@@ -178,15 +177,9 @@ class PresupuestoController extends Controller
      */
     public function show(Request $request, Presupuesto $presupuesto)
     {
-        // exit("X2");
-        // dd($request);
-        // Cargar las relaciones necesarias
         $presupuesto->load('cliente', 'productoPresupuestos.producto');
-
-        // Ordenar los productos por 'orden_prod' en orden ascendente
         $presupuesto->setRelation('productoPresupuestos', $presupuesto->productoPresupuestos->sortBy('orden_prod'));
 
-        // Pasar los datos del presupuesto a la vista
         return view('pages/presupuesto.show', compact('presupuesto'));
     }
 
@@ -207,18 +200,19 @@ class PresupuestoController extends Controller
         $productosArrastrados = $presupuesto->productoPresupuestos->map(function($pp) {
             return [
                 'id' => optional($pp->producto)->id,
+                'capitulo_id' => $pp->capitulo_id,
                 'nombre' => optional($pp->producto)->nombre,
-                'cantidad' => optional($pp->producto)->cantidad,
-                'precio' => optional($pp->producto)->precio,
-                'orden_prod' => $pp->orden_prod,
-                'stock' => optional($pp->producto)->stock,
+                'cantidad' => $pp->cantidad,
+                'precio' => $pp->precio,
+                'orden' => $pp->orden,
+                'stock' => $pp->stock,
                 'tipo' => $pp->tipo,
-                'titulo' => optional($pp->producto)->titulo,
-                'descripcion' => optional($pp->producto)->descripcion,
+                'titulo' =>$pp->titulo,
+                'descripcion' => $pp->descripcion,
             ];
         });
 
-        $productosArrastrados = $productosArrastrados->sortBy('orden_prod')->values();
+        $productosArrastrados = $productosArrastrados->sortBy('orden')->values();
 
         return view('pages/presupuesto.edit', compact('presupuesto', 'proyecto', 'clientes', 'productosArrastrados'));
     }
@@ -234,7 +228,7 @@ class PresupuestoController extends Controller
     {
         // Validar los datos de entrada
         $validatedData = $request->validate([
-            'cliente_id' => 'required|exists:clientes,id',
+            'cliente_id' => 'required|exists:tclientes,id',
             'precio_total' => 'required|numeric|min:0',
             'lista_productos' => 'required|json',
         ]);
@@ -253,20 +247,26 @@ class PresupuestoController extends Controller
         foreach ($productos as $producto) {
             $presupuestoProducto = new ProductoPresupuesto();
             $presupuestoProducto->presupuesto_id = $presupuesto->id;
-            $presupuestoProducto->producto_id = $producto['id'];
-            $presupuestoProducto->cantidad = $producto['cantidad'];
-            $presupuestoProducto->precio = $producto['precio'];
-            $presupuestoProducto->orden_prod = $request->input("orden_producto_{$producto['id']}");
+            $presupuestoProducto->producto_id = $producto['id'] ?? null;
+            $presupuestoProducto->capitulo_id = $producto['capitulo_id'] ?? null;
+            $presupuestoProducto->cantidad = $producto['cantidad'] ?? null;
+            $presupuestoProducto->precio = $producto['precio'] ?? null;
+            $presupuestoProducto->orden = $producto['orden'];
+            $presupuestoProducto->titulo = $producto['titulo'] ?? null;
+            $presupuestoProducto->descripcion = $producto['descripcion'] ?? null;
             $presupuestoProducto->save();
 
-            $productoModel = Producto::find($producto['id']);
-            if ($productoModel) {
-                $productoModel->precio = $producto['precio'];
-                $productoModel->save();
+            if (isset($presupuestoProducto->producto_id)) {
+                $productoModel = Producto::find($presupuestoProducto->producto_id);
+
+                if ($productoModel) {
+                    $productoModel->precio = $producto['precio'];
+                    $productoModel->save();
+                }
             }
         }
-
-        return redirect()->route('presupuesto.index')->with('update_pres', 'Presupuesto actualizado.')->with('clear_storage', true);
+//dd($productos);
+        return redirect()->route('proyecto.index')->with('update_pres', 'Proyecto actualizado.')->with('clear_storage', true);
     }
 
     public function download(Presupuesto $presupuesto, $sendByEmail = false)

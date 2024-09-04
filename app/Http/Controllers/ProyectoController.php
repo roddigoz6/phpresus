@@ -134,7 +134,7 @@ class ProyectoController extends Controller
         }
 
         try {
-            // Buscar el presupuesto relacionado al proyecto y actualizar su campo aceptado a true
+            // Actualiza el presupuesto relacionado y marca como aceptado
             $presupuesto = $proyecto->presupuesto;
             if ($presupuesto) {
                 $presupuesto->aceptado = true;
@@ -143,7 +143,7 @@ class ProyectoController extends Controller
                 return response()->json(['success' => false, 'message' => 'Presupuesto no encontrado.'], 404);
             }
 
-            // Buscar el cliente relacionado y actualizar su campo establecido a true
+            // Actualiza el cliente relacionado
             $cliente = $proyecto->cliente;
             if ($cliente) {
                 $cliente->establecido = true;
@@ -152,19 +152,16 @@ class ProyectoController extends Controller
                 return response()->json(['success' => false, 'message' => 'Cliente no encontrado.'], 404);
             }
 
-            // Actualizar el estado del proyecto a 'presupuesto_aceptado'
+            // Actualiza el estado del proyecto
             $proyecto->estado = 'presupuesto_aceptado';
             $proyecto->save();
 
-            // Retornar una respuesta exitosa
             return response()->json(['success' => true, 'message' => 'El proyecto y el presupuesto han sido aceptados correctamente.']);
 
         } catch (\Exception $e) {
-            // Retornar una respuesta de error
             return response()->json(['success' => false, 'message' => 'Hubo un problema al aceptar el presupuesto: ' . $e->getMessage()], 500);
         }
     }
-
 
     /**
      * Remove the specified resource from storage.

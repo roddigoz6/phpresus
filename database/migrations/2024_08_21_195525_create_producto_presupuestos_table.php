@@ -18,6 +18,7 @@ return new class extends Migration
             //
             $table->foreignId('producto_id')->nullable()->constrained('TProductos')->onDelete('cascade');
             $table->foreignId('presupuesto_id')->constrained('TPresupuestos')->onDelete('cascade');
+            $table->float('capitulo_id')->nullable();
             $table->float('precio')->nullable();
             $table->integer('cantidad')->nullable();
             $table->string('orden')->nullable();

@@ -234,6 +234,12 @@
 <script>
 let productosArrastrados = [];
 
+let nextCapituloId = 1;
+
+function generarIdCapitulo() {
+    return nextCapituloId++;
+}
+
 function limpiarProductos() {
     localStorage.removeItem('productosArrastrados');
 }
@@ -323,7 +329,6 @@ function drop(event) {
     }
 }
 
-// Función para manejar el reordenamiento con drop2
 function drop2(event) {
     window.drop_function = 1;
     console.log("DEV: DROP-EVENT 2");
@@ -348,18 +353,33 @@ function drop2(event) {
             fila_destino.before(window.fila_original);
         }
 
-        const productoId = window.fila_original.data('producto-id');
-        const producto = productosArrastrados.find(p => p.id === productoId);
-        if (producto) {
-            productosArrastrados = productosArrastrados.filter(p => p.id !== productoId);
-            productosArrastrados.splice(posicionDestino, 0, producto);
+        const productoId = window.fila_original.data('producto-id') || null;
+        const capituloId = window.fila_original.data('capitulo-id') || window.fila_original.find('.id-capitulo').val() || null;
+        const productoTipo = window.fila_original.find('.tipo-producto').val();
+
+        let producto = null;
+
+        if (productoTipo === 'capitulo') {
+            producto = productosArrastrados.find(p => p.tipo === 'capitulo' && p.capitulo_id == capituloId);
+        } else {
+            producto = productosArrastrados.find(p => p.id == productoId && p.tipo === productoTipo);
         }
 
+        if (producto) {
+            productosArrastrados = productosArrastrados.filter(p =>
+                (p.id !== productoId && p.capitulo_id !== capituloId)
+            );
+
+            productosArrastrados.splice(posicionDestino, 0, producto);
+        } else {
+            console.log(`No se encontró el producto o capítulo con ID: ${productoId}, capitulo_id: ${capituloId}`);
+        }
+
+        // Actualizar el orden de los productos y capítulos
+        actualizarOrdenProductos();
     } else {
         console.log("No se puede soltar la fila sobre sí misma.");
     }
-
-    actualizarOrdenProductos();
 }
 
 //Para agregar capítulos
@@ -376,7 +396,7 @@ $('#saveCapituloBtn').on('click', function() {
     }
 
     const nuevoCapitulo = {
-        id: null,
+        capitulo_id: generarIdCapitulo(),
         titulo: tituloCapitulo,
         tipo: 'capitulo',
         orden: productosArrastrados.length + 1,
@@ -401,7 +421,13 @@ function actualizarListaProductos() {
         console.log('Producto:', producto);
 
         const tr = $('<tr></tr>');
-        tr.attr('data-producto-id', producto.id);
+        if (producto.tipo != 'linea') {
+
+            tr.attr('data-capitulo-id', producto.capitulo_id || '');
+        }else{
+            tr.attr('data-producto-id', producto.id || '');
+        }
+
         tr.addClass('item');
         tr.attr('draggable', true);
 
@@ -417,7 +443,6 @@ function actualizarListaProductos() {
                 console.log(producto);
                 producto.descripcion = $(this).val();
                 document.getElementById("lista_productos").value = JSON.stringify(productosArrastrados);
-
             });
             tdDescripcion.append(descripcionInput);
 
@@ -428,10 +453,18 @@ function actualizarListaProductos() {
             eliminarBtn.html('<i class="fa-solid fa-trash"></i>');
             eliminarBtn.on('click', function() {
                 tr.remove();
-                productosArrastrados = productosArrastrados.filter(p => p !== producto);
+                productosArrastrados = productosArrastrados.filter(p => p.capitulo_id !== producto.capitulo_id);
                 actualizarOrdenProductos();
             });
             tdAcciones.append(eliminarBtn);
+
+            const idInput = $('<input>');
+            idInput.attr({
+                type: 'hidden',
+                class: 'id-capitulo',
+                name: `capitulo_id_${index + 1}`,
+                value: producto.capitulo_id
+            });
 
             const ordenInput = $('<input>');
             ordenInput.attr({
@@ -449,8 +482,9 @@ function actualizarListaProductos() {
                 value: producto.tipo
             });
 
-            tr.append(tdTitulo, tdDescripcion, tdAcciones, ordenInput, tipoInput);
+            tr.append(tdTitulo, tdDescripcion, tdAcciones, idInput, ordenInput, tipoInput);
         } else {
+            // Aquí va el código para productos (no capítulos)
             const tdNombre = $('<td class="align-middle"></td>');
             tdNombre.text(producto.nombre);
 
@@ -514,7 +548,7 @@ function actualizarListaProductos() {
             eliminarBtn.html('<i class="fa-solid fa-trash"></i>');
             eliminarBtn.on('click', function() {
                 tr.remove();
-                productosArrastrados = productosArrastrados.filter(p => p !== producto);
+                productosArrastrados = productosArrastrados.filter(p => p.id !== producto.id);
                 actualizarOrdenProductos();
                 actualizarPrecioTotal();
             });
@@ -559,31 +593,35 @@ function actualizarListaProductos() {
 
 function actualizarOrdenProductos() {
     $('#productos-table-body tr').each(function(index) {
+        // Leer los valores de cada fila
         const productoId = $(this).data('producto-id') || null;
+        const capituloId = $(this).data('capitulo-id') || $(this).find('.id-capitulo').val() || null;
         const productoTipo = $(this).find('.tipo-producto').val();
 
-        //console.log(`Procesando producto de tipo: ${productoTipo}, ID: ${productoId}`);
+        console.log(`Procesando fila con: productoId=${productoId}, capituloId=${capituloId}, tipo=${productoTipo}`);
 
-        const producto = productosArrastrados.find(p => p.id === productoId && p.tipo === productoTipo);
+        let producto = null;
 
-        if (producto) {
-            producto.orden = index + 1;
-            $(this).find('.orden-producto').val(producto.orden);
-            //console.log(`Orden actualizado para ${productoTipo} con ID ${productoId}: ${producto.orden}`);
-        } else if (productoTipo === 'capitulo') {
-            const capitulo = productosArrastrados.find(p => p.tipo === 'capitulo' && p.id === null);
-            if (capitulo) {
-                capitulo.orden = index + 1;
-                $(this).find('.orden-producto').val(capitulo.orden);
-                //console.log(`Orden actualizado para capitulo: ${capitulo.titulo}, nuevo orden: ${capitulo.orden}`);
-            }
+        // Actualizar el producto o capítulo según su tipo
+        if (productoTipo === 'capitulo') {
+            producto = productosArrastrados.find(p => p.tipo === 'capitulo' && p.capitulo_id == capituloId);
         } else {
-            console.log(`No se encontró producto o capítulo en la lista con tipo: ${productoTipo} y ID: ${productoId}`);
+            producto = productosArrastrados.find(p => p.id == productoId && p.tipo === productoTipo);
+        }
+
+        // Actualizar el orden si se encontró el producto o capítulo
+        if (producto) {
+            producto.orden = index + 1;  // Actualizar el orden en el array
+            $(this).find('.orden-producto').val(producto.orden);
+        } else {
+            console.log(`No se encontró producto o capítulo en la lista con tipo: ${productoTipo}, ID: ${productoId}, capitulo_id: ${capituloId}`);
         }
     });
 
+    // Ordenar el array `productosArrastrados` por el nuevo orden
     productosArrastrados.sort((a, b) => a.orden - b.orden);
 
+    // Actualizar el valor del campo oculto
     document.getElementById("lista_productos").value = JSON.stringify(productosArrastrados);
 }
 
@@ -649,7 +687,7 @@ function agregarProducto(productoId) {
             descripcion: descripcionInput,
             cantidad: 1
         });
-        console.log("reooksfjdescrip");
+        //console.log("reooksfjdescrip");
     }
     actualizarListaProductos();
 }
@@ -702,8 +740,8 @@ document.addEventListener('DOMContentLoaded', function() {
             success: function(data) {
 
                 if (data.success) {
-                    localStorage.setItem('successMessage', data.message || 'Presupuesto creado correctamente.');
-                    window.location.href = '{{ route('presupuesto.index') }}';
+                    localStorage.setItem('successMessage', data.message || 'Proyecto presupuestado correctamente.');
+                    window.location.href = '{{ route('proyecto.index') }}';
 
                 } else {
                     Toast.fire({

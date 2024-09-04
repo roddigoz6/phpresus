@@ -11,7 +11,7 @@
         <tbody>
             @foreach($productos as $producto)
                 @if($producto->stock > 0)
-                    <tr id="producto-{{ $producto->id }}" draggable="true" ondragstart="drag(event)" data-bs-toggle="popover" data-bs-trigger="hover focus" title="{{ $producto->leyenda }}">
+                    <tr id="producto-{{ $producto->id }}" draggable="true" ondragstart="drag(event)" data-bs-toggle="popover" data-bs-trigger="hover" title="{{ $producto->leyenda }}">
                         <td class="producto-id" style="display: none;">{{ $producto->id }}</td>
                         <td class="producto-tipo" style="display: none;">{{ $producto->tipo }}</td>
                         <td class="producto-nombre">{{ $producto->nombre }}</td>

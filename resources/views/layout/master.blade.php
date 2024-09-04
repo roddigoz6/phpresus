@@ -353,7 +353,7 @@
     document.addEventListener('DOMContentLoaded', function() {
     document.addEventListener('submit', function(e) {
         if (e.target && e.target.id === 'createClientForm') {
-            e.preventDefault(); // Evitar el envío tradicional del formulario
+            e.preventDefault();
 
             const formData = new FormData(e.target);
             fetch(e.target.action, {
@@ -368,14 +368,18 @@
             .then(data => {
                 if (data.id) {
                     const postCreateModal = new bootstrap.Modal(document.getElementById('postCreateClienteModal'));
+                    const createPres = "{{route('presupuesto.create')}}";
+                    const clientIndx = "{{route('cliente.index')}}";
+                    const clienteId = data.id;
+
                     postCreateModal.show();
 
                     document.getElementById('goToPresupuestoBtn').addEventListener('click', function() {
-                        window.location.href = `/presupuesto/create?cliente_id=${data.id}`;
+                        window.location.href = `${createPres}?cliente_id=${clienteId}`;
                     });
 
                     document.getElementById('goToClientesBtn').addEventListener('click', function() {
-                        window.location.href = `/cliente`;
+                        window.location.href = `${clientIndx}`;
                     });
 
                     const crearClienteModal = bootstrap.Modal.getInstance(document.getElementById('crearClienteModal'));
@@ -443,7 +447,8 @@ $(document).ready(function() {
     $('#goToPresupuesto').on('click', function() {
         const clienteId = $('#cliente').val();
         if (clienteId) {
-            window.location.href = `/presupuesto/create?cliente_id=${clienteId}`;
+            const createPres = "{{route('presupuesto.create')}}";
+            window.location.href = `${createPres}?cliente_id=${clienteId}`;
         } else {
             const Toast = Swal.mixin({
                 toast: true,
@@ -463,6 +468,7 @@ $(document).ready(function() {
         }
     });
 });
+
 </script>
 
 @livewireScripts

@@ -7,12 +7,11 @@
 
     @if ($proyecto->estado == 'presupuestado')
     <div class="menu-item px-3">
-        <a href="#" class="menu-link px-3 aceptar-proyecto-btn" data-proyecto-id="{{ $proyecto->id }}">
+        <a href="#" class="menu-link px-3 aceptar-proyecto-btn" data-proyecto-id="{{ $proyecto->proyecto_id }}">
             <span class="menu-title">Aceptar proyecto</span>
             <span><i class="fa-solid fa-circle-check"></i></span>
         </a>
     </div>
-
     @endif
 
     <div class="menu-item px-3">

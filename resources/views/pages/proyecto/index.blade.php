@@ -175,7 +175,7 @@
                                 <td class="align-middle">
                                     <div class="card-toolbar">
                                         <button type="button" class="btn btn-sm btn-icon btn-light-primary me-n3" data-kt-menu-trigger="{default: 'click', lg: 'hover'}" data-kt-menu-placement="bottom-end"><i class="fa-solid fa-bars"></i></button>
-                                        @include('partials/menus/_acciones_proyecto')
+                                        @include('partials/menus/_acciones_proyecto', ['proyecto' => $proyecto])
                                     </div>
                                 </td>
                             </tr>
@@ -912,6 +912,28 @@
     </div>
 </div>
 
+@if (session('update_pres'))
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const Toast = Swal.mixin({
+                toast: true,
+                position: "top-end",
+                showConfirmButton: false,
+                timer: 3000,
+                timerProgressBar: true,
+                didOpen: (toast) => {
+                    toast.onmouseenter = Swal.stopTimer;
+                    toast.onmouseleave = Swal.resumeTimer;
+                }
+            });
+            Toast.fire({
+                icon: "success",
+                title: @json(session('update_pres'))
+            });
+        });
+    </script>
+@endif
+
 @push('scripts')
 <script>
 document.addEventListener('DOMContentLoaded', function() {
@@ -1042,28 +1064,30 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
+
 document.addEventListener('DOMContentLoaded', function() {
-    console.log('DOM content loaded'); // Para depuración
+    console.log('DOM content loaded');
 
-    // Manejo del clic en el botón de aceptar proyecto
     $(document).on('click', '.aceptar-proyecto-btn', function(event) {
-        event.preventDefault(); // Prevenir el comportamiento por defecto del enlace
+        event.preventDefault();
 
-        console.log('Button clicked'); // Para depuración
+        console.log('Button clicked');
 
         var proyectoId = $(this).data('proyecto-id');
+        console.log(proyectoId);
 
         $.ajax({
             url: '{{ route('proyecto.aceptar', ['id' => ':proyectoId']) }}'.replace(':proyectoId', proyectoId),
-            type: 'POST', // O usa PUT si tu ruta es PUT
+            type: 'POST',
             data: {
                 _token: $('meta[name="csrf-token"]').attr('content')
             },
             success: function(response) {
                 if (response.success) {
                     alert('Proyecto aceptado correctamente.');
-                    location.reload(); // Recargar la página o actualizar el contenido dinámicamente si es necesario
+                    location.reload();
                 } else {
+
                     alert('Hubo un problema al aceptar el proyecto.');
                 }
             },

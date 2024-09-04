@@ -13,6 +13,7 @@ class ProductoPresupuesto extends Model
     protected $fillable = [
         'producto_id',
         'presupuesto_id',
+        'capitulo_id',
         'precio',
         'cantidad',
         'orden',
