@@ -12,7 +12,7 @@
                 </div>
                 <div class="col text-end">
                     <button type="button" class="btn btn-light-primary" data-bs-toggle="modal" data-bs-target="#crearProductoModal" data-bs-toggle="popover" data-bs-trigger="hover focus" title="Crear un nuevo producto y agregar a la lista">
-                        Agregar producto <i class="fas fa-plus-circle"></i>
+                        Nuevo producto <i class="fas fa-plus-circle"></i>
                     </button>
                 </div>
             </div>
@@ -105,33 +105,38 @@
             <form action="{{ route('presupuesto.update', $presupuesto->id) }}" method="POST" class="mb-3">
                 @csrf
                 @method('PUT')
-                <div class="input-group mb-3 mt-3">
-                    <h3>Editar proyecto {{ $proyecto->proyecto_id }}, cliente {{ $presupuesto->cliente->nombre }}.</h3>
+                <div class="row">
+                    <h3>Editar proyecto {{ $proyecto->proyecto_id }}, cliente <strong id="cliente_nombre_proyecto"> {{ $presupuesto->cliente->nombre }} </strong>.</h3>
                 </div>
 
-                {{-- <div class="input-group mb-3 mt-3">
-                    <div class="" id="clienteSelectContainer">
-                        <select id="clienteEditProyect" name="cliente" class="form-select ">
-                            @foreach ($clientes as $cliente)
-                                <option value="{{ $cliente->id }}" {{ $cliente->id == $proyecto->cliente->id ? 'selected' : '' }}>
-                                    {{ $cliente->nombre }}
-                                </option>
-                            @endforeach
-                        </select>
+                <div class="row mb-3">
+                    <div class="col col-me">
+                        <div class="form-group">
+                            <div class="row">
+                                <select id="clienteSelectEdit" name="cliente" class="form-control">
+                                </select>
+                            </div>
+                        </div>
                     </div>
-                </div> --}}
 
-                <div class="col">
-                    <hr />
-                    <p class="mb-0">Datos del cliente</p>
+                    <div class="col col-auto">
+                        <button type="button" class="btn btn-light-primary" data-bs-toggle="modal" data-bs-target="#crearClienteModalEdit" data-bs-toggle="popover" data-bs-trigger="hover focus" title="Crear nuevo cliente">
+                           Nuevo cliente <i class="fas fa-plus-circle"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="row form-group">
+
                     <div class="col form-group">
-                        Cliente: <strong>{{ $presupuesto->cliente->nombre }} {{ $presupuesto->cliente->apellido }}</strong>
+                        <p class="mb-0">Datos del cliente</p>
+                        Cliente: <strong id="cliente_nombre">{{ $presupuesto->cliente->nombre }} {{ $presupuesto->cliente->apellido }}</strong>
                         <input type="hidden" value="{{ $presupuesto->cliente->id }}" id="cliente_id" name="cliente_id">
                     </div>
 
                     <div class="col form-group">
-                        Contacto: <strong>{{ $presupuesto->cliente->contacto ?: 'No registrado' }}</strong><br>
-                        Forma de pago de cliente: <strong>{{ $presupuesto->cliente->pago ?: 'No registrado' }}</strong>
+                        Contacto: <strong id="cliente_contacto">{{ $presupuesto->cliente->contacto ?: 'No registrado' }}</strong><br>
+                        Forma de pago de cliente: <strong id="cliente_pago">{{ $presupuesto->cliente->pago ?: 'No registrado' }}</strong>
                     </div>
                 </div>
 
@@ -240,6 +245,7 @@
     </div>
 </div>
 
+<!-- Capítulos -->
 <div class="modal fade" id="capituloModal" tabindex="-1" aria-labelledby="capituloModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
@@ -261,93 +267,241 @@
     </div>
 </div>
 
+<!--Modal para agregar clientes-->
+<div class="modal fade" id="crearClienteModalEdit" tabindex="1" aria-labelledby="crearClienteModalEditLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-body">
+                <form id="createClientFormEdit" action="{{ route('cliente.store') }}" method="POST">
+                    @csrf
+                    <input type="hidden" name="context" value="form">
+                    <div class="row">
+                        <div class="col">
+                            <div class="header-modal">
+                                <h4>Datos del cliente</h4>
+                                <input type="hidden" name="context" value="form">
+                            </div>
+                            <div class="row">
+                                <div class="col">
+                                    <div class="">
+                                        <label for="nombre">Nombre</label> <strong class="required"></strong>
+                                        <input type="text" class="form-control" id="nombre" name="nombre" required>
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <div class="">
+                                        <label for="apellido">Apellido</label> <strong class="required"></strong>
+                                        <input type="text" class="form-control" id="apellido" name="apellido" required>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col">
+                                    <div class="">
+                                        <label for="dni">DNI</label> <strong class="required"></strong>
+                                        <input type="text" class="form-control" id="dni" name="dni" required>
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <div>
+                                        <label for="movil">Móvil</label> <strong class="required"></strong>
+                                        <input type="text" class="form-control" id="movil" name="movil" required>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="">
+                                <label for="email">Correo Electrónico</label>
+                                <input type="email" class="form-control" id="email" name="email">
+                            </div>
+                            <div class="">
+                                <label for="direccion">Direccion</label> <strong class="required"></strong>
+                                <input type="text" class="form-control" id="direccion" name="direccion" required>
+                            </div>
+                            <div class="">
+                                <label for="cp">Código postal</label> <strong class="required"></strong>
+                                <input type="text" class="form-control" id="cp" name="cp" required>
+                            </div>
+                            <div class="row">
+                                <div class="col">
+                                    <div class="">
+                                        <label for="poblacion">Población</label> <strong class="required"></strong>
+                                        <input type="text" class="form-control" id="poblacion" name="poblacion" required>
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <div class="">
+                                        <label for="provincia">Provincia</label> <strong class="required"></strong>
+                                        <input type="text" class="form-control" id="provincia" name="provincia" required>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col">
+                                    <div class="">
+                                        <label for="fax">Fax</label>
+                                        <input type="text" class="form-control" id="fax" name="fax">
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <div>
+                                        <label for="cargo">Cargo</label>
+                                        <input type="text" class="form-control" id="cargo" name="cargo">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col">
+                            <div class="header-modal">
+                                <h4>Datos de envío</h4>
+                            </div>
+                            <div class="">
+                                <label for="contacto">Contacto</label>
+                                <input type="text" class="form-control" id="contacto" name="contacto">
+                            </div>
+                            <div class="">
+                                <label for="titular_nom">Nombre de titular</label>
+                                <input type="text" class="form-control" id="titular_nom" name="titular_nom">
+                            </div>
+                            <div class="">
+                                <label for="titular_ape">Apellido de titular</label>
+                                <input type="text" class="form-control" id="titular_ape" name="titular_ape">
+                            </div>
+                            <div class="">
+                                <label for="direccion_envio">Dirección de envío</label>
+                                <input type="text" class="form-control" id="direccion_envio" name="direccion_envio">
+                            </div>
+                            <div class="">
+                                <label for="cp_envio">Código postal de dirección de envío</label>
+                                <input type="text" class="form-control" id="cp_envio" name="cp_envio">
+                            </div>
+                            <div class="">
+                                <label for="poblacion_envio">Población de dirección de envío</label>
+                                <input type="text" class="form-control" id="poblacion_envio" name="poblacion_envio">
+                            </div>
+                            <div class="">
+                                <label for="provincia_envio">Provincia de dirección de envío</label>
+                                <input type="text" class="form-control" id="provincia_envio" name="provincia_envio">
+                            </div>
+
+                        </div>
+                        <div class="header-modal">
+                            <h4>Pago</h4>
+                        </div>
+                        <div class="">
+                            <label for="pago">Forma de pago</label>
+                            <select class="form-select" id="pago" name="pago">
+                                <option value="Ver condiciones">Ver condiciones</option>
+                                <option value="50% inicio, 50% fin">50% inicio, 50% fin</option>
+                                <option value="50% termino de obra, resto a 90 dias">50% termino de obra, resto a 90 días</option>
+                                <option value="50% comienzo de obra, resto a convenir">50% comienzo de obra, resto a convenir</option>
+                                <option value="Certificaciones quincenales">Certificaciones quincenales</option>
+                                <option value="Como siempre">Como siempre</option>
+                                <option value="Contado termino de obra">Contado termino de obra</option>
+                                <option value="Convenir">Convenir</option>
+                                <option value="Fin de ejercicio, 15 de diciembre">Fin de ejercicio, 15 de diciembre</option>
+                                <option value="Letra de 90 dias">Letra de 90 días</option>
+                                <option value="Letra a la vista">Letra a la vista</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="mt-3">Los campos <strong class="required"></strong> son requeridos.</div>
+                    <div class="d-flex justify-content-end">
+                        <button type="submit" class="btn btn-light-primary mt-3">Guardar <i class="fas fa-check-circle"></i></button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
 @push('scripts')
 <script>
-    $(document).ready(function() {
-        console.log(productosArrastrados);
+$(document).ready(function() {
+    //console.log(productosArrastrados);
+    actualizarListaProductos();
+});
+
+let nextCapituloId = 1;
+
+function generarIdCapitulo() {
+    const maxCapituloId = productosArrastrados.reduce((maxId, producto) => {
+        if (producto.tipo === 'capitulo' && producto.capitulo_id !== null) {
+            return Math.max(maxId, producto.capitulo_id);
+        }
+        return maxId;
+    }, 0);
+
+    return maxCapituloId + 1;
+}
+
+
+let productosArrastrados = {!! json_encode($productosArrastrados) !!};
+
+function limpiarProductos() {
+    localStorage.removeItem('productosArrastrados');
+}
+
+function allowDrop(event) {
+    event.preventDefault();
+}
+
+function drag(event) {
+    event.dataTransfer.setData("text", event.target.id);
+}
+
+function drop(event) {
+    if (window.drop_function != undefined && window.drop_function === 2) {
+        //console.log("CAMBIANDO A DROP2");
+        drop2(event);
+        return;
+    }
+    //console.log("DEV: DROP-EVENT 1");
+    event.preventDefault();
+    const data = event.dataTransfer.getData("text");
+    const draggedElement = document.getElementById(data);
+    const productoId = parseInt(draggedElement.querySelector('.producto-id').textContent);
+    const productoNombre = draggedElement.querySelector('.producto-nombre').textContent;
+    const productoPrecio = parseFloat(draggedElement.querySelector('.producto-precio').textContent);
+    const productoStock = parseInt(draggedElement.querySelector('.producto-stock').textContent);
+
+    const productoExistente = productosArrastrados.find(producto => producto.id === productoId);
+    if (!productoExistente) {
+        productosArrastrados.push({
+            id: productoId,
+            nombre: productoNombre,
+            precio: productoPrecio,
+            stock: productoStock,
+            cantidad: 1,
+            orden: productosArrastrados.length + 1,
+            tipo: '',
+            titulo: '',
+            descripcion: ''
+        });
+
         actualizarListaProductos();
-    });
-
-    let nextCapituloId = 1;
-
-    function generarIdCapitulo() {
-        const maxCapituloId = productosArrastrados.reduce((maxId, producto) => {
-            if (producto.tipo === 'capitulo' && producto.capitulo_id !== null) {
-                return Math.max(maxId, producto.capitulo_id);
+    } else {
+        const Toast = Swal.mixin({
+            toast: true,
+            position: "top-end",
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+                toast.onmouseenter = Swal.stopTimer;
+                toast.onmouseleave = Swal.resumeTimer;
             }
-            return maxId;
-        }, 0);
-
-        return maxCapituloId + 1;
+        });
+        Toast.fire({
+            icon: "error",
+            title: "Ya agregaste este producto"
+        });
     }
+}
 
-
-    let productosArrastrados = {!! json_encode($productosArrastrados) !!};
-
-    function limpiarProductos() {
-        localStorage.removeItem('productosArrastrados');
-    }
-
-    function allowDrop(event) {
-        event.preventDefault();
-    }
-
-    function drag(event) {
-        event.dataTransfer.setData("text", event.target.id);
-    }
-
-    function drop(event) {
-        if (window.drop_function != undefined && window.drop_function === 2) {
-            //console.log("CAMBIANDO A DROP2");
-            drop2(event);
-            return;
-        }
-        //console.log("DEV: DROP-EVENT 1");
-        event.preventDefault();
-        const data = event.dataTransfer.getData("text");
-        const draggedElement = document.getElementById(data);
-        const productoId = parseInt(draggedElement.querySelector('.producto-id').textContent);
-        const productoNombre = draggedElement.querySelector('.producto-nombre').textContent;
-        const productoPrecio = parseFloat(draggedElement.querySelector('.producto-precio').textContent);
-        const productoStock = parseInt(draggedElement.querySelector('.producto-stock').textContent);
-
-        const productoExistente = productosArrastrados.find(producto => producto.id === productoId);
-        if (!productoExistente) {
-            productosArrastrados.push({
-                id: productoId,
-                nombre: productoNombre,
-                precio: productoPrecio,
-                stock: productoStock,
-                cantidad: 1,
-
-                tipo: '',
-                titulo: '',
-                descripcion: ''
-            });
-
-            actualizarListaProductos();
-        } else {
-            const Toast = Swal.mixin({
-                toast: true,
-                position: "top-end",
-                showConfirmButton: false,
-                timer: 3000,
-                timerProgressBar: true,
-                didOpen: (toast) => {
-                    toast.onmouseenter = Swal.stopTimer;
-                    toast.onmouseleave = Swal.resumeTimer;
-                }
-            });
-            Toast.fire({
-                icon: "error",
-                title: "Ya agregaste este producto"
-            });
-        }
-    }
-
-    function drop2(event) {
+function drop2(event) {
     window.drop_function = 1;
-    console.log("DEV: DROP-EVENT 2");
+    //console.log("DEV: DROP-EVENT 2");
     event.preventDefault();
 
     const x = event.clientX;
@@ -360,8 +514,8 @@
         const posicionOriginal = window.fila_original.index();
         const posicionDestino = fila_destino.index();
 
-        console.log('Posición original:', posicionOriginal);
-        console.log('Posición destino:', posicionDestino);
+        //console.log('Posición original:', posicionOriginal);
+        //console.log('Posición destino:', posicionDestino);
 
         if (posicionOriginal < posicionDestino) {
             fila_destino.after(window.fila_original);
@@ -369,37 +523,29 @@
             fila_destino.before(window.fila_original);
         }
 
-        const productoId = window.fila_original.data('producto-id') || null;
-        const capituloId = window.fila_original.data('capitulo-id') || window.fila_original.find('.id-capitulo').val() || null;
-        const productoTipo = window.fila_original.find('.tipo-producto').val();
+        //console.log('Elemento debajo del ratón:', $(elementoDebajoDelRaton));
+        //console.log('Fila destino:', fila_destino);
 
-        // Clonar el objeto para evitar referencias incorrectas
-        let producto = null;
-
-        if (productoTipo === 'capitulo') {
-            producto = {...productosArrastrados.find(p => p.tipo === 'capitulo' && p.capitulo_id == capituloId)};
-        } else {
-            producto = {...productosArrastrados.find(p => p.id == productoId && p.tipo === productoTipo)};
-        }
-
-        if (producto) {
-            // Remover el producto del array
-            productosArrastrados.splice(posicionOriginal, 1);
-
-            // Ajustar la nueva posición
-            const nuevaPosicionDestino = posicionDestino > posicionOriginal ? posicionDestino - 1 : posicionDestino;
-
-            // Insertar el producto en la nueva posición
-            productosArrastrados.splice(nuevaPosicionDestino, 0, producto);
-        } else {
-            console.log(`No se encontró el producto o capítulo con ID: ${productoId}, capitulo_id: ${capituloId}`);
-        }
-
-        // Actualizar el orden de los productos y capítulos
-        actualizarOrdenProductos();
     } else {
-        console.log("No se puede soltar la fila sobre sí misma.");
+        const Toast = Swal.mixin({
+            toast: true,
+            position: "top-end",
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+                toast.onmouseenter = Swal.stopTimer;
+                toast.onmouseleave = Swal.resumeTimer;
+            }
+        });
+        Toast.fire({
+            icon: "warning",
+            title: "No se puede soltar la fila sobre sí misma."
+        });
     }
+
+    actualizarOrdenProductos();
+    actualizarListaProductos();
 }
 
 //Para agregar capítulos
@@ -411,7 +557,21 @@ $('#saveCapituloBtn').on('click', function() {
     const tituloCapitulo = $('#capituloTitulo').val().trim();
 
     if (tituloCapitulo === '') {
-        alert('El título del capítulo no puede estar vacío.');
+        const Toast = Swal.mixin({
+            toast: true,
+            position: "top-end",
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+                toast.onmouseenter = Swal.stopTimer;
+                toast.onmouseleave = Swal.resumeTimer;
+            }
+        });
+        Toast.fire({
+            icon: "warning",
+            title: "El título es necesario."
+        });
         return;
     }
 
@@ -432,13 +592,12 @@ $('#saveCapituloBtn').on('click', function() {
 });
 
 function actualizarListaProductos() {
-    console.log("FUN: actualizarListaProductos");
 
     const tableBody = $('#productos-table-body');
     tableBody.empty();
 
     productosArrastrados.forEach((producto, index) => {
-        console.log('Producto:', producto);
+        //console.log('Producto:', producto);
 
         const tr = $('<tr></tr>');
         if (producto.tipo != 'linea') {
@@ -458,8 +617,8 @@ function actualizarListaProductos() {
             descripcionInput.attr('name', `descripcion_capitulo_${index + 1}`);
             descripcionInput.val(producto.descripcion || '');
             descripcionInput.on('change', function() {
-                console.log("CP1", descripcionInput);
-                console.log(producto);
+                //console.log("CP1", descripcionInput);
+                //console.log(producto);
                 producto.descripcion = $(this).val();
                 document.getElementById("lista_productos").value = JSON.stringify(productosArrastrados);
             });
@@ -514,8 +673,8 @@ function actualizarListaProductos() {
             descripcionInput.val(producto.descripcion || '');
 
             descripcionInput.on('change', function() {
-                console.log("CP1", descripcionInput);
-                console.log(producto);
+                //console.log("CP1", descripcionInput);
+                //console.log(producto);
                 producto.descripcion = $(this).val();
                 document.getElementById("lista_productos").value = JSON.stringify(productosArrastrados);
             });
@@ -616,21 +775,23 @@ function actualizarOrdenProductos() {
         const capituloId = $(this).data('capitulo-id') || $(this).find('.id-capitulo').val() || null;
         const productoTipo = $(this).find('.tipo-producto').val();
 
-        console.log(`Procesando fila con: productoId=${productoId}, capituloId=${capituloId}, tipo=${productoTipo}`);
+        //console.log(`Procesando fila con: productoId=${productoId}, capituloId=${capituloId}, tipo=${productoTipo}`);
 
         let producto = null;
 
         if (productoTipo === 'capitulo') {
-            producto = productosArrastrados.find(p => p.tipo === 'capitulo' && p.capitulo_id == capituloId);
-        } else {
+            producto = productosArrastrados.find(p => p.capitulo_id == capituloId && p.tipo === 'capitulo');
+        } else if (productoId !== null) {
             producto = productosArrastrados.find(p => p.id == productoId && p.tipo === productoTipo);
+        } else {
+            producto = productosArrastrados.find(p => p.capitulo_id == capituloId && p.tipo === productoTipo);
         }
 
         if (producto) {
-            producto.orden = index + 1;
-            $(this).find('.orden-producto').val(producto.orden);
+            producto.orden = index + 1;  // Actualiza el orden en el objeto
+            $(this).find('.orden-producto').val(producto.orden);  // Reflejar en el DOM
         } else {
-            console.log(`No se encontró producto o capítulo en la lista con tipo: ${productoTipo}, ID: ${productoId}, capitulo_id: ${capituloId}`);
+            //console.log(`No se encontró producto o capítulo en la lista con tipo: ${productoTipo}, ID: ${productoId}, capitulo_id: ${capituloId}`);
         }
     });
 
@@ -640,6 +801,7 @@ function actualizarOrdenProductos() {
     // Actualizar el campo oculto con el nuevo orden
     document.getElementById("lista_productos").value = JSON.stringify(productosArrastrados);
 }
+
 
 // Función para actualizar el precio total
 function actualizarPrecioTotal() {
@@ -703,76 +865,192 @@ function agregarProducto(productoId) {
             descripcion: descripcionInput,
             cantidad: 1
         });
-        //console.log("reooksfjdescrip");
     }
     actualizarListaProductos();
 }
 
 $(document).ready(function() {
-    // Prevenir comportamiento por defecto del formulario
-    $('#search-form').on('submit', function(e) {
-        e.preventDefault();
-        cargarProductos();
-    });
-
-    // Manejar clic en botón de búsqueda
-    $('#search-button').on('click', function() {
-        cargarProductos();
-    });
-
-    // Manejar clic en botón de ordenar por nombre
-    $('#orderButton').on('click', function() {
-        const currentOrder = $('#order-input').val();
-        const newOrder = currentOrder === 'asc' ? 'desc' : 'asc';
-        $('#order-input').val(newOrder);
-        cargarProductos();
-    });
-
-    // Manejar clic en botón de ordenar por precio
-    $('#precioButton').on('click', function() {
-        const currentPrecioOrder = $('#precio_order-input').val();
-        const newPrecioOrder = currentPrecioOrder === 'asc' ? 'desc' : 'asc';
-        $('#precio_order-input').val(newPrecioOrder);
-        cargarProductos();
-    });
-
-    // Función para cargar productos al cargar la página
-    cargarProductos();
-
-    // Función para cargar productos al hacer clic en la paginación
-    $('#productos-container').on('click', '.pagination a', function(e) {
-        e.preventDefault();
-        const url = $(this).attr('href');
-        cargarProductos({
-            url: url
-        });
-    });
-
-    // Función para cargar productos utilizando AJAX
     function cargarProductos(params = {}) {
         const url = params.url || '{{ route('presupuesto.getProductos') }}';
         const data = {
             search: $('#search-input').val(),
             order: $('#order-input').val(),
             precio_order: $('#precio_order-input').val(),
+            sort_by: $('#sort_by-input').val(),
             _token: '{{ csrf_token() }}'
         };
 
-        // Realizar solicitud AJAX para cargar productos
         $.ajax({
             url: url,
             method: 'GET',
             data: data,
             success: function(response) {
-                $('#productos-container').html(response.html);
-                $('#pagination-container').html(response.pagination);
+                $('#productos-content').html(response.html);
             },
             error: function(xhr, status, error) {
-                console.log('Error al cargar los productos: ', error);
-                console.log(xhr.responseText);
+                alert('Error al cargar los productos.');
+                console.error(error);
             }
         });
     }
+
+    $('#search-form').on('submit', function(e) {
+        e.preventDefault();
+        cargarProductos();
+    });
+
+    $('#search-button').on('click', function() {
+        cargarProductos();
+    });
+
+    $('#orderButton').on('click', function() {
+        const currentOrder = $('#order-input').val();
+        const newOrder = currentOrder === 'asc' ? 'desc' : 'asc';
+        $('#order-input').val(newOrder);
+        $('#sort_by-input').val('nombre');
+        cargarProductos();
+    });
+
+    $('#precioButton').on('click', function() {
+        const currentPrecioOrder = $('#precio_order-input').val();
+        const newPrecioOrder = currentPrecioOrder === 'asc' ? 'desc' : 'asc';
+        $('#precio_order-input').val(newPrecioOrder);
+        $('#sort_by-input').val('precio');
+        cargarProductos();
+    });
+
+    $('#productos-container').on('click', '.pagination a', function (e) {
+        e.preventDefault();
+        const url = $(this).attr('href');
+        cargarProductos({ url: url });
+    });
+
+    cargarProductos();
+
+    $(document).on('click', '.pagination a', function(event) {
+        event.preventDefault();
+
+        const pageUrl = $(this).attr('href');
+        cargarProductos({ url: pageUrl });
+    });
+});
+
+$(document).ready(function() {
+    const Toast = Swal.mixin({
+        toast: true,
+        position: "top-end",
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true,
+        didOpen: (toast) => {
+            toast.onmouseenter = Swal.stopTimer;
+            toast.onmouseleave = Swal.resumeTimer;
+        }
+    });
+
+    // Datos del cliente original
+    const originalCliente = {
+        id: $('#cliente_id').val(),
+        nombre: $('#cliente_nombre').text(),
+        contacto: $('#cliente_contacto').text(),
+        pago: $('#cliente_pago').text()
+    };
+
+    $('#createClientFormEdit').submit(function(e) {
+        e.preventDefault();
+
+        let formData = $(this).serialize();
+
+        $.ajax({
+            type: 'POST',
+            url: $(this).attr('action'),
+            data: formData,
+            success: function(response) {
+                $('#crearClienteModalEdit').modal('hide');
+
+                $('#cliente_id').val(response.id);
+                $('#cliente_nombre').html(`${response.nombre} ${response.apellido}`);
+                $('#cliente_contacto').html(response.contacto || 'No registrado');
+                $('#cliente_pago').html(response.pago || 'No registrado');
+                $('#cliente_nombre_proyecto').html(response.nombre);
+
+                Toast.fire({
+                    icon: "success",
+                    title: "Cliente creado exitosamente.",
+                    timer: 3000
+                });
+            },
+            error: function(xhr, status, error) {
+                console.error(error);
+                Toast.fire({
+                    icon: "error",
+                    title: "Error al crear el cliente. Inténtalo de nuevo.",
+                    timer: 4000
+                });
+            }
+        });
+    });
+
+    function initializeSelect2Edit() {
+        $('#clienteSelectEdit').select2({
+            placeholder: 'Seleccionar cliente',
+            allowClear: true,
+            width: '100%',
+            language: {
+                noResults: function() {
+                    return 'No se encontraron clientes con ese nombre';
+                }
+            }
+        }).on('change', function() {
+            const clienteId = $(this).val();
+
+            if (clienteId && clienteId !== originalCliente.id) { // Verificar si el cliente ha cambiado
+                $.ajax({
+                    url: '{{ route("clientes.data") }}',
+                    method: 'GET',
+                    success: function(data) {
+                        // Encontrar el cliente seleccionado
+                        const cliente = data.find(c => c.id == clienteId);
+
+                        if (cliente) {
+                            $('#cliente_id').val(cliente.id);
+                            $('#cliente_nombre').html(`${cliente.text}`);
+                            $('#cliente_contacto').html(cliente.contacto || 'No registrado');
+                            $('#cliente_pago').html(cliente.pago || 'No registrado');
+                            $('#cliente_nombre_proyecto').html(cliente.text);
+                        }
+                    },
+                    error: function(error) {
+                        console.error('Error al obtener los detalles del cliente:', error);
+                    }
+                });
+            } else {
+                // Restablecer los datos al cliente original si no se selecciona uno nuevo
+                $('#cliente_id').val(originalCliente.id);
+                $('#cliente_nombre').html(originalCliente.nombre);
+                $('#cliente_contacto').html(originalCliente.contacto);
+                $('#cliente_pago').html(originalCliente.pago);
+                $('#cliente_nombre_proyecto').html(originalCliente.nombre);
+            }
+        });
+    }
+
+    initializeSelect2Edit();
+
+    $.ajax({
+        url: '{{ route("clientes.data") }}',
+        method: 'GET',
+        success: function(data) {
+            $('#clienteSelectEdit').empty().append(
+                $.map(data, function(cliente) {
+                    return new Option(cliente.text, cliente.id, false, false);
+                })
+            ).val('{{ $presupuesto->cliente->id }}').trigger('change'); // Seleccionar cliente actual
+        },
+        error: function(error) {
+            console.error('Error al cargar los clientes:', error);
+        }
+    });
 });
 
 </script>

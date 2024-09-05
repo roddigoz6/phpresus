@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
 use App\Mail\Saludo;
-use App\Mail\PresupuestoEnviado;
+//use App\Mail\PresupuestoEnviado;
 use App\Models\ProductoPresupuesto;
 use App\Models\Presupuesto;
 use App\Models\Proyecto;
@@ -226,24 +226,31 @@ class PresupuestoController extends Controller
      */
     public function update(Request $request, Presupuesto $presupuesto)
     {
-        // Validar los datos de entrada
         $validatedData = $request->validate([
             'cliente_id' => 'required|exists:tclientes,id',
             'precio_total' => 'required|numeric|min:0',
             'lista_productos' => 'required|json',
+            'serie_ref' => 'string|max:255|nullable',
+            'num_ref' => 'string|max:255|nullable',
+            'pago' => 'string|nullable'
         ]);
 
-        // Actualizar los datos del presupuesto
         $presupuesto->update([
             'cliente_id' => $validatedData['cliente_id'],
             'precio_total' => $validatedData['precio_total'],
         ]);
 
-        // Eliminar los productos antiguos asociados con el presupuesto
+        $presupuesto->proyecto->update([
+            'cliente_id' => $validatedData['cliente_id'],
+            'serie_ref' => $validatedData['serie_ref'],
+            'num_ref' => $validatedData['num_ref'],
+            'pago' => $validatedData['pago']
+        ]);
+
         $presupuesto->productoPresupuestos()->delete();
 
-        // Decodificar la lista de productos del JSON
         $productos = json_decode($validatedData['lista_productos'], true);
+
         foreach ($productos as $producto) {
             $presupuestoProducto = new ProductoPresupuesto();
             $presupuestoProducto->presupuesto_id = $presupuesto->id;
@@ -251,9 +258,10 @@ class PresupuestoController extends Controller
             $presupuestoProducto->capitulo_id = $producto['capitulo_id'] ?? null;
             $presupuestoProducto->cantidad = $producto['cantidad'] ?? null;
             $presupuestoProducto->precio = $producto['precio'] ?? null;
-            $presupuestoProducto->orden = $producto['orden'];
+            $presupuestoProducto->orden = $producto['orden'] ?? null;
             $presupuestoProducto->titulo = $producto['titulo'] ?? null;
             $presupuestoProducto->descripcion = $producto['descripcion'] ?? null;
+            $presupuestoProducto->tipo = $producto['tipo'];
             $presupuestoProducto->save();
 
             if (isset($presupuestoProducto->producto_id)) {
@@ -265,7 +273,7 @@ class PresupuestoController extends Controller
                 }
             }
         }
-//dd($productos);
+
         return redirect()->route('proyecto.index')->with('update_pres', 'Proyecto actualizado.')->with('clear_storage', true);
     }
 

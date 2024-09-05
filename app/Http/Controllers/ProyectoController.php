@@ -1,12 +1,21 @@
 <?php
 
 namespace App\Http\Controllers;
+use App\Http\Controllers\Controller;
 
 use Carbon\Carbon;
 use App\Models\Cliente;
+use App\Mail\Saludo;
+use App\Mail\ProyectoEnviado;
 use App\Models\Proyecto;
 use App\Models\Presupuesto;
 use App\Models\Visita;
+
+use Dompdf\Dompdf;
+use Dompdf\Options;
+
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Http\Request;
 
 class ProyectoController extends Controller
@@ -21,6 +30,7 @@ class ProyectoController extends Controller
 
         // Consulta base para proyectos activos
         $query = Proyecto::where('eliminado', false)
+                    ->where('cerrado', false)
                     ->with('cliente');
 
         if ($search) {
@@ -35,21 +45,25 @@ class ProyectoController extends Controller
         // Proyectos por estado
         $proyectosPresupuestado = Proyecto::where('eliminado', false)
                                         ->where('estado', 'presupuestado')
+                                        ->where('cerrado', false)
                                         ->with('cliente')
                                         ->paginate(15);
 
         $proyectosPresupuestoAceptado = Proyecto::where('eliminado', false)
                                                 ->where('estado', 'presupuesto_aceptado')
+                                                ->where('cerrado', false)
                                                 ->with('cliente')
                                                 ->paginate(15);
 
         $proyectosFacturadoPendienteCobro = Proyecto::where('eliminado', false)
                                                     ->where('estado', 'facturado_pendiente_cobro')
+                                                    ->where('cerrado', false)
                                                     ->with('cliente')
                                                     ->paginate(15);
 
         $proyectosFacturaCobrada = Proyecto::where('eliminado', false)
                                             ->where('estado', 'factura_cobrada')
+                                            ->where('cerrado', false)
                                             ->with('cliente')
                                             ->paginate(15);
 
@@ -103,9 +117,20 @@ class ProyectoController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Proyecto $proyecto)
+    public function show($id)
     {
-        //
+        $proyecto = Proyecto::findOrFail($id);
+        $cliente = $proyecto->cliente;
+        $presupuesto = $proyecto->presupuesto;
+        if ($presupuesto) {
+            $productoPresupuestos = $presupuesto->productoPresupuestos->sortBy('orden');
+        } else {
+            $productoPresupuestos = collect();
+        }
+
+        //dd($productoPresupuestos);
+
+        return view('pages/proyecto.show', compact('proyecto', 'cliente', 'productoPresupuestos'));
     }
 
     /**
@@ -160,6 +185,85 @@ class ProyectoController extends Controller
 
         } catch (\Exception $e) {
             return response()->json(['success' => false, 'message' => 'Hubo un problema al aceptar el presupuesto: ' . $e->getMessage()], 500);
+        }
+    }
+
+    public function cerrar(Request $request, $id)
+    {
+        // Obtén el proyecto por ID
+        $proyecto = Proyecto::find($id);
+
+        if (!$proyecto) {
+            return response()->json(['success' => false, 'message' => 'Proyecto no encontrado.'], 404);
+        }
+
+        try {
+
+            $proyecto->cerrado = true;
+            $proyecto->save();
+
+            return response()->json(['success' => true, 'message' => 'El proyecto se ha cerrado.']);
+
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => 'Hubo un problema al cerrar el proyecto: ' . $e->getMessage()], 500);
+        }
+    }
+
+    public function download(Proyecto $proyecto, $sendByEmail = false)
+    {
+        // Obtener datos del presupuesto
+        $cliente = $proyecto->cliente;
+        $presupuesto = $proyecto->presupuesto;
+        $productos_print = $presupuesto->productoPresupuestos()
+            ->orderBy('orden')
+            ->get();
+
+        $options = new Options();
+        $options->set('isHtml5ParserEnabled', true);
+        $options->set('isRemoteEnabled', true);
+
+        $dompdf = new Dompdf($options);
+
+        $html = view('pages/proyecto.show', compact('id', 'productos_print'))->render();
+
+        $dompdf->loadHtml($html);
+        $dompdf->setPaper('A4', 'portrait');
+        $dompdf->render();
+
+        $output = $dompdf->output();
+        $pdfName = "proyecto_{$cliente->nombre}_{$proyecto->proyecto_id}.pdf";
+        $pdfPath = "public/proyectos/{$pdfName}";
+
+        // Guarda el PDF en el servidor
+        Storage::put($pdfPath, $output);
+
+        if ($sendByEmail) {
+            return $pdfPath; // Devuelve la ruta del PDF
+        } else {
+            // Envía el PDF al navegador para descarga
+            return response()->stream(function () use ($output) {
+                echo $output;
+            }, 200, [
+                'Content-Type' => 'application/pdf',
+                'Content-Disposition' => "attachment; filename=\"{$pdfName}\"",
+            ]);
+        }
+    }
+
+    public function sendMail($id)
+    {
+        $proyecto = Proyecto::findOrFail($id);
+
+        $pdfPath = $this->download($proyecto, true);
+        $clienteEmail = $proyecto->cliente->email;
+
+        try {
+            // Enviar correo electrónico con el PDF adjunto
+            Mail::to($clienteEmail)->send(new ProyectoEnviado($proyecto, Storage::path($pdfPath)));
+            // Log the CSRF token from the session
+            return response()->json(['success' => true]);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Error al enviar el correo electrónico'], 500);
         }
     }
 

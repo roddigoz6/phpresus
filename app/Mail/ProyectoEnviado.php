@@ -1,18 +1,17 @@
 <?php
 namespace App\Mail;
 
-use App\Models\Presupuesto;
+use App\Models\Proyecto;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
-class PresupuestoEnviado extends Mailable
+class ProyectoEnviado extends Mailable
 {
     use Queueable, SerializesModels;
-    public $presupuesto;
+    public $proyecto;
     public $pdfPath;
 
     /**
@@ -20,18 +19,18 @@ class PresupuestoEnviado extends Mailable
      *
      * @return void
      */
-    public function __construct(Presupuesto $presupuesto, $pdfPath)
+    public function __construct(Proyecto $proyecto, $pdfPath)
     {
-        $this->presupuesto = $presupuesto;
+        $this->proyecto = $proyecto;
         $this->pdfPath = $pdfPath;
     }
 
     public function build()
     {
-        return $this->subject('Adjunto de presupuesto.')
+        return $this->subject('Nuevo Proyecto.')
         ->view('mails.saludo')
         ->attach($this->pdfPath, [
-            'as' => 'presupuesto_' . $this->presupuesto->cliente->nombre . '.pdf',
+            'as' => 'proyecto_' . $this->proyecto->cliente->nombre . '.pdf',
             'mime' => 'application/pdf',
         ]);
     }
@@ -43,7 +42,7 @@ class PresupuestoEnviado extends Mailable
     public function envelope()
     {
         return new Envelope(
-            subject: 'Presupuesto Enviado',
+            subject: 'Proyecto Enviado',
         );
     }
 

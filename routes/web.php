@@ -41,23 +41,35 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::get('/presupuesto/create/getProductos', [PresupuestoController::class, 'getProductos'])->name('presupuesto.getProductos');
 
-    Route::get('/presupuesto/{presupuesto}/download', [PresupuestoController::class, 'download'])->name('presupuesto.download');
-    Route::post('/presupuesto/send-mail/{presupuestoId}', [PresupuestoController::class, 'sendMail'])->name('presupuesto.sendMail');
-
     Route::get('/clientes/data', [ClienteController::class, 'getClientesData'])->name('clientes.data');
 
     Route::get('/productos/bajo-stock', [DashboardController::class, 'getProductosBajoStock'])->name('productos.bajo.stock');
 
     Route::get('/user/{id}/getUltimaModif', [UserController::class, 'getUltimaModif'])->name('user.getUltimaModif');
 
+    Route::get('/proyecto/{id}', [ProyectoController::class, 'show'])
+        ->where('id', '.*')
+        ->name('proyecto.show');
+
+    Route::get('/proyecto/{id}/download', [ProyectoController::class, 'download'])
+        ->where('id', '.*')
+        ->name('proyecto.download');
+
+    Route::post('/proyecto/send-mail/{id}', [ProyectoController::class, 'sendMail'])
+        ->where('id', '.*')
+        ->name('proyecto.sendMail');
+
     Route::delete('/proyecto/{id}', [ProyectoController::class, 'destroy'])
         ->where('id', '.*')
         ->name('proyecto.destroy');
 
-    Route::post('/proyecto/{id}', [ProyectoController::class, 'aceptar'])
+    Route::post('/proyecto/{id}/aceptar', [ProyectoController::class, 'aceptar'])
         ->where('id', '.*')
         ->name('proyecto.aceptar');
 
+    Route::post('/proyecto/{id}/cerrar', [ProyectoController::class, 'cerrar'])
+        ->where('id', '.*')
+        ->name('proyecto.cerrar');
 });
 
 Route::get('/error', function () {

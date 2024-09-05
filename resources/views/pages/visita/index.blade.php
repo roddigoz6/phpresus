@@ -391,7 +391,7 @@
                     <tbody>
                         @if ($visitasBaja->isEmpty())
                             <tr>
-                                <td colspan="9" class="text-center">No hay visitas en media prioridad.</td>
+                                <td colspan="9" class="text-center">No hay visitas en baja prioridad.</td>
                             </tr>
                         @else
                             @foreach ($visitasBaja as $visita)
@@ -498,7 +498,7 @@
                     <tbody>
                         @if ($visitasBaja->isEmpty())
                             <tr>
-                                <td colspan="9" class="text-center">No hay visitas en media prioridad.</td>
+                                <td colspan="9" class="text-center">Historial de visitas vacío.</td>
                             </tr>
                         @else
                             @foreach ($visitasAntiguas as $visita)

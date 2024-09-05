@@ -74,14 +74,14 @@
                                 @switch($proyecto->estado)
                                     @case('presupuestado')
                                         <td class="align-middle">
-                                            <button class="btn btn-light-secondary"
+                                            <a href="{{route('proyecto.show', $proyecto->proyecto_id)}}" class="btn btn-light-secondary"
                                                 data-presupuesto-id="{{ $proyecto->proyecto_id }}"
                                                 data-bs-toggle="popover"
                                                 data-bs-trigger="hover"
                                                 title="Ver detalle del proyecto">
                                                 {{ $proyecto->proyecto_id }}
                                                 <span class="badge badge-info">P</span>
-                                            </button>
+                                            </a>
                                         </td>
                                         @break
 
@@ -1064,17 +1064,23 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
-
 document.addEventListener('DOMContentLoaded', function() {
-    console.log('DOM content loaded');
+    const Toast = Swal.mixin({
+        toast: true,
+        position: "top-end",
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true,
+        didOpen: (toast) => {
+            toast.onmouseenter = Swal.stopTimer;
+            toast.onmouseleave = Swal.resumeTimer;
+        }
+    });
 
     $(document).on('click', '.aceptar-proyecto-btn', function(event) {
         event.preventDefault();
 
-        console.log('Button clicked');
-
         var proyectoId = $(this).data('proyecto-id');
-        console.log(proyectoId);
 
         $.ajax({
             url: '{{ route('proyecto.aceptar', ['id' => ':proyectoId']) }}'.replace(':proyectoId', proyectoId),
@@ -1084,21 +1090,117 @@ document.addEventListener('DOMContentLoaded', function() {
             },
             success: function(response) {
                 if (response.success) {
-                    alert('Proyecto aceptado correctamente.');
                     location.reload();
+                    Toast.fire({
+                        icon: "success",
+                        title: "Proyecto con presupuesto aceptado.",
+                        timer: 3000
+                    });
                 } else {
-
-                    alert('Hubo un problema al aceptar el proyecto.');
+                    Toast.fire({
+                        icon: "error",
+                        title: "Hubo un problema al aceptar el proyecto.",
+                        timer: 3000
+                    });
                 }
             },
             error: function(xhr, status, error) {
-                console.error('Error:', error);
-                alert('Ocurrió un error inesperado.');
+                Toast.fire({
+                    icon: "error",
+                    title: error,
+                    timer: 3000
+                });
             }
         });
     });
 });
 
+document.addEventListener('DOMContentLoaded', function() {
+    const Toast = Swal.mixin({
+        toast: true,
+        position: "top-end",
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true,
+        didOpen: (toast) => {
+            toast.onmouseenter = Swal.stopTimer;
+            toast.onmouseleave = Swal.resumeTimer;
+        }
+    });
+
+    $(document).on('click', '.cerrar-proyecto-btn', function(event) {
+        event.preventDefault();
+
+        var proyectoId = $(this).data('proyecto-id');
+
+        $.ajax({
+            url: '{{ route('proyecto.cerrar', ['id' => ':proyectoId']) }}'.replace(':proyectoId', proyectoId),
+            type: 'POST',
+            data: {
+                _token: $('meta[name="csrf-token"]').attr('content')
+            },
+            success: function(response) {
+                if (response.success) {
+                    location.reload();
+                    Toast.fire({
+                        icon: "success",
+                        title: "Proyecto cerrado.",
+                        timer: 3000
+                    });
+                } else {
+                    Toast.fire({
+                        icon: "error",
+                        title: "No se pudo cerrar el proyecto.",
+                        timer: 3000
+                    });
+                }
+            },
+            error: function(xhr, status, error) {
+                Toast.fire({
+                    icon: "error",
+                    title: error,
+                    timer: 3000
+                });
+            }
+        });
+    });
+
+    $(document).on('click', '.descargar-proyecto-btn', function(event) {
+        event.preventDefault();
+
+        var proyectoId = $(this).data('proyecto-id');
+
+        $.ajax({
+            url: '{{ route('proyecto.download', ['id' => ':proyectoId']) }}'.replace(':proyectoId', proyectoId),
+            type: 'GET',
+            data: {
+                _token: $('meta[name="csrf-token"]').attr('content')
+            },
+            success: function(response) {
+                if (response.success) {
+                    Toast.fire({
+                        icon: "success",
+                        title: "Proyecto descargado.",
+                        timer: 3000
+                    });
+                } else {
+                    Toast.fire({
+                        icon: "error",
+                        title: "No se pudo descargar el proyecto.",
+                        timer: 3000
+                    });
+                }
+            },
+            error: function(xhr, status, error) {
+                Toast.fire({
+                    icon: "error",
+                    title: error,
+                    timer: 3000
+                });
+            }
+        });
+    });
+});
 </script>
 @endpush
 @include('partials/modals/_cliente-proyecto')

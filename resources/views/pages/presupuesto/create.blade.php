@@ -107,10 +107,10 @@
 
                 <h3>Crear proyecto</h3>
 
-                <div class="col">
+                <div class="row">
                     <hr />
-                    <p class="mb-0">Datos del cliente</p>
                     <div class="col form-group">
+                    <p class="mb-0">Datos del cliente</p>
 
                         Cliente: <strong>{{$cliente->nombre}} {{$cliente->apellido}}</strong>
                         <input type="hidden" value="{{$cliente->id}}" id="cliente_id" name="cliente_id">
@@ -293,7 +293,7 @@ function drop(event) {
     const productoTipo = productoTipoElem.textContent.trim();
 
     if (!productoTipo) {
-        console.error("Tipo del producto es null o vacío.");
+        //console.error("Tipo del producto es null o vacío.");
     }
 
     const productoExistente = productosArrastrados.find(producto => producto.id === productoId);
@@ -331,7 +331,7 @@ function drop(event) {
 
 function drop2(event) {
     window.drop_function = 1;
-    console.log("DEV: DROP-EVENT 2");
+    //console.log("DEV: DROP-EVENT 2");
     event.preventDefault();
 
     const x = event.clientX;
@@ -344,8 +344,8 @@ function drop2(event) {
         const posicionOriginal = window.fila_original.index();
         const posicionDestino = fila_destino.index();
 
-        console.log('Posición original:', posicionOriginal);
-        console.log('Posición destino:', posicionDestino);
+        //console.log('Posición original:', posicionOriginal);
+        //console.log('Posición destino:', posicionDestino);
 
         if (posicionOriginal < posicionDestino) {
             fila_destino.after(window.fila_original);
@@ -372,13 +372,27 @@ function drop2(event) {
 
             productosArrastrados.splice(posicionDestino, 0, producto);
         } else {
-            console.log(`No se encontró el producto o capítulo con ID: ${productoId}, capitulo_id: ${capituloId}`);
+            //console.log(`No se encontró el producto o capítulo con ID: ${productoId}, capitulo_id: ${capituloId}`);
         }
 
         // Actualizar el orden de los productos y capítulos
         actualizarOrdenProductos();
     } else {
-        console.log("No se puede soltar la fila sobre sí misma.");
+        const Toast = Swal.mixin({
+            toast: true,
+            position: "top-end",
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+                toast.onmouseenter = Swal.stopTimer;
+                toast.onmouseleave = Swal.resumeTimer;
+            }
+        });
+        Toast.fire({
+            icon: "warning",
+            title: "No se puede soltar la fila sobre sí misma."
+        });
     }
 }
 
@@ -391,7 +405,21 @@ $('#saveCapituloBtn').on('click', function() {
     const tituloCapitulo = $('#capituloTitulo').val().trim();
 
     if (tituloCapitulo === '') {
-        alert('El título del capítulo no puede estar vacío.');
+        const Toast = Swal.mixin({
+            toast: true,
+            position: "top-end",
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+                toast.onmouseenter = Swal.stopTimer;
+                toast.onmouseleave = Swal.resumeTimer;
+            }
+        });
+        Toast.fire({
+            icon: "warning",
+            title: "El título del capítulo no puede estar vacío."
+        });
         return;
     }
 
@@ -412,17 +440,16 @@ $('#saveCapituloBtn').on('click', function() {
 });
 
 function actualizarListaProductos() {
-    console.log("FUN: actualizarListaProductos");
+    //console.log("FUN: actualizarListaProductos");
 
     const tableBody = $('#productos-table-body');
     tableBody.empty();
 
     productosArrastrados.forEach((producto, index) => {
-        console.log('Producto:', producto);
+        //console.log('Producto:', producto);
 
         const tr = $('<tr></tr>');
         if (producto.tipo != 'linea') {
-
             tr.attr('data-capitulo-id', producto.capitulo_id || '');
         }else{
             tr.attr('data-producto-id', producto.id || '');
@@ -439,8 +466,8 @@ function actualizarListaProductos() {
             descripcionInput.attr('name', `descripcion_capitulo_${index + 1}`);
             descripcionInput.val(producto.descripcion || '');
             descripcionInput.on('change', function() {
-                console.log("CP1", descripcionInput);
-                console.log(producto);
+                //console.log("CP1", descripcionInput);
+                //console.log(producto);
                 producto.descripcion = $(this).val();
                 document.getElementById("lista_productos").value = JSON.stringify(productosArrastrados);
             });
@@ -495,8 +522,8 @@ function actualizarListaProductos() {
             descripcionInput.val(producto.descripcion || '');
 
             descripcionInput.on('change', function() {
-                console.log("CP1", descripcionInput);
-                console.log(producto);
+                //console.log("CP1", descripcionInput);
+                //console.log(producto);
                 producto.descripcion = $(this).val();
                 document.getElementById("lista_productos").value = JSON.stringify(productosArrastrados);
             });
@@ -593,39 +620,30 @@ function actualizarListaProductos() {
 
 function actualizarOrdenProductos() {
     $('#productos-table-body tr').each(function(index) {
-        // Leer los valores de cada fila
         const productoId = $(this).data('producto-id') || null;
         const capituloId = $(this).data('capitulo-id') || $(this).find('.id-capitulo').val() || null;
         const productoTipo = $(this).find('.tipo-producto').val();
 
-        console.log(`Procesando fila con: productoId=${productoId}, capituloId=${capituloId}, tipo=${productoTipo}`);
-
         let producto = null;
 
-        // Actualizar el producto o capítulo según su tipo
         if (productoTipo === 'capitulo') {
             producto = productosArrastrados.find(p => p.tipo === 'capitulo' && p.capitulo_id == capituloId);
         } else {
             producto = productosArrastrados.find(p => p.id == productoId && p.tipo === productoTipo);
         }
 
-        // Actualizar el orden si se encontró el producto o capítulo
         if (producto) {
-            producto.orden = index + 1;  // Actualizar el orden en el array
+            producto.orden = index + 1;
             $(this).find('.orden-producto').val(producto.orden);
         } else {
-            console.log(`No se encontró producto o capítulo en la lista con tipo: ${productoTipo}, ID: ${productoId}, capitulo_id: ${capituloId}`);
+
         }
     });
 
-    // Ordenar el array `productosArrastrados` por el nuevo orden
     productosArrastrados.sort((a, b) => a.orden - b.orden);
-
-    // Actualizar el valor del campo oculto
     document.getElementById("lista_productos").value = JSON.stringify(productosArrastrados);
 }
 
-// Función para actualizar el precio total
 function actualizarPrecioTotal() {
     let total = 0;
     productosArrastrados.forEach(producto => {
@@ -639,7 +657,6 @@ function actualizarPrecioTotal() {
     document.getElementById("lista_productos").value = JSON.stringify(productosArrastrados);
 }
 
-// Evento para limpiar la tabla
 document.getElementById("limpiarCanvas").addEventListener("click", function() {
     const tableBody = document.getElementById("productos-table-body");
     tableBody.innerHTML = "";
@@ -647,7 +664,6 @@ document.getElementById("limpiarCanvas").addEventListener("click", function() {
     actualizarPrecioTotal();
 });
 
-// Función para agregar un producto a la lista
 function agregarProducto(productoId) {
     const productoElement = document.querySelector(`#producto-${productoId}`);
 
@@ -687,7 +703,6 @@ function agregarProducto(productoId) {
             descripcion: descripcionInput,
             cantidad: 1
         });
-        //console.log("reooksfjdescrip");
     }
     actualizarListaProductos();
 }
@@ -696,25 +711,23 @@ function agregarProducto(productoId) {
 document.addEventListener('DOMContentLoaded', function() {
     const form = document.getElementById('presupuesto-form');
     const Toast = Swal.mixin({
-                    toast: true,
-                    position: 'top-end',
-                    showConfirmButton: false,
-                    timer: 3000,
-                    timerProgressBar: true,
-                    didOpen: (toast) => {
-                        toast.onmouseenter = Swal.stopTimer;
-                        toast.onmouseleave = Swal.resumeTimer;
-                    }
-                })
+        toast: true,
+        position: 'top-end',
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true,
+        didOpen: (toast) => {
+            toast.onmouseenter = Swal.stopTimer;
+            toast.onmouseleave = Swal.resumeTimer;
+        }
+    })
 
     form.addEventListener('submit', function(event) {
-        event.preventDefault(); // Evita el envío tradicional del formulario
+        event.preventDefault();
 
-        // Obtener los valores del formulario
         const listaProductosInput = document.getElementById('lista_productos');
         const listaProductos = JSON.parse(listaProductosInput.value || '[]');
 
-        // Verificar si el array de productos está vacío
         if (listaProductos.length === 0) {
 
             Toast.fire({
@@ -722,7 +735,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 title: 'Error',
                 text: 'El presupuesto debe contener al menos un producto.'
             });
-            return; // Detiene la ejecución si el array está vacío
+            return;
         }
 
         var formData = new FormData(this);
@@ -785,7 +798,6 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
-
 $(document).ready(function() {
     function cargarProductos(params = {}) {
         const url = params.url || '{{ route('presupuesto.getProductos') }}';
@@ -811,18 +823,15 @@ $(document).ready(function() {
         });
     }
 
-    // Prevenir comportamiento por defecto del formulario
     $('#search-form').on('submit', function(e) {
         e.preventDefault();
         cargarProductos();
     });
 
-    // Manejar clic en botón de búsqueda
     $('#search-button').on('click', function() {
         cargarProductos();
     });
 
-    // Manejar clic en botón de ordenar por nombre
     $('#orderButton').on('click', function() {
         const currentOrder = $('#order-input').val();
         const newOrder = currentOrder === 'asc' ? 'desc' : 'asc';
@@ -831,7 +840,6 @@ $(document).ready(function() {
         cargarProductos();
     });
 
-    // Manejar clic en botón de ordenar por precio
     $('#precioButton').on('click', function() {
         const currentPrecioOrder = $('#precio_order-input').val();
         const newPrecioOrder = currentPrecioOrder === 'asc' ? 'desc' : 'asc';
@@ -840,7 +848,6 @@ $(document).ready(function() {
         cargarProductos();
     });
 
-    // Función para cargar productos al hacer clic en la paginación
     $('#productos-container').on('click', '.pagination a', function (e) {
         e.preventDefault();
         const url = $(this).attr('href');
@@ -849,7 +856,6 @@ $(document).ready(function() {
 
     cargarProductos();
 
-    // Manejar el clic en los enlaces de paginación
     $(document).on('click', '.pagination a', function(event) {
         event.preventDefault();
 

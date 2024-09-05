@@ -57,7 +57,9 @@ class ClienteController extends Controller
         $clientesData = $clientes->map(function ($cliente) {
             return [
                 'id' => $cliente->id,
-                'text' => $cliente->nombre . ' ' . $cliente->apellido
+                'text' => $cliente->nombre . ' ' . $cliente->apellido,
+                'contacto' => $cliente->contacto,
+                'pago' => $cliente->pago,
             ];
         });
 

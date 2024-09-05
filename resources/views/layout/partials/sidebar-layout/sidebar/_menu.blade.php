@@ -20,15 +20,6 @@
                     </div>
 
                     <div class="menu-item">
-                        <a class="menu-link ? 'active' : '' }}" href="{{ route('presupuesto.index') }}">
-                            <span class="menu-bullet">
-                                <i class="fa-solid fa-clipboard-list"></i>
-                            </span>
-                            <span class="menu-title">Ver presupuestos</span>
-                        </a>
-                    </div>
-
-                    <div class="menu-item">
                         <a class="menu-link ? 'active' : '' }}" href="{{ route('visita.index') }}">
                             <span class="menu-bullet">
                                 <i class="fa-solid fa-calendar-check"></i>

@@ -3,7 +3,7 @@
 <!--begin::Head-->
 <head>
     <base href=""/>
-    <title>{{ config('app.name', 'PhPresus') }} - @yield('title', '')</title>
+    <title>{{ config('app.name', 'Kasier') }} - @yield('title', '')</title>
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta charset="utf-8"/>
     <meta name="description" content=""/>
@@ -117,7 +117,7 @@
                 <div class="form-group mt-6" id="clienteSelectContainer" style="display: none;">
                     <div class="row">
                         <div class="col me-auto">
-                            <select data-dropdown-parent="#clienteModalLabel" id="cliente" name="cliente" class="form-control">
+                            <select data-dropdown-parent="#clienteModalLabel" id="clienteSelectMaster" name="cliente" class="form-control">
                             </select>
                         </div>
                         <div class="col col-auto">
@@ -396,7 +396,7 @@
 $(document).ready(function() {
     // Inicializar select2 cuando se carga el documento
     function initializeSelect2() {
-        $('#cliente').select2({
+        $('#clienteSelectMaster').select2({
             placeholder: 'Seleccionar cliente',
             allowClear: true,
             width: '100%',
@@ -417,8 +417,8 @@ $(document).ready(function() {
             url: '{{ route("clientes.data") }}',
             method: 'GET',
             success: function(data) {
-                $('#cliente').empty();
-                $('#cliente').select2({
+                $('#clienteSelectMaster').empty();
+                $('#clienteSelectMaster').select2({
                     placeholder: 'Seleccionar cliente',
                     allowClear: true,
                     width: '100%',
@@ -432,7 +432,7 @@ $(document).ready(function() {
                         return new Option(cliente.text, cliente.id, false, false);
                     })
                 );
-                $('#cliente').val(null).trigger('change');
+                $('#clienteSelectMaster').val(null).trigger('change');
             },
             error: function(error) {
                 console.error('Error al cargar los clientes:', error);
@@ -445,7 +445,7 @@ $(document).ready(function() {
     });
 
     $('#goToPresupuesto').on('click', function() {
-        const clienteId = $('#cliente').val();
+        const clienteId = $('#clienteSelectMaster').val();
         if (clienteId) {
             const createPres = "{{route('presupuesto.create')}}";
             window.location.href = `${createPres}?cliente_id=${clienteId}`;
