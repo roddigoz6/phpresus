@@ -209,9 +209,11 @@ class ProyectoController extends Controller
         }
     }
 
-    public function download(Proyecto $proyecto, $sendByEmail = false)
+    public function download($id, $sendByEmail = false)
     {
-        // Obtener datos del presupuesto
+        $proyectoId = urldecode($id); // Decodifica el ID
+
+        $proyecto = Proyecto::where('proyecto_id', $proyectoId)->firstOrFail();
         $cliente = $proyecto->cliente;
         $presupuesto = $proyecto->presupuesto;
         $productos_print = $presupuesto->productoPresupuestos()
@@ -223,9 +225,7 @@ class ProyectoController extends Controller
         $options->set('isRemoteEnabled', true);
 
         $dompdf = new Dompdf($options);
-
         $html = view('pages/proyecto.show', compact('id', 'productos_print'))->render();
-
         $dompdf->loadHtml($html);
         $dompdf->setPaper('A4', 'portrait');
         $dompdf->render();
@@ -234,13 +234,11 @@ class ProyectoController extends Controller
         $pdfName = "proyecto_{$cliente->nombre}_{$proyecto->proyecto_id}.pdf";
         $pdfPath = "public/proyectos/{$pdfName}";
 
-        // Guarda el PDF en el servidor
         Storage::put($pdfPath, $output);
 
         if ($sendByEmail) {
-            return $pdfPath; // Devuelve la ruta del PDF
+            return $pdfPath;
         } else {
-            // Envía el PDF al navegador para descarga
             return response()->stream(function () use ($output) {
                 echo $output;
             }, 200, [
@@ -249,6 +247,7 @@ class ProyectoController extends Controller
             ]);
         }
     }
+
 
     public function sendMail($id)
     {

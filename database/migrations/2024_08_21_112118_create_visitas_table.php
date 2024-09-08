@@ -21,6 +21,7 @@ return new class extends Migration
             $table->time('hora_fin')->nullable();
             $table->string('contacto_visita')->nullable();
             $table->string('prioridad')->nullable();
+            $table->text('nota_cerrar')->nullable();
             $table->boolean('eliminado')->default(false);
             $table->timestamps();
         });

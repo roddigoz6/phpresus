@@ -82,6 +82,7 @@
                 <tr style="margin-top: 8px; margin-bottom: 8px;">
                     <th>Id</th>
                     <th>Producto</th>
+                    <th>Descripción</th>
                     <th>Cantidad</th>
                     <th>Precio Unitario</th>
                     <th>Precio Total</th>
@@ -102,7 +103,7 @@
 
                         @case('capitulo')
                             <td colspan="2"><strong>{{ $productoPresupuesto->titulo }}</strong></td>
-                            <td colspan="4">{{ $productoPresupuesto->descripcion }}</td>
+                            <td colspan="2">{{ $productoPresupuesto->descripcion }}</td>
                             @break
 
                         @default
@@ -112,7 +113,7 @@
                 @endforeach
                 <tr style="border-top:1px solid black; margin-top: 8px; margin-bottom: 8px;">
                     <td><strong>Total</strong></td>
-                    <td colspan="3"></td>
+                    <td colspan="4"></td>
                     <td><strong>€ {{ $productoPresupuestos->sum(function ($pp) { return $pp->cantidad * $pp->precio; }) }}</strong></td>
                 </tr>
             </tbody>

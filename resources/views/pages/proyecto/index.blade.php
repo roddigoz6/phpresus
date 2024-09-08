@@ -1201,6 +1201,20 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 });
+
+const downloadUrl = "{{ route('proyecto.download', ['id' => ':id']) }}";
+
+document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('.descargar-proyecto-btn').forEach(button => {
+        button.addEventListener('click', function() {
+            const proyectoId = encodeURIComponent(this.getAttribute('data-proyecto-id'));
+            const url = downloadUrl.replace(':id', proyectoId);
+            window.location.href = url;
+        });
+    });
+});
+
+
 </script>
 @endpush
 @include('partials/modals/_cliente-proyecto')

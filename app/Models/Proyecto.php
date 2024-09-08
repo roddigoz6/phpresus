@@ -34,6 +34,17 @@ class Proyecto extends Model
             $numero = str_pad($count, 5, '0', STR_PAD_LEFT);
             $proyecto->proyecto_id = $numero . '/' . $year;
         });
+
+        static::updating(function ($proyecto) {
+            if ($proyecto->isDirty('estado')) {
+                $estado = $proyecto->estado;
+                $historial = new HistorialEstado([
+                    'proyecto_id' => $proyecto->proyecto_id,
+                    $estado => now()  // Registrar la fecha del cambio de estado
+                ]);
+                $historial->save();
+            }
+        });
     }
 
     protected $casts = [

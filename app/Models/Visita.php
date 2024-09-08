@@ -19,8 +19,24 @@ class Visita extends Model
         'hora_fin',
         'contacto_visita',
         'prioridad',
+        'nota_cerrar',
         'eliminado',
     ];
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::updating(function ($visita) {
+            if ($visita->isDirty('nota_cerrar')) {
+                $historial = new HistorialEstado([
+                    'visita_id' => $visita->id,
+                    'nota_cerrar' => now()
+                ]);
+                $historial->save();
+            }
+        });
+    }
 
     protected $casts = [
         'eliminado' => 'bool',

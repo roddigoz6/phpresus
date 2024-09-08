@@ -16,11 +16,12 @@
         @endif
 
         <div class="menu-item px-3">
-            <a href="" class="menu-link px-3 descargar-proyecto-btn" data-proyecto-id="{{ $proyecto->proyecto_id }}">
+            <a href="#" class="menu-link px-3 descargar-proyecto-btn" data-proyecto-id="{{ $proyecto->proyecto_id }}">
                 <span class="menu-title">Descargar PDF</span>
                 <span><i class="fa-solid fa-circle-down"></i></span>
             </a>
         </div>
+
 
         <div class="menu-item px-3">
             <a href="" class="menu-link px-3 enviar-proyecto-btn" data-proyecto-id="{{ $proyecto->proyecto_id }}">
@@ -107,4 +108,7 @@
             contactoInput.value = contacto;
         });
     });
+
+
+
 </script>
