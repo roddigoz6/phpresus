@@ -289,8 +289,8 @@
             </div>
             <div class="modal-body">
                 <p>El cliente ha sido creado. ¿Qué te gustaría hacer?</p>
-                <button type="button" class="btn btn-primary" id="goToPresupuestoBtn">Crear proyecto</button>
-                <button type="button" class="btn btn-secondary" id="goToClientesBtn">Volver al listado de clientes</button>
+                <button type="button" class="btn btn-light-primary" id="goToPresupuestoBtn">Crear proyecto <i class="fa-solid fa-arrow-right fa-shake"></i></button>
+                <button type="button" class="btn btn-light-secondary" id="goToClientesBtn">Ir a clientes <i class="fa-regular fa-user"></i></button>
             </div>
         </div>
     </div>

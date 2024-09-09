@@ -16,12 +16,11 @@
         @endif
 
         <div class="menu-item px-3">
-            <a href="#" class="menu-link px-3 descargar-proyecto-btn" data-proyecto-id="{{ $proyecto->proyecto_id }}">
+            <a href="{{ route('proyecto.download', ['id' => $proyecto->proyecto_id]) }}" class="menu-link px-3 descargar-proyecto-btn" data-proyecto-id="{{ $proyecto->proyecto_id }}">
                 <span class="menu-title">Descargar PDF</span>
                 <span><i class="fa-solid fa-circle-down"></i></span>
             </a>
         </div>
-
 
         <div class="menu-item px-3">
             <a href="" class="menu-link px-3 enviar-proyecto-btn" data-proyecto-id="{{ $proyecto->proyecto_id }}">
@@ -72,43 +71,41 @@
 </div>
 
 <script>
-    document.addEventListener('DOMContentLoaded', () => {
-        let menuLinks = document.querySelectorAll('.menu-item a');
+document.addEventListener('DOMContentLoaded', () => {
+    let menuLinks = document.querySelectorAll('.menu-item a');
 
-        menuLinks.forEach(link => {
-            let icon = link.querySelector('.fa-solid');
-            if (icon && !link.closest('form')) {
-                link.addEventListener('mouseover', () => {
-                    icon.classList.add('fa-beat', 'text-primary');
-                });
+    menuLinks.forEach(link => {
+        let icon = link.querySelector('.fa-solid');
+        if (icon && !link.closest('form')) {
+            link.addEventListener('mouseover', () => {
+                icon.classList.add('fa-beat', 'text-primary');
+            });
 
-                link.addEventListener('mouseout', () => {
-                    icon.classList.remove('fa-beat', 'text-primary');
-                });
-            }
-        });
+            link.addEventListener('mouseout', () => {
+                icon.classList.remove('fa-beat', 'text-primary');
+            });
+        }
     });
+});
 
-    document.addEventListener('DOMContentLoaded', function() {
-        const visitaModal = document.getElementById('visitaModal');
+document.addEventListener('DOMContentLoaded', function() {
+    const visitaModal = document.getElementById('visitaModal');
 
-        visitaModal.addEventListener('show.bs.modal', function(event) {
-            const button = event.relatedTarget; // El botón que abrió el modal
-            const proyectoId = button.getAttribute('data-proyecto-id');
-            const serieRef = button.getAttribute('data-serie-ref');
-            const contacto = button.getAttribute('data-contacto');
+    visitaModal.addEventListener('show.bs.modal', function(event) {
+        const button = event.relatedTarget; // El botón que abrió el modal
+        const proyectoId = button.getAttribute('data-proyecto-id');
+        const serieRef = button.getAttribute('data-serie-ref');
+        const contacto = button.getAttribute('data-contacto');
 
-            // Actualiza los elementos en el modal con los valores capturados
-            const modalTitle = visitaModal.querySelector('.modal-title strong');
-            const proyectoInput = visitaModal.querySelector('input[name="proyecto_id"]');
-            const contactoInput = visitaModal.querySelector('input[name="contacto_visita"]');
+        // Actualiza los elementos en el modal con los valores capturados
+        const modalTitle = visitaModal.querySelector('.modal-title strong');
+        const proyectoInput = visitaModal.querySelector('input[name="proyecto_id"]');
+        const contactoInput = visitaModal.querySelector('input[name="contacto_visita"]');
 
-            modalTitle.textContent = `${proyectoId} - ${serieRef}`;
-            proyectoInput.value = proyectoId;
-            contactoInput.value = contacto;
-        });
+        modalTitle.textContent = `${proyectoId} - ${serieRef}`;
+        proyectoInput.value = proyectoId;
+        contactoInput.value = contacto;
     });
-
-
+});
 
 </script>

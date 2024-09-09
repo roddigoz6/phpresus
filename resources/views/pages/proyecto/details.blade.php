@@ -1,12 +1,9 @@
-<!-- Contenido del presupuesto para el modal -->
-<div id="orden" class="container"
-    style="font-family: Arial, sans-serif; margin: 0; padding: 0; width: 100%; margin: auto; background-color: white; padding: 20px; box-sizing: border-box;">
+<div id="orden" class="container">
     <div class="header"
         style="background-color:#212529; color:white; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid black; padding: 10px; margin-bottom: 10px; border-radius:10px;">
         <h1 class="m-0" style="margin: 0; color:white;">Kasier</h1>
         <p class="date" style="margin: 0;">Fecha actual: {{ date('d/m/Y') }}</p>
     </div>
-
     <div class="details" style="display: flex; justify-content: space-between; ">
         <div class="col">
             <strong>Datos del proyecto</strong>
@@ -75,6 +72,44 @@
         </div>
     </div>
 
+    <div class="table-responsive" style="width: 100%; overflow-x: auto; border-radius: 10px;">
+        <table class="table table-light text-center table-hover rounded-table" style="width: 100%; border-collapse: collapse; border-radius: 10px; overflow: hidden;">
+            <thead class="table-dark" style="background-color: #252129; color: white;">
+                <tr style="margin-top: 8px; margin-bottom: 8px;">
+                    <th class="icon-table">Motivo de visita</th>
+                    <th class="icon-table">Contacto de visita</th>
+                    <th class="icon-table">Fecha de visita</th>
+                    <th class="icon-table">Fin de visita</th>
+                    <th class="icon-table">Comentario de cierre</th>
+                </tr>
+            </thead>
+            <tbody style="text-align: center;">
+                @if ($visitas->isEmpty())
+                <tr style="margin-top: 8px; margin-bottom: 8px;">
+                    <td class="align-middle" colspan="5">No hay visitas registradas.</td>
+                </tr>
+                @else
+                    @foreach ($visitas as $visita)
+                    <tr style="margin-top: 8px; margin-bottom: 8px;">
+                        <td class="align-middle">{{ $visita->descripcion ?? 'No registrado' }}</td>
+                        <td class="align-middle">{{ $visita->contacto_visita }}</td>
+                        <td class="align-middle">{{ $visita->fecha_inicio }} a las {{ $visita->hora_inicio }}</td>
+
+                        @if ($visita->fecha_fin == null)
+                        <td class="align-middle">No registrado</td>
+                        @else
+                        <td class="align-middle">{{ $visita->fecha_fin }} a las {{ $visita->hora_fin }}</td>
+                        @endif
+
+                        <td class="align-middle">{{ $visita->nota_cerrar }}</td>
+                    </tr>
+                    @endforeach
+                @endif
+            </tbody>
+
+        </table>
+    </div>
+
     <p><strong>Productos</strong></p>
 
     <div class="table-responsive" style="width: 100%; overflow-x: auto; border-radius: 10px;">
@@ -100,7 +135,6 @@
                                 <td>{{ $productoPresupuesto->cantidad }}</td>
                                 <td>{{ $productoPresupuesto->precio }}</td>
                                 <td>{{ $productoPresupuesto->cantidad * $productoPresupuesto->precio }}</td>
-
                             @break
 
                         @case('capitulo')
@@ -108,7 +142,6 @@
                                 <td colspan="2"><strong>{{ $productoPresupuesto->titulo }}</strong></td>
                                 <td colspan="4">{{ $productoPresupuesto->descripcion }}</td>
                             </tr>
-
                             @break
 
                         @default

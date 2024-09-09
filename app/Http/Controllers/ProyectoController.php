@@ -14,6 +14,7 @@ use App\Models\Visita;
 use Dompdf\Dompdf;
 use Dompdf\Options;
 
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Http\Request;
@@ -55,6 +56,12 @@ class ProyectoController extends Controller
                                                 ->with('cliente')
                                                 ->paginate(15);
 
+        $proyectosPorFact = Proyecto::where('eliminado', false)
+                                    ->where('estado', 'por_facturar')
+                                    ->where('cerrado', false)
+                                    ->with('cliente')
+                                    ->paginate(15);
+
         $proyectosFacturadoPendienteCobro = Proyecto::where('eliminado', false)
                                                     ->where('estado', 'facturado_pendiente_cobro')
                                                     ->where('cerrado', false)
@@ -90,6 +97,7 @@ class ProyectoController extends Controller
             'proyectos',
             'proyectosPresupuestado',
             'proyectosPresupuestoAceptado',
+            'proyectosPorFact',
             'proyectosFacturadoPendienteCobro',
             'proyectosFacturaCobrada',
             'proyectosCerrado',
@@ -130,7 +138,25 @@ class ProyectoController extends Controller
 
         //dd($productoPresupuestos);
 
-        return view('pages/proyecto.show', compact('proyecto', 'cliente', 'productoPresupuestos'));
+        return view('pages/proyecto.show', compact('proyecto', 'cliente',  'productoPresupuestos'));
+    }
+
+    public function details($id)
+    {
+        $proyecto = Proyecto::findOrFail($id);
+        $cliente = $proyecto->cliente;
+        $visitas = $proyecto->visitas;
+
+        $presupuesto = $proyecto->presupuesto;
+        if ($presupuesto) {
+            $productoPresupuestos = $presupuesto->productoPresupuestos->sortBy('orden');
+        } else {
+            $productoPresupuestos = collect();
+        }
+
+        //dd($productoPresupuestos);
+
+        return view('pages/proyecto.details', compact('proyecto', 'cliente', 'visitas', 'productoPresupuestos'));
     }
 
     /**
@@ -211,21 +237,27 @@ class ProyectoController extends Controller
 
     public function download($id, $sendByEmail = false)
     {
-        $proyectoId = urldecode($id); // Decodifica el ID
+        $proyecto = Proyecto::find($id);
 
-        $proyecto = Proyecto::where('proyecto_id', $proyectoId)->firstOrFail();
+        // Obtener datos del proyecto
         $cliente = $proyecto->cliente;
+
         $presupuesto = $proyecto->presupuesto;
-        $productos_print = $presupuesto->productoPresupuestos()
-            ->orderBy('orden')
-            ->get();
+        if ($presupuesto) {
+            $productoPresupuestos = $presupuesto->productoPresupuestos->sortBy('orden');
+        } else {
+            $productoPresupuestos = collect();
+        }
 
         $options = new Options();
         $options->set('isHtml5ParserEnabled', true);
         $options->set('isRemoteEnabled', true);
 
         $dompdf = new Dompdf($options);
-        $html = view('pages/proyecto.show', compact('id', 'productos_print'))->render();
+
+        // Renderizar la vista como HTML
+        $html = view('pages/proyecto.show', compact('proyecto', 'cliente', 'productoPresupuestos'))->render();
+
         $dompdf->loadHtml($html);
         $dompdf->setPaper('A4', 'portrait');
         $dompdf->render();
@@ -234,11 +266,14 @@ class ProyectoController extends Controller
         $pdfName = "proyecto_{$cliente->nombre}_{$proyecto->proyecto_id}.pdf";
         $pdfPath = "public/proyectos/{$pdfName}";
 
+        // Guarda el PDF en el servidor
         Storage::put($pdfPath, $output);
 
         if ($sendByEmail) {
+            // Devuelve la ruta del archivo PDF para el envío por correo
             return $pdfPath;
         } else {
+            // Envía el PDF al navegador para descarga
             return response()->stream(function () use ($output) {
                 echo $output;
             }, 200, [
@@ -248,13 +283,13 @@ class ProyectoController extends Controller
         }
     }
 
-
     public function sendMail($id)
     {
         $proyecto = Proyecto::findOrFail($id);
+        $cliente = $proyecto->cliente;
 
-        $pdfPath = $this->download($proyecto, true);
-        $clienteEmail = $proyecto->cliente->email;
+        $pdfPath = $this->download($id, true);
+        $clienteEmail = $cliente->email;
 
         try {
             // Enviar correo electrónico con el PDF adjunto
@@ -262,7 +297,7 @@ class ProyectoController extends Controller
             // Log the CSRF token from the session
             return response()->json(['success' => true]);
         } catch (\Exception $e) {
-            return response()->json(['error' => 'Error al enviar el correo electrónico'], 500);
+            return response()->json(['error' => $e], 500);
         }
     }
 

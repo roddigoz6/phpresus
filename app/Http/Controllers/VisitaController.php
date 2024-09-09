@@ -74,6 +74,40 @@ class VisitaController extends Controller
         //
     }
 
+    public function cerrar(Request $request, $id)
+    {
+        $request->validate([
+            'nota_cerrar' => 'required|string|max:255',
+        ]);
+
+        $visita = Visita::findOrFail($id);
+        $proyecto = $visita->proyecto;
+
+        $fechaHoraFin = now();
+        $fecha_fin = $fechaHoraFin->toDateString();
+        $hora_fin = $fechaHoraFin->toTimeString();
+
+        // Actualiza los campos de la visita
+        $visita->update([
+            'nota_cerrar' => $request->nota_cerrar,
+            'fecha_fin' => $fecha_fin,
+            'hora_fin' => $hora_fin,
+        ]);
+
+        // Verifica el estado del proyecto y actualiza solo si es necesario
+        if ($proyecto->estado !== 'por_facturar') {
+            $proyecto->update([
+                'estado' => 'por_facturar',
+            ]);
+            $mensaje = 'Visita cerrada. Proyecto ' . $proyecto->proyecto_id . ' pendiente de factura.';
+        } else {
+            $mensaje = 'Visita cerrada del proyecto ' . $proyecto->proyecto_id . '.';
+        }
+
+        // Redireccionar con mensaje de éxito
+        return redirect()->route('proyecto.index')->with('success_visita_cerrar', $mensaje);
+    }
+
     /**
      * Store a newly created resource in storage.
      */
@@ -105,7 +139,6 @@ class VisitaController extends Controller
         ]);
 
         //dd($validatedData);
-        // Crear la visita con los datos validados
         $visita = Visita::create([
 
             'proyecto_id' => $validatedData['proyecto_id'],

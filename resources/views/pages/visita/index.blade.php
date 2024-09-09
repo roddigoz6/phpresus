@@ -99,13 +99,8 @@
 
                                     <td class="align-middle">{{ $visita->contacto_visita }}</td>
                                     <td class="align-middle">
-                                        <form id="delete-form-{{ $visita->id }}" action="{{ route('visita.destroy', $visita->id) }}" method="POST" style="display: inline;">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="button" class="btn btn-light-danger delete-btn" data-visita-id="{{ $visita->id }}" data-bs-toggle="popover" title="Eliminar visita">
-                                                <i class="fa-solid fa-trash"></i>
-                                            </button>
-                                        </form>
+                                        <button type="button" class="btn btn-sm btn-icon btn-light-primary me-n3" data-kt-menu-trigger="{default: 'click', lg: 'hover'}" data-kt-menu-placement="bottom-end"><i class="fa-solid fa-bars"></i></button>
+                                        @include('partials/menus/_acciones_visita', ['visita' => $visita])
                                     </td>
                                 </tr>
                             @endforeach
@@ -207,13 +202,8 @@
 
                                     <td class="align-middle">{{ $visita->contacto_visita }}</td>
                                     <td class="align-middle">
-                                        <form id="delete-form-{{ $visita->id }}" action="{{ route('visita.destroy', $visita->id) }}" method="POST" style="display: inline;">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="button" class="btn btn-light-danger delete-btn" data-visita-id="{{ $visita->id }}" data-bs-toggle="popover" title="Eliminar visita">
-                                                <i class="fa-solid fa-trash"></i>
-                                            </button>
-                                        </form>
+                                        <button type="button" class="btn btn-sm btn-icon btn-light-primary me-n3" data-kt-menu-trigger="{default: 'click', lg: 'hover'}" data-kt-menu-placement="bottom-end"><i class="fa-solid fa-bars"></i></button>
+                                        @include('partials/menus/_acciones_visita', ['visita' => $visita])
                                     </td>
                                 </tr>
                             @endforeach
@@ -314,13 +304,8 @@
 
                                     <td class="align-middle">{{ $visita->contacto_visita }}</td>
                                     <td class="align-middle">
-                                        <form id="delete-form-{{ $visita->id }}" action="{{ route('visita.destroy', $visita->id) }}" method="POST" style="display: inline;">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="button" class="btn btn-light-danger delete-btn" data-visita-id="{{ $visita->id }}" data-bs-toggle="popover" title="Eliminar visita">
-                                                <i class="fa-solid fa-trash"></i>
-                                            </button>
-                                        </form>
+                                        <button type="button" class="btn btn-sm btn-icon btn-light-primary me-n3" data-kt-menu-trigger="{default: 'click', lg: 'hover'}" data-kt-menu-placement="bottom-end"><i class="fa-solid fa-bars"></i></button>
+                                        @include('partials/menus/_acciones_visita', ['visita' => $visita])
                                     </td>
                                 </tr>
                             @endforeach
@@ -421,13 +406,8 @@
 
                                     <td class="align-middle">{{ $visita->contacto_visita }}</td>
                                     <td class="align-middle">
-                                        <form id="delete-form-{{ $visita->id }}" action="{{ route('visita.destroy', $visita->id) }}" method="POST" style="display: inline;">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="button" class="btn btn-light-danger delete-btn" data-visita-id="{{ $visita->id }}" data-bs-toggle="popover" title="Eliminar visita">
-                                                <i class="fa-solid fa-trash"></i>
-                                            </button>
-                                        </form>
+                                        <button type="button" class="btn btn-sm btn-icon btn-light-primary me-n3" data-kt-menu-trigger="{default: 'click', lg: 'hover'}" data-kt-menu-placement="bottom-end"><i class="fa-solid fa-bars"></i></button>
+                                        @include('partials/menus/_acciones_visita', ['visita' => $visita])
                                     </td>
                                 </tr>
                             @endforeach
@@ -528,13 +508,8 @@
 
                                     <td class="align-middle">{{ $visita->contacto_visita }}</td>
                                     <td class="align-middle">
-                                        <form id="delete-form-{{ $visita->id }}" action="{{ route('visita.destroy', $visita->id) }}" method="POST" style="display: inline;">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="button" class="btn btn-light-danger delete-btn" data-visita-id="{{ $visita->id }}" data-bs-toggle="popover" title="Eliminar visita">
-                                                <i class="fa-solid fa-trash"></i>
-                                            </button>
-                                        </form>
+                                        <button type="button" class="btn btn-sm btn-icon btn-light-primary me-n3" data-kt-menu-trigger="{default: 'click', lg: 'hover'}" data-kt-menu-placement="bottom-end"><i class="fa-solid fa-bars"></i></button>
+                                        @include('partials/menus/_acciones_visita', ['visita' => $visita])
                                     </td>
                                 </tr>
                             @endforeach
@@ -697,6 +672,29 @@
             });
         });
     });
+
+
+document.addEventListener('DOMContentLoaded', function() {
+    var deleteButtons = document.querySelectorAll('.cerrar-btn');
+
+    deleteButtons.forEach(function(button) {
+        button.addEventListener('click', function() {
+            var visitaId = this.getAttribute('data-visita-id');
+
+            var form = document.getElementById('visitaCerrarForm');
+            var formAction = form.getAttribute('action').replace(':id', visitaId);
+            form.setAttribute('action', formAction);
+
+            document.getElementById('visita-id-input').value = visitaId;
+            document.querySelector('#visitaCerrarModalLabel strong').textContent = visitaId;
+
+            var modalElement = document.getElementById('visitaCerrarModal');
+            var modal = new bootstrap.Modal(modalElement);
+            modal.show();
+        });
+    });
+});
+
     </script>
     @endpush
 </x-default-layout>

@@ -29,9 +29,12 @@ class Visita extends Model
 
         static::updating(function ($visita) {
             if ($visita->isDirty('nota_cerrar')) {
+                $proyectoId = $visita->proyecto_id;
+
                 $historial = new HistorialEstado([
+                    'proyecto_id' => $proyectoId,
                     'visita_id' => $visita->id,
-                    'nota_cerrar' => now()
+                    'nota_cerrar' => now(),
                 ]);
                 $historial->save();
             }

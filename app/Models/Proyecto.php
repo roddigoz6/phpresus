@@ -32,17 +32,25 @@ class Proyecto extends Model
             $year = date('y');
             $count = Proyecto::whereYear('created_at', date('Y'))->count() + 1;
             $numero = str_pad($count, 5, '0', STR_PAD_LEFT);
-            $proyecto->proyecto_id = $numero . '/' . $year;
+            $proyecto->proyecto_id = $numero . '-' . $year;
+        });
+
+        static::created(function ($proyecto) {
+            $historial = new HistorialEstado([
+                'proyecto_id' => $proyecto->proyecto_id,
+                'presupuestado' => now(),
+            ]);
+            $historial->save();
         });
 
         static::updating(function ($proyecto) {
             if ($proyecto->isDirty('estado')) {
-                $estado = $proyecto->estado;
-                $historial = new HistorialEstado([
-                    'proyecto_id' => $proyecto->proyecto_id,
-                    $estado => now()  // Registrar la fecha del cambio de estado
-                ]);
-                $historial->save();
+                $historial = HistorialEstado::where('proyecto_id', $proyecto->proyecto_id)->first();
+
+                if ($historial) {
+                    $estado = $proyecto->estado;
+                    $historial->update([$estado => now()]);
+                }
             }
         });
     }

@@ -31,31 +31,32 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::resource('/user-management/permissions', PermissionManagementController::class);
     });
 
+    //
     Route::resource('cliente', ClienteController::class);
-    Route::resource('factura', FacturaController::class);
-    Route::resource('presupuesto', PresupuestoController::class);
-    Route::resource('proyecto', ProyectoController::class);
-    Route::resource('visita', VisitaController::class);
-    Route::resource('producto', ProductoController::class);
-    Route::resource('user', UserController::class);
-
-    Route::get('/presupuesto/create/getProductos', [PresupuestoController::class, 'getProductos'])->name('presupuesto.getProductos');
-
     Route::get('/clientes/data', [ClienteController::class, 'getClientesData'])->name('clientes.data');
 
-    Route::get('/productos/bajo-stock', [DashboardController::class, 'getProductosBajoStock'])->name('productos.bajo.stock');
+    //
+    Route::resource('factura', FacturaController::class);
 
-    Route::get('/user/{id}/getUltimaModif', [UserController::class, 'getUltimaModif'])->name('user.getUltimaModif');
+    //
+    Route::resource('presupuesto', PresupuestoController::class);
+    Route::get('/presupuesto/create/getProductos', [PresupuestoController::class, 'getProductos'])->name('presupuesto.getProductos');
 
-    Route::get('/proyecto/{id}', [ProyectoController::class, 'show'])
+    //
+    Route::resource('proyecto', ProyectoController::class);
+    Route::get('/proyecto/{id}/show', [ProyectoController::class, 'show'])
         ->where('id', '.*')
         ->name('proyecto.show');
+
+    Route::get('/proyecto/{id}/details', [ProyectoController::class, 'details'])
+        ->where('id', '.*')
+        ->name('proyecto.details');
 
     Route::get('/proyecto/{id}/download', [ProyectoController::class, 'download'])
         ->where('id', '.*')
         ->name('proyecto.download');
 
-    Route::post('/proyecto/send-mail/{id}', [ProyectoController::class, 'sendMail'])
+    Route::post('/proyecto/{id}/send-mail', [ProyectoController::class, 'sendMail'])
         ->where('id', '.*')
         ->name('proyecto.sendMail');
 
@@ -70,6 +71,24 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/proyecto/{id}/cerrar', [ProyectoController::class, 'cerrar'])
         ->where('id', '.*')
         ->name('proyecto.cerrar');
+
+    //
+    Route::resource('visita', VisitaController::class);
+    Route::post('/visita/{id}/cerrar', [VisitaController::class, 'cerrar'])->name('visita.cerrar');
+
+    //
+    Route::resource('producto', ProductoController::class);
+    Route::get('/productos/bajo-stock', [DashboardController::class, 'getProductosBajoStock'])->name('productos.bajo.stock');
+
+    //
+    Route::resource('user', UserController::class);
+    Route::get('/user/{id}/getUltimaModif', [UserController::class, 'getUltimaModif'])->name('user.getUltimaModif');
+
+
+
+
+
+
 });
 
 Route::get('/error', function () {

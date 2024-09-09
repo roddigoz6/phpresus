@@ -29,7 +29,11 @@
         </li>
         <li class="nav-item" role="presentation">
             <a class="nav-link bg-primary text-white" id="presAcept-tab" data-bs-toggle="tab" href="#presAcept" role="tab"
-                aria-controls="presAcept" aria-selected="false">Presupuestos Aceptados</a>
+                aria-controls="presAcept" aria-selected="false">Presupuestos aceptados</a>
+        </li>
+        <li class="nav-item" role="presentation">
+            <a class="nav-link bg-secondary" id="porFact-tab" data-bs-toggle="tab" href="#porFact" role="tab"
+                aria-controls="porFact" aria-selected="false">Por facturar</a>
         </li>
         <li class="nav-item" role="presentation">
             <a class="nav-link bg-warning text-white" id="facturaPorCobr-tab" data-bs-toggle="tab" href="#facturaPorCobr" role="tab"
@@ -74,60 +78,74 @@
                                 @switch($proyecto->estado)
                                     @case('presupuestado')
                                         <td class="align-middle">
-                                            <a href="{{route('proyecto.show', $proyecto->proyecto_id)}}" class="btn btn-light-secondary"
-                                                data-presupuesto-id="{{ $proyecto->proyecto_id }}"
-                                                data-bs-toggle="popover"
-                                                data-bs-trigger="hover"
-                                                title="Ver detalle del proyecto">
-                                                {{ $proyecto->proyecto_id }}
-                                                <span class="badge badge-info">P</span>
+                                            <a href="#"
+                                               class="btn btn-light-secondary"
+                                               data-presupuesto-id="{{ $proyecto->proyecto_id }}"
+                                               data-bs-toggle="modal"
+                                               data-bs-target="#detallesProyectoModal"
+                                               data-proyecto-id="{{ $proyecto->proyecto_id }}"
+                                               title="Ver detalle del proyecto">
+                                               {{ $proyecto->proyecto_id }}
+                                               <span class="badge badge-info">P</span>
                                             </a>
-                                        </td>
+                                          </td>
                                         @break
 
                                     @case('presupuesto_aceptado')
                                         <td class="align-middle">
-                                            <button class="btn btn-light-secondary"
+                                            <a href="{{route('proyecto.details', $proyecto->proyecto_id)}}" class="btn btn-light-secondary"
                                                 data-presupuesto-id="{{ $proyecto->proyecto_id }}"
                                                 data-bs-toggle="popover"
                                                 data-bs-trigger="hover"
                                                 title="Ver detalle del proyecto">
                                                 {{ $proyecto->proyecto_id }}
                                                 <span class="badge badge-primary">A</span>
-                                            </button>
+                                            </a>
+                                        </td>
+                                        @break
+
+                                    @case('por_facturar')
+                                        <td class="align-middle">
+                                            <a href="{{route('proyecto.details', $proyecto->proyecto_id)}}" class="btn btn-light-secondary"
+                                                data-presupuesto-id="{{ $proyecto->proyecto_id }}"
+                                                data-bs-toggle="popover"
+                                                data-bs-trigger="hover"
+                                                title="Ver detalle del proyecto">
+                                                {{ $proyecto->proyecto_id }}
+                                                <span class="badge badge-secondary">P</span>
+                                            </a>
                                         </td>
                                         @break
 
                                     @case('facturado_pendiente_cobro')
                                         <td class="align-middle">
-                                            <button class="btn btn-light-secondary"
+                                            <a href="{{route('proyecto.details', $proyecto->proyecto_id)}}" class="btn btn-light-secondary"
                                                 data-presupuesto-id="{{ $proyecto->proyecto_id }}"
                                                 data-bs-toggle="popover"
                                                 data-bs-trigger="hover"
                                                 title="Ver detalle del proyecto">
                                                 {{ $proyecto->proyecto_id }}
                                                 <span class="badge badge-warning">C</span>
-                                            </button>
+                                            </a>
                                         </td>
                                         @break
 
                                     @case('factura_cobrada')
                                         <td class="align-middle">
-                                            <button class="btn btn-light-secondary"
+                                            <a href="{{route('proyecto.details', $proyecto->proyecto_id)}}" class="btn btn-light-secondary"
                                                 data-presupuesto-id="{{ $proyecto->proyecto_id }}"
                                                 data-bs-toggle="popover"
                                                 data-bs-trigger="hover"
                                                 title="Ver detalle del proyecto">
                                                 {{ $proyecto->proyecto_id }}
                                                 <span class="badge badge-success">F</span>
-                                            </button>
+                                            </a>
                                         </td>
                                         @break
 
                                     @default
 
                                 @endswitch
-
                                 <td class="align-middle"> {{ $proyecto->serie_ref ?? 'No registrado' }} - {{ $proyecto->num_ref ?? 'No registrado' }} </td>
                                 <td class="align-middle">
                                     <a
@@ -254,14 +272,14 @@
                         @foreach ($proyectosPresupuestado as $proyecto)
                             <tr class="text-center">
                                 <td class="align-middle">
-                                            <button class="btn btn-light-secondary"
+                                            <a href="{{route('proyecto.details', $proyecto->proyecto_id)}}" class="btn btn-light-secondary"
                                                 data-presupuesto-id="{{ $proyecto->proyecto_id }}"
                                                 data-bs-toggle="popover"
                                                 data-bs-trigger="hover"
                                                 title="Ver detalle del proyecto">
                                                 {{ $proyecto->proyecto_id }}
                                                 <span class="badge badge-info">P</span>
-                                            </button>
+                                            </a>
                                         </td>
                                 <td class="align-middle"> {{ $proyecto->serie_ref ?? 'No registrado' }} - {{ $proyecto->num_ref ?? 'No registrado' }} </td>
 
@@ -390,14 +408,14 @@
                         @foreach ($proyectosPresupuestoAceptado as $proyecto)
                             <tr class="text-center">
                                 <td class="align-middle">
-                                            <button class="btn btn-light-secondary"
+                                            <a href="{{route('proyecto.details', $proyecto->proyecto_id)}}" class="btn btn-light-secondary"
                                                 data-presupuesto-id="{{ $proyecto->proyecto_id }}"
                                                 data-bs-toggle="popover"
                                                 data-bs-trigger="hover"
                                                 title="Ver detalle del proyecto">
                                                 {{ $proyecto->proyecto_id }}
                                                 <span class="badge badge-primary">A</span>
-                                            </button>
+                                            </a>
                                         </td>
                                 <td class="align-middle"> {{ $proyecto->serie_ref ?? 'No registrado' }} - {{ $proyecto->num_ref ?? 'No registrado' }} </td>
 
@@ -501,6 +519,142 @@
             </div>
         </div>
 
+        <!-- Proyectos por facturar -->
+        <div class="tab-pane fade {{ $tab == 'porFact' ? 'show active' : '' }}" id="porFact" role="tabpanel"
+        aria-labelledby="porFact-tab">
+            <table class="table table-light text-center table-hover rounded-table">
+                <thead class="table-dark">
+                    <tr class="align-middle">
+                        <th class="icon-table">Proyecto</th>
+                        <th class="icon-table">Título / Serie de referencia</th>
+                        <th class="icon-table">Cliente</th>
+                        <th class="icon-table">Precio total</th>
+                        <th class="icon-table">Forma de pago</th>
+                        <th class="icon-table">Visita asignada</th>
+                        <th class="icon-table">Fecha de creación</th>
+                        <th class="icon-table">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if ($proyectosPorFact->isEmpty())
+                        <tr>
+                            <td colspan="9" class="text-center">No hay proyectos por facturar.</td>
+                        </tr>
+                    @else
+                        @foreach ($proyectosPorFact as $proyecto)
+                            <tr class="text-center">
+                                <td class="align-middle">
+                                            <a href="{{route('proyecto.details', $proyecto->proyecto_id)}}" class="btn btn-light-secondary"
+                                                data-presupuesto-id="{{ $proyecto->proyecto_id }}"
+                                                data-bs-toggle="popover"
+                                                data-bs-trigger="hover"
+                                                title="Ver detalle del proyecto">
+                                                {{ $proyecto->proyecto_id }}
+                                                <span class="badge badge-primary">A</span>
+                                            </a>
+                                        </td>
+                                <td class="align-middle"> {{ $proyecto->serie_ref ?? 'No registrado' }} - {{ $proyecto->num_ref ?? 'No registrado' }} </td>
+
+                                <td class="align-middle">
+                                    <a
+                                        class="item-link"
+                                        type="button"
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#clienteProyectoModal"
+                                        data-nombre="{{ $proyecto->cliente->nombre }}"
+                                        data-apellido="{{ $proyecto->cliente->apellido }}"
+                                        data-dni="{{ $proyecto->cliente->dni }}"
+                                        data-email="{{ $proyecto->cliente->email }}"
+                                        data-movil="{{ $proyecto->cliente->movil }}"
+                                        data-contacto="{{ $proyecto->cliente->contacto }}"
+                                        data-direccion="{{ $proyecto->cliente->direccion }}"
+                                        data-cp="{{ $proyecto->cliente->cp }}"
+                                        data-poblacion="{{ $proyecto->cliente->poblacion }}"
+                                        data-provincia="{{ $proyecto->cliente->provincia }}"
+                                        data-fax="{{ $proyecto->cliente->fax }}"
+                                        data-cargo="{{ $proyecto->cliente->cargo }}"
+                                        data-titular-nom="{{ $proyecto->cliente->titular_nom }}"
+                                        data-titular-ape="{{ $proyecto->cliente->titular_ape }}"
+                                        data-direccion-envio="{{ $proyecto->cliente->direccion_envio }}"
+                                        data-cp-envio="{{ $proyecto->cliente->cp_envio }}"
+                                        data-poblacion-envio="{{ $proyecto->cliente->poblacion_envio }}"
+                                        data-provincia-envio="{{ $proyecto->cliente->provincia_envio }}"
+                                        data-pago="{{ $proyecto->cliente->pago }}"
+                                        data-establecido="{{ $proyecto->cliente->establecido }}">
+                                        {{ $proyecto->cliente->nombre }} {{ $proyecto->cliente->apellido }}
+                                    </a>
+                                </td>
+
+                                <td class="align-middle">€{{ $proyecto->presupuesto->precio_total }}</td>
+                                <td class="align-middle">{{ $proyecto->pago }}</td>
+
+                                <td class="align-middle">
+                                    @if($proyecto->visitas->isEmpty())
+                                        No hay visitas
+                                    @else
+                                        <a href="{{route('visita.index')}}" class="btn btn-light-primary">Sí, ir a visitas</a>
+                                    @endif
+                                </td>
+
+                                <td class="align-middle">{{ $proyecto->created_at->format('d/m/Y H:i') }}</td>
+
+                                <td class="align-middle">
+                                    <div class="card-toolbar">
+                                        <button type="button" class="btn btn-sm btn-icon btn-light-primary me-n3" data-kt-menu-trigger="{default: 'click', lg: 'hover'}" data-kt-menu-placement="bottom-end"><i class="fa-solid fa-bars"></i></button>
+                                        @include('partials/menus/_acciones_proyecto')
+                                    </div>
+                                </td>
+                            </tr>
+                        @endforeach
+                    @endif
+                </tbody>
+            </table>
+
+            @php
+                $totalPages = $proyectosPorFact->lastPage();
+                $currentPage = $proyectosPorFact->currentPage();
+                $maxPagesToShow = 5; // Número máximo de enlaces de página a mostrar
+
+                $startPage = max($currentPage - floor($maxPagesToShow / 2), 1);
+                $endPage = min($startPage + $maxPagesToShow - 1, $totalPages);
+
+                // Ajuste para cuando hay menos de 10 páginas a mostrar al principio o al final
+                if ($endPage - $startPage + 1 < $maxPagesToShow) {
+                    $startPage = max($endPage - $maxPagesToShow + 1, 1);
+                }
+            @endphp
+
+            <div class="d-flex justify-content-center">
+                <ul class="pagination">
+                    @if ($startPage > 1)
+                        <li class="page-item">
+                            <a class="page-link" href="{{ $proyectosPorFact->url(1) }}&tab=porFact">1</a>
+                        </li>
+                        @if ($startPage > 2)
+                            <li class="page-item disabled"><span class="page-link">...</span></li>
+                        @endif
+                    @endif
+
+                    @for ($i = $startPage; $i <= $endPage; $i++)
+                        <li class="page-item {{ $proyectosPorFact->currentPage() == $i ? 'active' : '' }}">
+                            <a class="page-link"
+                                href="{{ $proyectosPorFact->url($i) }}&tab=porFact">{{ $i }}</a>
+                        </li>
+                    @endfor
+
+                    @if ($endPage < $totalPages)
+                        @if ($endPage < $totalPages - 1)
+                            <li class="page-item disabled"><span class="page-link">...</span></li>
+                        @endif
+                        <li class="page-item">
+                            <a class="page-link"
+                                href="{{ $proyectosPorFact->url($totalPages) }}&tab=porFact">{{ $totalPages }}</a>
+                        </li>
+                    @endif
+                </ul>
+            </div>
+        </div>
+
         <!-- Facturas por cobrar -->
         <div class="tab-pane fade {{ $tab == 'facturaPorCobr' ? 'show active' : '' }}" id="facturaPorCobr" role="tabpanel"
             aria-labelledby="facturaPorCobr-tab">
@@ -526,14 +680,14 @@
                         @foreach ($proyectosFacturadoPendienteCobro as $proyecto)
                             <tr class="text-center">
                                 <td class="align-middle">
-                                            <button class="btn btn-light-secondary"
+                                            <a href="{{route('proyecto.details', $proyecto->proyecto_id)}}" class="btn btn-light-secondary"
                                                 data-presupuesto-id="{{ $proyecto->proyecto_id }}"
                                                 data-bs-toggle="popover"
                                                 data-bs-trigger="hover"
                                                 title="Ver detalle del proyecto">
                                                 {{ $proyecto->proyecto_id }}
                                                 <span class="badge badge-warning">C</span>
-                                            </button>
+                                            </a>
                                         </td>
                                 <td class="align-middle"> {{ $proyecto->serie_ref ?? 'No registrado' }} - {{ $proyecto->num_ref ?? 'No registrado' }} </td>
 
@@ -662,14 +816,14 @@
                         @foreach ($proyectosFacturaCobrada as $proyecto)
                             <tr class="text-center">
                                 <td class="align-middle">
-                                            <button class="btn btn-light-secondary"
+                                            <a href="{{route('proyecto.details', $proyecto->proyecto_id)}}" class="btn btn-light-secondary"
                                                 data-presupuesto-id="{{ $proyecto->proyecto_id }}"
                                                 data-bs-toggle="popover"
                                                 data-bs-trigger="hover"
                                                 title="Ver detalle del proyecto">
                                                 {{ $proyecto->proyecto_id }}
                                                 <span class="badge badge-success">F</span>
-                                            </button>
+                                            </a>
                                         </td>
                                 <td class="align-middle"> {{ $proyecto->serie_ref ?? 'No registrado' }} - {{ $proyecto->num_ref ?? 'No registrado' }} </td>
 
@@ -798,14 +952,14 @@
                         @foreach ($proyectosCerrado as $proyecto)
                             <tr class="text-center">
                                 <td class="align-middle">
-                                            <button class="btn btn-light-secondary"
+                                            <a href="{{route('proyecto.details', $proyecto->proyecto_id)}}" class="btn btn-light-secondary"
                                                 data-presupuesto-id="{{ $proyecto->proyecto_id }}"
                                                 data-bs-toggle="popover"
                                                 data-bs-trigger="hover"
                                                 title="Ver detalle del proyecto">
                                                 {{ $proyecto->proyecto_id }}
                                                 <span class="badge badge-dark">X</span>
-                                            </button>
+                                            </a>
                                         </td>
                                 <td class="align-middle"> {{ $proyecto->serie_ref ?? 'No registrado' }} - {{ $proyecto->num_ref ?? 'No registrado' }} </td>
 
@@ -933,6 +1087,30 @@
         });
     </script>
 @endif
+
+@if (session('success_visita_cerrar'))
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const Toast = Swal.mixin({
+                toast: true,
+                position: "top-end",
+                showConfirmButton: false,
+                timer: 3000,
+                timerProgressBar: true,
+                didOpen: (toast) => {
+                    toast.onmouseenter = Swal.stopTimer;
+                    toast.onmouseleave = Swal.resumeTimer;
+                }
+            });
+            const message = @json(session('success_visita_cerrar'));
+            Toast.fire({
+                icon: "success",
+                title: message
+            });
+        });
+    </script>
+@endif
+
 
 @push('scripts')
 <script>
@@ -1128,11 +1306,12 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
+
     $(document).on('click', '.cerrar-proyecto-btn', function(event) {
         event.preventDefault();
 
         var proyectoId = $(this).data('proyecto-id');
-
+        console.log(proyectoId);
         $.ajax({
             url: '{{ route('proyecto.cerrar', ['id' => ':proyectoId']) }}'.replace(':proyectoId', proyectoId),
             type: 'POST',
@@ -1165,36 +1344,28 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    $(document).on('click', '.descargar-proyecto-btn', function(event) {
+    $(document).on('click', '.enviar-proyecto-btn', function(event) {
         event.preventDefault();
 
         var proyectoId = $(this).data('proyecto-id');
 
         $.ajax({
-            url: '{{ route('proyecto.download', ['id' => ':proyectoId']) }}'.replace(':proyectoId', proyectoId),
-            type: 'GET',
+            url: '{{ route('proyecto.sendMail', ['id' => ':proyectoId']) }}'.replace(':proyectoId', proyectoId),
+            method: 'POST',
             data: {
-                _token: $('meta[name="csrf-token"]').attr('content')
+                _token: '{{ csrf_token() }}'
             },
             success: function(response) {
-                if (response.success) {
-                    Toast.fire({
-                        icon: "success",
-                        title: "Proyecto descargado.",
-                        timer: 3000
-                    });
-                } else {
-                    Toast.fire({
-                        icon: "error",
-                        title: "No se pudo descargar el proyecto.",
-                        timer: 3000
-                    });
-                }
+                Toast.fire({
+                    icon: 'success',
+                    title: 'Éxito',
+                    timer: 3000
+                });
             },
             error: function(xhr, status, error) {
                 Toast.fire({
-                    icon: "error",
-                    title: error,
+                    icon: 'error',
+                    title: 'Error',
                     timer: 3000
                 });
             }
@@ -1202,14 +1373,17 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
-const downloadUrl = "{{ route('proyecto.download', ['id' => ':id']) }}";
+document.addEventListener('DOMContentLoaded', function () {
+    document.querySelectorAll('[data-bs-toggle="modal"]').forEach(function (element) {
+        element.addEventListener('click', function () {
+        var proyectoId = this.getAttribute('data-proyecto-id');
 
-document.addEventListener('DOMContentLoaded', () => {
-    document.querySelectorAll('.descargar-proyecto-btn').forEach(button => {
-        button.addEventListener('click', function() {
-            const proyectoId = encodeURIComponent(this.getAttribute('data-proyecto-id'));
-            const url = downloadUrl.replace(':id', proyectoId);
-            window.location.href = url;
+        fetch(`/proyecto/${proyectoId}/details`)
+            .then(response => response.text())
+            .then(html => {
+            document.getElementById('modalBody').innerHTML = html;
+            })
+            .catch(error => console.error('Error:', error));
         });
     });
 });
@@ -1217,5 +1391,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
 </script>
 @endpush
+@include('partials/modals/_detalles-proyecto')
 @include('partials/modals/_cliente-proyecto')
 </x-default-layout>
