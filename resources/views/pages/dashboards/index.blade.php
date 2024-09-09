@@ -39,7 +39,5 @@
         <!--end::Col-->
     </div>
     <!--end::Row-->
-
+@include('partials/modals/_detalles-proyecto')
 </x-default-layout>
-
-

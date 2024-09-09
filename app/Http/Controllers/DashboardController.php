@@ -1,8 +1,10 @@
 <?php
 
 namespace App\Http\Controllers;
+use App\Traits\ProyectoDetailsTrait;
 
 use Illuminate\Http\Request;
+use App\Models\Proyecto;
 use App\Models\Presupuesto;
 use App\Models\Producto;
 use App\Models\Cliente;
@@ -10,11 +12,19 @@ use Illuminate\Support\Facades\Auth;
 
 class DashboardController extends Controller
 {
-    public function index()
+    use ProyectoDetailsTrait;
+
+    public function index(Request $request)
     {
         addVendors(['amcharts', 'amcharts-maps', 'amcharts-stock']);
 
         $user = Auth::user();
+        $proyectoDetails = null;
+
+        if ($request->has('proyecto_id')) {
+            $proyectoId = $request->input('proyecto_id');
+            $proyectoDetails = $this->getProyectoDetails($proyectoId);
+        }
 
         // Presupuestos
         $presupuestosAceptados = Presupuesto::where('aceptado', true)->where('eliminado', false)->count();
@@ -43,6 +53,8 @@ class DashboardController extends Controller
         $clientesEstablecidos = Cliente::where('establecido', true)->where('eliminado', false)->count();
         $clientesNoEstablecidos = Cliente::where('establecido', false)->where('eliminado', false)->count();
 
+
+
         return view('pages.dashboards.index', compact(
             'user',
             'presupuestosAceptados',
@@ -53,7 +65,8 @@ class DashboardController extends Controller
             'productosDisponiblesCount',
             'clientes',
             'clientesEstablecidos',
-            'clientesNoEstablecidos'
+            'clientesNoEstablecidos',
+            'proyectoDetails'
         ));
     }
 

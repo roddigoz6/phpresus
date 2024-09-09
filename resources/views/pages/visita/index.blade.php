@@ -417,8 +417,8 @@
                 </table>
 
                 @php
-                    $totalPages = $visitasMedia->lastPage();
-                    $currentPage = $visitasMedia->currentPage();
+                    $totalPages = $visitasBaja->lastPage();
+                    $currentPage = $visitasBaja->currentPage();
                     $maxPagesToShow = 5; // Número máximo de enlaces de página a mostrar
 
                     $startPage = max($currentPage - floor($maxPagesToShow / 2), 1);
@@ -442,7 +442,7 @@
                         @endif
 
                         @for ($i = $startPage; $i <= $endPage; $i++)
-                            <li class="page-item {{ $visitasMedia->currentPage() == $i ? 'active' : '' }}">
+                            <li class="page-item {{ $visitasBaja->currentPage() == $i ? 'active' : '' }}">
                                 <a class="page-link"
                                     href="{{ $visitasBaja->url($i) }}&tab=baja">{{ $i }}</a>
                             </li>
@@ -476,7 +476,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @if ($visitasBaja->isEmpty())
+                        @if ($visitasAntiguas->isEmpty())
                             <tr>
                                 <td colspan="9" class="text-center">Historial de visitas vacío.</td>
                             </tr>
@@ -519,8 +519,8 @@
                 </table>
 
                 @php
-                    $totalPages = $visitasMedia->lastPage();
-                    $currentPage = $visitasMedia->currentPage();
+                    $totalPages = $visitasAntiguas->lastPage();
+                    $currentPage = $visitasAntiguas->currentPage();
                     $maxPagesToShow = 5; // Número máximo de enlaces de página a mostrar
 
                     $startPage = max($currentPage - floor($maxPagesToShow / 2), 1);
@@ -536,7 +536,7 @@
                     <ul class="pagination">
                         @if ($startPage > 1)
                             <li class="page-item">
-                                <a class="page-link" href="{{ $visitasBaja->url(1) }}&tab=historial">1</a>
+                                <a class="page-link" href="{{ $visitasAntiguas->url(1) }}&tab=historial">1</a>
                             </li>
                             @if ($startPage > 2)
                                 <li class="page-item disabled"><span class="page-link">...</span></li>
@@ -544,9 +544,9 @@
                         @endif
 
                         @for ($i = $startPage; $i <= $endPage; $i++)
-                            <li class="page-item {{ $visitasMedia->currentPage() == $i ? 'active' : '' }}">
+                            <li class="page-item {{ $visitasAntiguas->currentPage() == $i ? 'active' : '' }}">
                                 <a class="page-link"
-                                    href="{{ $visitasBaja->url($i) }}&tab=historial">{{ $i }}</a>
+                                    href="{{ $visitasAntiguas->url($i) }}&tab=historial">{{ $i }}</a>
                             </li>
                         @endfor
 
@@ -556,7 +556,7 @@
                             @endif
                             <li class="page-item">
                                 <a class="page-link"
-                                    href="{{ $visitasBaja->url($totalPages) }}&tab=historial">{{ $totalPages }}</a>
+                                    href="{{ $visitasAntiguas->url($totalPages) }}&tab=historial">{{ $totalPages }}</a>
                             </li>
                         @endif
                     </ul>

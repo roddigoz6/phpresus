@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
+use App\Traits\ProyectoDetailsTrait;
 
 use Carbon\Carbon;
 use App\Models\Cliente;
 use App\Mail\Saludo;
+
 use App\Mail\ProyectoEnviado;
 use App\Models\Proyecto;
 use App\Models\Presupuesto;
@@ -21,6 +23,8 @@ use Illuminate\Http\Request;
 
 class ProyectoController extends Controller
 {
+    use ProyectoDetailsTrait;
+
     /**
      * Display a listing of the resource.
      */
@@ -143,20 +147,8 @@ class ProyectoController extends Controller
 
     public function details($id)
     {
-        $proyecto = Proyecto::findOrFail($id);
-        $cliente = $proyecto->cliente;
-        $visitas = $proyecto->visitas;
-
-        $presupuesto = $proyecto->presupuesto;
-        if ($presupuesto) {
-            $productoPresupuestos = $presupuesto->productoPresupuestos->sortBy('orden');
-        } else {
-            $productoPresupuestos = collect();
-        }
-
-        //dd($productoPresupuestos);
-
-        return view('pages/proyecto.details', compact('proyecto', 'cliente', 'visitas', 'productoPresupuestos'));
+        $data = $this->getProyectoDetails($id);
+        return view('pages/proyecto.details', $data);
     }
 
     /**

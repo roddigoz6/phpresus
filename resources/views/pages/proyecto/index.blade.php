@@ -77,68 +77,76 @@
                             <tr class="text-center">
                                 @switch($proyecto->estado)
                                     @case('presupuestado')
-                                        <td class="align-middle">
-                                            <a href="#"
-                                               class="btn btn-light-secondary"
-                                               data-presupuesto-id="{{ $proyecto->proyecto_id }}"
-                                               data-bs-toggle="modal"
-                                               data-bs-target="#detallesProyectoModal"
-                                               data-proyecto-id="{{ $proyecto->proyecto_id }}"
-                                               title="Ver detalle del proyecto">
-                                               {{ $proyecto->proyecto_id }}
-                                               <span class="badge badge-info">P</span>
-                                            </a>
-                                          </td>
-                                        @break
+                                    <td class="align-middle">
+                                        <a href="#"
+                                        class="btn btn-light-secondary"
+                                        data-presupuesto-id="{{ $proyecto->proyecto_id }}"
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#detallesProyectoModal"
+                                        data-proyecto-id="{{ $proyecto->proyecto_id }}"
+                                        title="Ver detalle del proyecto">
+                                        {{ $proyecto->proyecto_id }}
+                                        <span class="badge badge-info">P</span>
+                                        </a>
+                                    </td>
+                                    @break
 
                                     @case('presupuesto_aceptado')
                                         <td class="align-middle">
-                                            <a href="{{route('proyecto.details', $proyecto->proyecto_id)}}" class="btn btn-light-secondary"
-                                                data-presupuesto-id="{{ $proyecto->proyecto_id }}"
-                                                data-bs-toggle="popover"
-                                                data-bs-trigger="hover"
-                                                title="Ver detalle del proyecto">
-                                                {{ $proyecto->proyecto_id }}
-                                                <span class="badge badge-primary">A</span>
+                                            <a href="#"
+                                            class="btn btn-light-secondary"
+                                            data-presupuesto-id="{{ $proyecto->proyecto_id }}"
+                                            data-bs-toggle="modal"
+                                            data-bs-target="#detallesProyectoModal"
+                                            data-proyecto-id="{{ $proyecto->proyecto_id }}"
+                                            title="Ver detalle del proyecto">
+                                            {{ $proyecto->proyecto_id }}
+                                            <span class="badge badge-primary">A</span>
                                             </a>
                                         </td>
                                         @break
 
                                     @case('por_facturar')
                                         <td class="align-middle">
-                                            <a href="{{route('proyecto.details', $proyecto->proyecto_id)}}" class="btn btn-light-secondary"
-                                                data-presupuesto-id="{{ $proyecto->proyecto_id }}"
-                                                data-bs-toggle="popover"
-                                                data-bs-trigger="hover"
-                                                title="Ver detalle del proyecto">
-                                                {{ $proyecto->proyecto_id }}
-                                                <span class="badge badge-secondary">P</span>
+                                            <a href="#"
+                                            class="btn btn-light-secondary"
+                                            data-presupuesto-id="{{ $proyecto->proyecto_id }}"
+                                            data-bs-toggle="modal"
+                                            data-bs-target="#detallesProyectoModal"
+                                            data-proyecto-id="{{ $proyecto->proyecto_id }}"
+                                            title="Ver detalle del proyecto">
+                                            {{ $proyecto->proyecto_id }}
+                                            <span class="badge badge-secondary">P</span>
                                             </a>
                                         </td>
                                         @break
 
                                     @case('facturado_pendiente_cobro')
                                         <td class="align-middle">
-                                            <a href="{{route('proyecto.details', $proyecto->proyecto_id)}}" class="btn btn-light-secondary"
-                                                data-presupuesto-id="{{ $proyecto->proyecto_id }}"
-                                                data-bs-toggle="popover"
-                                                data-bs-trigger="hover"
-                                                title="Ver detalle del proyecto">
-                                                {{ $proyecto->proyecto_id }}
-                                                <span class="badge badge-warning">C</span>
+                                            <a href="#"
+                                            class="btn btn-light-secondary"
+                                            data-presupuesto-id="{{ $proyecto->proyecto_id }}"
+                                            data-bs-toggle="modal"
+                                            data-bs-target="#detallesProyectoModal"
+                                            data-proyecto-id="{{ $proyecto->proyecto_id }}"
+                                            title="Ver detalle del proyecto">
+                                            {{ $proyecto->proyecto_id }}
+                                            <span class="badge badge-warning">C</span>
                                             </a>
                                         </td>
                                         @break
 
                                     @case('factura_cobrada')
                                         <td class="align-middle">
-                                            <a href="{{route('proyecto.details', $proyecto->proyecto_id)}}" class="btn btn-light-secondary"
-                                                data-presupuesto-id="{{ $proyecto->proyecto_id }}"
-                                                data-bs-toggle="popover"
-                                                data-bs-trigger="hover"
-                                                title="Ver detalle del proyecto">
-                                                {{ $proyecto->proyecto_id }}
-                                                <span class="badge badge-success">F</span>
+                                            <a href="#"
+                                            class="btn btn-light-secondary"
+                                            data-presupuesto-id="{{ $proyecto->proyecto_id }}"
+                                            data-bs-toggle="modal"
+                                            data-bs-target="#detallesProyectoModal"
+                                            data-proyecto-id="{{ $proyecto->proyecto_id }}"
+                                            title="Ver detalle del proyecto">
+                                            {{ $proyecto->proyecto_id }}
+                                            <span class="badge badge-success">F</span>
                                             </a>
                                         </td>
                                         @break
@@ -272,17 +280,18 @@
                         @foreach ($proyectosPresupuestado as $proyecto)
                             <tr class="text-center">
                                 <td class="align-middle">
-                                            <a href="{{route('proyecto.details', $proyecto->proyecto_id)}}" class="btn btn-light-secondary"
-                                                data-presupuesto-id="{{ $proyecto->proyecto_id }}"
-                                                data-bs-toggle="popover"
-                                                data-bs-trigger="hover"
-                                                title="Ver detalle del proyecto">
-                                                {{ $proyecto->proyecto_id }}
-                                                <span class="badge badge-info">P</span>
-                                            </a>
-                                        </td>
+                                    <a href="#"
+                                       class="btn btn-light-secondary"
+                                       data-presupuesto-id="{{ $proyecto->proyecto_id }}"
+                                       data-bs-toggle="modal"
+                                       data-bs-target="#detallesProyectoModal"
+                                       data-proyecto-id="{{ $proyecto->proyecto_id }}"
+                                       title="Ver detalle del proyecto">
+                                       {{ $proyecto->proyecto_id }}
+                                       <span class="badge badge-info">P</span>
+                                    </a>
+                                </td>
                                 <td class="align-middle"> {{ $proyecto->serie_ref ?? 'No registrado' }} - {{ $proyecto->num_ref ?? 'No registrado' }} </td>
-
                                 <td class="align-middle">
                                     <a
                                         class="item-link"
@@ -329,7 +338,7 @@
                                 <td class="align-middle">
                                     <div class="card-toolbar">
                                         <button type="button" class="btn btn-sm btn-icon btn-light-primary me-n3" data-kt-menu-trigger="{default: 'click', lg: 'hover'}" data-kt-menu-placement="bottom-end"><i class="fa-solid fa-bars"></i></button>
-                                        @include('partials/menus/_acciones_proyecto')
+                                        @include('partials/menus/_acciones_proyecto', ['proyecto' => $proyecto])
                                     </div>
                                 </td>
                             </tr>
@@ -408,15 +417,18 @@
                         @foreach ($proyectosPresupuestoAceptado as $proyecto)
                             <tr class="text-center">
                                 <td class="align-middle">
-                                            <a href="{{route('proyecto.details', $proyecto->proyecto_id)}}" class="btn btn-light-secondary"
-                                                data-presupuesto-id="{{ $proyecto->proyecto_id }}"
-                                                data-bs-toggle="popover"
-                                                data-bs-trigger="hover"
-                                                title="Ver detalle del proyecto">
-                                                {{ $proyecto->proyecto_id }}
-                                                <span class="badge badge-primary">A</span>
-                                            </a>
-                                        </td>
+                                    <a href="#"
+                                       class="btn btn-light-secondary"
+                                       data-presupuesto-id="{{ $proyecto->proyecto_id }}"
+                                       data-bs-toggle="modal"
+                                       data-bs-target="#detallesProyectoModal"
+                                       data-proyecto-id="{{ $proyecto->proyecto_id }}"
+                                       title="Ver detalle del proyecto">
+                                       {{ $proyecto->proyecto_id }}
+                                       <span class="badge badge-primary">A</span>
+                                    </a>
+                                </td>
+
                                 <td class="align-middle"> {{ $proyecto->serie_ref ?? 'No registrado' }} - {{ $proyecto->num_ref ?? 'No registrado' }} </td>
 
                                 <td class="align-middle">
@@ -465,7 +477,7 @@
                                 <td class="align-middle">
                                     <div class="card-toolbar">
                                         <button type="button" class="btn btn-sm btn-icon btn-light-primary me-n3" data-kt-menu-trigger="{default: 'click', lg: 'hover'}" data-kt-menu-placement="bottom-end"><i class="fa-solid fa-bars"></i></button>
-                                        @include('partials/menus/_acciones_proyecto')
+                                        @include('partials/menus/_acciones_proyecto', ['proyecto' => $proyecto])
                                     </div>
                                 </td>
                             </tr>
@@ -544,17 +556,18 @@
                         @foreach ($proyectosPorFact as $proyecto)
                             <tr class="text-center">
                                 <td class="align-middle">
-                                            <a href="{{route('proyecto.details', $proyecto->proyecto_id)}}" class="btn btn-light-secondary"
-                                                data-presupuesto-id="{{ $proyecto->proyecto_id }}"
-                                                data-bs-toggle="popover"
-                                                data-bs-trigger="hover"
-                                                title="Ver detalle del proyecto">
-                                                {{ $proyecto->proyecto_id }}
-                                                <span class="badge badge-primary">A</span>
-                                            </a>
-                                        </td>
+                                    <a href="#"
+                                       class="btn btn-light-secondary"
+                                       data-presupuesto-id="{{ $proyecto->proyecto_id }}"
+                                       data-bs-toggle="modal"
+                                       data-bs-target="#detallesProyectoModal"
+                                       data-proyecto-id="{{ $proyecto->proyecto_id }}"
+                                       title="Ver detalle del proyecto">
+                                       {{ $proyecto->proyecto_id }}
+                                       <span class="badge badge-secondary">P</span>
+                                    </a>
+                                </td>
                                 <td class="align-middle"> {{ $proyecto->serie_ref ?? 'No registrado' }} - {{ $proyecto->num_ref ?? 'No registrado' }} </td>
-
                                 <td class="align-middle">
                                     <a
                                         class="item-link"
@@ -601,7 +614,7 @@
                                 <td class="align-middle">
                                     <div class="card-toolbar">
                                         <button type="button" class="btn btn-sm btn-icon btn-light-primary me-n3" data-kt-menu-trigger="{default: 'click', lg: 'hover'}" data-kt-menu-placement="bottom-end"><i class="fa-solid fa-bars"></i></button>
-                                        @include('partials/menus/_acciones_proyecto')
+                                        @include('partials/menus/_acciones_proyecto', ['proyecto' => $proyecto])
                                     </div>
                                 </td>
                             </tr>
@@ -680,17 +693,18 @@
                         @foreach ($proyectosFacturadoPendienteCobro as $proyecto)
                             <tr class="text-center">
                                 <td class="align-middle">
-                                            <a href="{{route('proyecto.details', $proyecto->proyecto_id)}}" class="btn btn-light-secondary"
-                                                data-presupuesto-id="{{ $proyecto->proyecto_id }}"
-                                                data-bs-toggle="popover"
-                                                data-bs-trigger="hover"
-                                                title="Ver detalle del proyecto">
-                                                {{ $proyecto->proyecto_id }}
-                                                <span class="badge badge-warning">C</span>
-                                            </a>
-                                        </td>
+                                    <a href="#"
+                                       class="btn btn-light-secondary"
+                                       data-presupuesto-id="{{ $proyecto->proyecto_id }}"
+                                       data-bs-toggle="modal"
+                                       data-bs-target="#detallesProyectoModal"
+                                       data-proyecto-id="{{ $proyecto->proyecto_id }}"
+                                       title="Ver detalle del proyecto">
+                                       {{ $proyecto->proyecto_id }}
+                                       <span class="badge badge-warning">C</span>
+                                    </a>
+                                </td>
                                 <td class="align-middle"> {{ $proyecto->serie_ref ?? 'No registrado' }} - {{ $proyecto->num_ref ?? 'No registrado' }} </td>
-
                                 <td class="align-middle">
                                     <a
                                         class="item-link"
@@ -737,7 +751,7 @@
                                 <td class="align-middle">
                                     <div class="card-toolbar">
                                         <button type="button" class="btn btn-sm btn-icon btn-light-primary me-n3" data-kt-menu-trigger="{default: 'click', lg: 'hover'}" data-kt-menu-placement="bottom-end"><i class="fa-solid fa-bars"></i></button>
-                                        @include('partials/menus/_acciones_proyecto')
+                                        @include('partials/menus/_acciones_proyecto', ['proyecto' => $proyecto])
                                     </div>
                                 </td>
                             </tr>
@@ -816,15 +830,17 @@
                         @foreach ($proyectosFacturaCobrada as $proyecto)
                             <tr class="text-center">
                                 <td class="align-middle">
-                                            <a href="{{route('proyecto.details', $proyecto->proyecto_id)}}" class="btn btn-light-secondary"
-                                                data-presupuesto-id="{{ $proyecto->proyecto_id }}"
-                                                data-bs-toggle="popover"
-                                                data-bs-trigger="hover"
-                                                title="Ver detalle del proyecto">
-                                                {{ $proyecto->proyecto_id }}
-                                                <span class="badge badge-success">F</span>
-                                            </a>
-                                        </td>
+                                    <a href="#"
+                                       class="btn btn-light-secondary"
+                                       data-presupuesto-id="{{ $proyecto->proyecto_id }}"
+                                       data-bs-toggle="modal"
+                                       data-bs-target="#detallesProyectoModal"
+                                       data-proyecto-id="{{ $proyecto->proyecto_id }}"
+                                       title="Ver detalle del proyecto">
+                                       {{ $proyecto->proyecto_id }}
+                                       <span class="badge badge-success">F</span>
+                                    </a>
+                                </td>
                                 <td class="align-middle"> {{ $proyecto->serie_ref ?? 'No registrado' }} - {{ $proyecto->num_ref ?? 'No registrado' }} </td>
 
                                 <td class="align-middle">
@@ -873,7 +889,7 @@
                                 <td class="align-middle">
                                     <div class="card-toolbar">
                                         <button type="button" class="btn btn-sm btn-icon btn-light-primary me-n3" data-kt-menu-trigger="{default: 'click', lg: 'hover'}" data-kt-menu-placement="bottom-end"><i class="fa-solid fa-bars"></i></button>
-                                        @include('partials/menus/_acciones_proyecto')
+                                        @include('partials/menus/_acciones_proyecto', ['proyecto' => $proyecto])
                                     </div>
                                 </td>
                             </tr>
@@ -952,17 +968,18 @@
                         @foreach ($proyectosCerrado as $proyecto)
                             <tr class="text-center">
                                 <td class="align-middle">
-                                            <a href="{{route('proyecto.details', $proyecto->proyecto_id)}}" class="btn btn-light-secondary"
-                                                data-presupuesto-id="{{ $proyecto->proyecto_id }}"
-                                                data-bs-toggle="popover"
-                                                data-bs-trigger="hover"
-                                                title="Ver detalle del proyecto">
-                                                {{ $proyecto->proyecto_id }}
-                                                <span class="badge badge-dark">X</span>
-                                            </a>
-                                        </td>
+                                    <a href="#"
+                                        class="btn btn-light-secondary"
+                                        data-presupuesto-id="{{ $proyecto->proyecto_id }}"
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#detallesProyectoModal"
+                                        data-proyecto-id="{{ $proyecto->proyecto_id }}"
+                                        title="Ver detalle del proyecto">
+                                        {{ $proyecto->proyecto_id }}
+                                        <span class="badge badge-dark">X</span>
+                                    </a>
+                                </td>
                                 <td class="align-middle"> {{ $proyecto->serie_ref ?? 'No registrado' }} - {{ $proyecto->num_ref ?? 'No registrado' }} </td>
-
                                 <td class="align-middle">
                                     <a
                                         class="item-link"
@@ -1009,7 +1026,7 @@
                                 <td class="align-middle">
                                     <div class="card-toolbar">
                                         <button type="button" class="btn btn-sm btn-icon btn-light-primary me-n3" data-kt-menu-trigger="{default: 'click', lg: 'hover'}" data-kt-menu-placement="bottom-end"><i class="fa-solid fa-bars"></i></button>
-                                        @include('partials/menus/_acciones_proyecto')
+                                        @include('partials/menus/_acciones_proyecto', ['proyecto' => $proyecto])
                                     </div>
                                 </td>
                             </tr>
@@ -1373,22 +1390,53 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
-document.addEventListener('DOMContentLoaded', function () {
-    document.querySelectorAll('[data-bs-toggle="modal"]').forEach(function (element) {
-        element.addEventListener('click', function () {
-        var proyectoId = this.getAttribute('data-proyecto-id');
+document.addEventListener('DOMContentLoaded', () => {
+    // Maneja el evento de clic en los botones que abren modales de detalles
+    document.querySelectorAll('[data-bs-toggle="modal"]').forEach(button => {
+        button.addEventListener('click', function () {
+            var proyectoId = this.getAttribute('data-proyecto-id');
 
-        fetch(`/proyecto/${proyectoId}/details`)
-            .then(response => response.text())
-            .then(html => {
-            document.getElementById('modalBody').innerHTML = html;
-            })
-            .catch(error => console.error('Error:', error));
+            // Verifica si el atributo data-proyecto-id existe y es válido
+            if (proyectoId) {
+                fetch(`/proyecto/${proyectoId}/details`)
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Red no está disponible.');
+                        }
+                        return response.text();
+                    })
+                    .then(html => {
+                        // Solo actualiza el modal si es el modal de detalles
+                        if (this.getAttribute('data-bs-target') === '#detallesProyectoModal') {
+                            document.getElementById('modalBody').innerHTML = html;
+                        }
+                    })
+                    .catch(error => console.error('Error:', error));
+            } else {
+                console.error('ID de proyecto no válido o no proporcionado.');
+            }
+        });
+    });
+
+    // Maneja el evento de clic en los botones de asignar visita
+    document.querySelectorAll('[data-bs-target="#visitaModal"]').forEach(button => {
+        button.addEventListener('click', function () {
+            const visitaModal = document.getElementById('visitaModal');
+            const proyectoId = this.getAttribute('data-proyecto-id');
+            const serieRef = this.getAttribute('data-serie-ref');
+            const contacto = this.getAttribute('data-contacto');
+
+            // Actualiza los elementos en el modal de asignar visita con los valores capturados
+            const modalTitle = visitaModal.querySelector('.modal-title strong');
+            const proyectoInput = visitaModal.querySelector('input[name="proyecto_id"]');
+            const contactoInput = visitaModal.querySelector('input[name="contacto_visita"]');
+
+            modalTitle.textContent = `${proyectoId} - ${serieRef}`;
+            proyectoInput.value = proyectoId;
+            contactoInput.value = contacto;
         });
     });
 });
-
-
 </script>
 @endpush
 @include('partials/modals/_detalles-proyecto')

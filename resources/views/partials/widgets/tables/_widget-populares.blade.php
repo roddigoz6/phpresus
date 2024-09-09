@@ -18,12 +18,12 @@
             <table class="table table-hover table-row-dashed text-center gs-0 gy-3 my-0 rounded-table">
                 <thead class="table-dark">
                     <tr class="fs-7 fw-bold border-bottom-0 align-middle">
-                        <th class="icon-table">Id</th>
+                        <th class="icon-table">Producto</th>
                         <th class="icon-table">Nombre de producto</th>
                         <th class="icon-table">Descripción</th>
                         <th class="icon-table">Precio</th>
                         <th class="icon-table">Stock disponible</th>
-                        <th class="icon-table">Presupuesto</th>
+                        <th class="icon-table">Proyecto</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -40,7 +40,7 @@
                         </td>
 
                         <td class="align-middle" style="max-width: 200px; overflow: hidden; text-overflow: ellipsis; text-align:justify;">
-                            {{$popular->descripcion}}
+                            {{$popular->leyenda}}
                         </td>
 
                         <td class="align-middle">
@@ -60,16 +60,20 @@
                         <td class="align-middle">
                             <div class="symbol-group symbol-hover flex-nowrap align-middle justify-content-center">
                                 @foreach($popular->tprod_pres->take(5) as $index => $productoPresupuesto)
-
-                                @if ($productoPresupuesto->presupuesto && !$productoPresupuesto->presupuesto->eliminado)
-                                    <div class="symbol symbol-35px symbol-circle" data-bs-toggle="tooltip" title="Presupuesto {{ $productoPresupuesto->presupuesto->id }}">
-                                        <span class="symbol-label {{ $randomColor }} text-inverse-success fw-bold">{{ $productoPresupuesto->presupuesto->id }}</span>
-                                    </div>
-                                @else
-                                    <div class="symbol symbol-35px symbol-circle" data-bs-toggle="tooltip" title="Presupuesto no registrado o eliminado">
-                                        <span class="symbol-label bg-warning text-inverse-warning fw-bold">N/A</span>
-                                    </div>
-                                @endif
+                                    @if ($productoPresupuesto->presupuesto && !$productoPresupuesto->presupuesto->eliminado)
+                                        <div class="symbol symbol-35px symbol-circle" data-bs-toggle="tooltip" title="Proyecto {{ $productoPresupuesto->presupuesto->proyecto_id }}">
+                                            <span class="symbol-label {{ $randomColor }} text-inverse-success fw-bold proyecto-detalles-btn"
+                                                  data-bs-toggle="modal"
+                                                  data-bs-target="#detallesProyectoModal"
+                                                  data-proyecto-id="{{ $productoPresupuesto->presupuesto->proyecto->proyecto_id }}">
+                                                {{ ltrim(explode('-', $productoPresupuesto->presupuesto->proyecto->proyecto_id)[0], '0') }}
+                                            </span>
+                                        </div>
+                                    @else
+                                        <div class="symbol symbol-35px symbol-circle" data-bs-toggle="tooltip" title="Proyecto no registrado o eliminado">
+                                            <span class="symbol-label bg-warning text-inverse-warning fw-bold">N/A</span>
+                                        </div>
+                                    @endif
                                 @endforeach
 
                                 @if($popular->tprod_pres->count() > 5)
@@ -83,6 +87,8 @@
                             </div>
                         </td>
 
+
+
                     </tr>
                     @endforeach
                 </tbody>
@@ -95,3 +101,28 @@
     </h3>
     @endif
 </div>
+
+@push('scripts')
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    // Maneja el evento de clic en los botones de proyecto
+    document.querySelectorAll('[data-proyecto-id]').forEach(function (element) {
+        element.addEventListener('click', function () {
+            var proyectoId = this.getAttribute('data-proyecto-id');
+
+            if (proyectoId) {
+                fetch(`/proyecto/${proyectoId}/details`)
+                    .then(response => response.text())
+                    .then(html => {
+                        document.getElementById('modalBody').innerHTML = html;
+                    })
+                    .catch(error => console.error('Error:', error));
+            } else {
+                console.error('No se ha proporcionado un ID de proyecto válido.');
+            }
+        });
+    });
+});
+
+</script>
+@endpush

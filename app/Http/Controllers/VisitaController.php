@@ -12,58 +12,56 @@ class VisitaController extends Controller
      * Display a listing of the resource.
      */
 
-     public function index(Request $request)
-     {
-         $search = $request->input('search');
-         $tab = $request->input('tab', 'all');
+    public function index(Request $request)
+    {
+        $search = $request->input('search');
+        $tab = $request->input('tab', 'all');
 
-         $today = Carbon::today();
-         $threeDaysFromNow = Carbon::today()->addDays(3);
+        $today = Carbon::today();
+        $threeDaysFromNow = Carbon::today()->addDays(3);
 
-         // Consulta base para todas las visitas
-         $query = Visita::where('eliminado', false)
-                         ->orderBy('fecha_inicio', 'asc');
+        // Consulta base para todas las visitas
+        $query = Visita::where('eliminado', false)
+                        ->orderBy('fecha_inicio', 'asc');
 
-         if ($search) {
-             $query->whereHas('cliente', function($q) use ($search) {
-                 $q->where('nombre', 'like', "%$search%");
-             });
-         }
+        if ($search) {
+            $query->whereHas('cliente', function($q) use ($search) {
+                $q->where('nombre', 'like', "%$search%");
+            });
+        }
 
-         // Paginación de todas las visitas
-         $visitas = $query->paginate(15);
+        $visitas = $query->paginate(15);
+        $queryBaja = clone $query;
+        $visitasBaja = $queryBaja->where('prioridad', 'Baja')->paginate(15);
 
-         // Clonar la consulta para filtrar y paginar por prioridad
-         $queryBaja = clone $query;
-         $visitasBaja = $queryBaja->where('prioridad', 'Baja')->paginate(15);
+        $queryMedia = clone $query;
+        $visitasMedia = $queryMedia->where('prioridad', 'Media')->paginate(15);
 
-         $queryMedia = clone $query;
-         $visitasMedia = $queryMedia->where('prioridad', 'Media')->paginate(15);
+        $queryAlta = clone $query;
+        $visitasAlta = $queryAlta->where('prioridad', 'Alta')->paginate(15);
 
-         $queryAlta = clone $query;
-         $visitasAlta = $queryAlta->where('prioridad', 'Alta')->paginate(15);
+        $queryAntiguas = clone $query;
+        $queryAntiguas->whereDate('fecha_inicio', '<', $today)
+                    ->whereNotNull('nota_cerrar')
+                    ->where('nota_cerrar', '!=', '');
 
-         // Clonar la consulta para obtener visitas antiguas
-         $queryAntiguas = clone $query;
-         $queryAntiguas->whereDate('fecha_inicio', '<', $today);
-         $visitasAntiguas = $queryAntiguas->paginate(15);
+        $visitasAntiguas = $queryAntiguas->paginate(15);
 
-         // Redirigir a la última página si no hay visitas y hay más de una página
-         if ($visitas->count() == 0 && $visitas->lastPage() > 1) {
-             return redirect()->route('visita.index', ['page' => $visitas->lastPage() - 1, 'tab' => $tab]);
-         }
+        if ($visitas->count() == 0 && $visitas->lastPage() > 1) {
+            return redirect()->route('visita.index', ['page' => $visitas->lastPage() - 1, 'tab' => $tab]);
+        }
 
-         return view('pages/visita.index', compact(
-             'visitas',
-             'visitasBaja',
-             'visitasMedia',
-             'visitasAlta',
-             'visitasAntiguas',
-             'today',
-             'threeDaysFromNow',
-             'tab'
-         ));
-     }
+        return view('pages/visita.index', compact(
+            'visitas',
+            'visitasBaja',
+            'visitasMedia',
+            'visitasAlta',
+            'visitasAntiguas',
+            'today',
+            'threeDaysFromNow',
+            'tab'
+        ));
+    }
 
 
     /**

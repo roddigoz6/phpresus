@@ -88,24 +88,5 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 
-document.addEventListener('DOMContentLoaded', function() {
-    const visitaModal = document.getElementById('visitaModal');
-
-    visitaModal.addEventListener('show.bs.modal', function(event) {
-        const button = event.relatedTarget; // El botón que abrió el modal
-        const proyectoId = button.getAttribute('data-proyecto-id');
-        const serieRef = button.getAttribute('data-serie-ref');
-        const contacto = button.getAttribute('data-contacto');
-
-        // Actualiza los elementos en el modal con los valores capturados
-        const modalTitle = visitaModal.querySelector('.modal-title strong');
-        const proyectoInput = visitaModal.querySelector('input[name="proyecto_id"]');
-        const contactoInput = visitaModal.querySelector('input[name="contacto_visita"]');
-
-        modalTitle.textContent = `${proyectoId} - ${serieRef}`;
-        proyectoInput.value = proyectoId;
-        contactoInput.value = contacto;
-    });
-});
 
 </script>
