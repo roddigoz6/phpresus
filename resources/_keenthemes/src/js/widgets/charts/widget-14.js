@@ -68,7 +68,7 @@ var KTChartsWidget14 = (function () {
                     },
                 },
                 {
-                    category: "Human Resources",
+                    category: "Recursos humanos",
                     value: 68,
                     full: 100,
                     columnSettings: {

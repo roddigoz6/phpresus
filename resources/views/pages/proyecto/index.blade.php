@@ -1392,7 +1392,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 document.addEventListener('DOMContentLoaded', () => {
     // Maneja el evento de clic en los botones que abren modales de detalles
-    document.querySelectorAll('[data-bs-toggle="modal"]').forEach(button => {
+    document.querySelectorAll('[data-bs-target="#detallesProyectoModal"]').forEach(button => {
         button.addEventListener('click', function () {
             var proyectoId = this.getAttribute('data-proyecto-id');
 
@@ -1417,28 +1417,30 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     });
+});
 
-    // Maneja el evento de clic en los botones de asignar visita
-    document.querySelectorAll('[data-bs-target="#visitaModal"]').forEach(button => {
-        button.addEventListener('click', function () {
-            const visitaModal = document.getElementById('visitaModal');
-            const proyectoId = this.getAttribute('data-proyecto-id');
-            const serieRef = this.getAttribute('data-serie-ref');
-            const contacto = this.getAttribute('data-contacto');
 
-            // Actualiza los elementos en el modal de asignar visita con los valores capturados
-            const modalTitle = visitaModal.querySelector('.modal-title strong');
-            const proyectoInput = visitaModal.querySelector('input[name="proyecto_id"]');
-            const contactoInput = visitaModal.querySelector('input[name="contacto_visita"]');
+document.addEventListener('click', function(event) {
+    const button = event.target.closest('[data-bs-target="#visitaModal"]');
+    if (button) {
+        const visitaModal = document.getElementById('visitaModal');
+        const proyectoId = button.getAttribute('data-proyecto-id');
+        const serieRef = button.getAttribute('data-serie-ref');
+        const contacto = button.getAttribute('data-contacto');
 
-            modalTitle.textContent = `${proyectoId} - ${serieRef}`;
-            proyectoInput.value = proyectoId;
-            contactoInput.value = contacto;
-        });
-    });
+        // Actualiza los elementos en el modal de asignar visita con los valores capturados
+        const modalTitle = visitaModal.querySelector('.modal-title strong');
+        const proyectoInput = visitaModal.querySelector('input[name="proyecto_id"]');
+        const contactoInput = visitaModal.querySelector('input[name="contacto_visita"]');
+
+        modalTitle.textContent = `${proyectoId} - ${serieRef}`;
+        proyectoInput.value = proyectoId;
+        contactoInput.value = contacto;
+    }
 });
 </script>
 @endpush
+@include('partials/modals/_asignar-visita')
 @include('partials/modals/_detalles-proyecto')
 @include('partials/modals/_cliente-proyecto')
 </x-default-layout>

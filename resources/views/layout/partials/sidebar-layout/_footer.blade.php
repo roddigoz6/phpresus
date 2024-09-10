@@ -5,7 +5,7 @@
 		</div>
 		<ul class="menu menu-gray-600 menu-hover-primary fw-semibold order-1">
 			<span class="text-muted fw-semibold me-1">{{ date('Y') }}&copy;</span>
-			<a href="/" class="text-gray-800 text-hover-primary">PhPresus</a>
+			<a href="/" class="text-gray-800 text-hover-primary">{{ config('app.name', 'Kasier') }}</a>
 		</ul>
 	</div>
 </div>

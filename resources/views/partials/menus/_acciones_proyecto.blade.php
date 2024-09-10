@@ -1,4 +1,3 @@
-@include('partials/modals/_asignar-visita')
 
 <div class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-800 menu-state-bg-light-primary fw-semibold w-200px py-3" data-kt-menu="true">
     <div class="menu-item px-3">
@@ -39,11 +38,11 @@
         @if ($proyecto->estado != 'presupuestado')
             <div class="menu-item px-3">
                 <a href="#" class="menu-link px-3"
-                data-bs-toggle="modal"
-                data-bs-target="#visitaModal"
-                data-proyecto-id="{{ $proyecto->proyecto_id }}"
-                data-serie-ref="{{ $proyecto->serie_ref ?? 'Serie no registrada.' }}"
-                data-contacto="{{ $proyecto->cliente->contacto ?? 'Contacto no disponible' }}">
+                   data-bs-toggle="modal"
+                   data-bs-target="#visitaModal"
+                   data-proyecto-id="{{ $proyecto->proyecto_id }}"
+                   data-serie-ref="{{ $proyecto->serie_ref ?? 'Serie no registrada.' }}"
+                   data-contacto="{{ $proyecto->cliente->contacto ?? 'Contacto no disponible' }}">
                     <span class="menu-title">Asignar visita</span>
                     <span><i class="fa-solid fa-calendar-check"></i></span>
                 </a>
@@ -87,6 +86,4 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 });
-
-
 </script>
