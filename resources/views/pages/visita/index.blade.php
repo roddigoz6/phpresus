@@ -7,9 +7,13 @@
         <div class="col text-start">
             <h2>Visitas</h2>
         </div>
+        <div class="col text-end">
+            <a class="btn btn-light-primary" href="{{route('proyecto.index')}}">
+                Ir a proyectos <i class="fa-solid fa-screwdriver-wrench"></i></a>
+        </div>
     </div>
 
-    <form action="{{ route('proyecto.index') }}" method="GET" class="mb-3">
+    <form action="{{ route('visita.index') }}" method="GET" class="mb-3">
         <div class="input-group">
             <input type="text" class="form-control" name="search" placeholder="Buscar por nombre de cliente">
             <button class="btn btn-light-primary" type="submit"><i class="fas fa-search"></i></button>
@@ -88,7 +92,7 @@
                                         {{ $visita->proyecto_id }}, {{ $visita->proyecto->serie_ref ?? 'No registrado.' }}
                                     </button>
                                 </td>
-                                <td class="align-middle">{{ $visita->descripcion }} {{ $visita->proyecto->cliente->nombre }} {{ $visita->proyecto->cliente->apellido }}</td>
+                                <td class="align-middle">{{ $visita->descripcion }}, {{ $visita->proyecto->cliente->nombre }} {{ $visita->proyecto->cliente->apellido }}</td>
                                 <td class="align-middle">{{ $visita->fecha_inicio }} a las {{ $visita->hora_inicio }}</td>
 
                                 @if ($visita->fecha_fin == null && $visita->hora_fin == null)

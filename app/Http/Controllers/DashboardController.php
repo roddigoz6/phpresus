@@ -80,7 +80,6 @@ class DashboardController extends Controller
         $inicioSemana = Carbon::now()->startOfWeek();
         $finSemana = Carbon::now()->endOfWeek();
 
-        $visitas = Visita::whereBetween('fecha_inicio', [$inicioSemana, $finSemana])->get();
         $rangoSemana = $inicioSemana->format('d M') . ' al ' . $finSemana->format('d M');
 
         return view('pages.dashboards.index', compact(
@@ -98,10 +97,22 @@ class DashboardController extends Controller
             'clientesEstablecidos',
             'clientesNoEstablecidos',
             'proyectoDetails',
-            'visitas',
             'rangoSemana'
         ));
     }
+
+    public function getVisitasSemana(Request $request)
+    {
+        $inicioSemana = Carbon::now()->startOfWeek();
+        $finSemana = Carbon::now()->endOfWeek();
+
+        $visitas = Visita::whereBetween('fecha_inicio', [$inicioSemana, $finSemana])
+                        ->where('eliminado', false)
+                        ->paginate(5);
+
+        return view('partials.visitas_semana', compact('visitas'));
+    }
+
 
     public function getProductosBajoStock(Request $request)
     {

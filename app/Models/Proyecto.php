@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Models;
-
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -20,6 +19,7 @@ class Proyecto extends Model
         'serie_ref',
         'num_ref',
         'pago',
+        'iva',
         'cerrado',
         'eliminado'
     ];
@@ -44,12 +44,23 @@ class Proyecto extends Model
         });
 
         static::updating(function ($proyecto) {
+
             if ($proyecto->isDirty('estado')) {
-                $historial = HistorialEstado::where('proyecto_id', $proyecto->proyecto_id)->first();
+
+                $historial = HistorialEstado::where('proyecto_id', $proyecto->id)->first();
 
                 if ($historial) {
                     $estado = $proyecto->estado;
                     $historial->update([$estado => now()]);
+                }
+            }
+
+            if ($proyecto->isDirty('cerrado') && $proyecto->cerrado) {
+
+                $historial = HistorialEstado::where('proyecto_id', $proyecto->id)->first();
+
+                if ($historial) {
+                    $historial->update(['cerrado' => now()]);
                 }
             }
         });

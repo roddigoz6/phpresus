@@ -14,7 +14,7 @@
     </nav>
 
     <div class="details" style="display: flex; justify-content: space-between; ">
-        Hola, te envío el presupuesto de tus productos.
+        Hola, te envío la proforma de tu proyecto :)
     </div>
 
     <footer id="footer" class="text-center bg-dark">

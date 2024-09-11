@@ -15,9 +15,8 @@ class HistorialEstado extends Model
         'visita_id',
         'presupuestado',
         'presupuesto_aceptado',
-        'facturado_pendiente_cobro',
-        'factura_cobrada',
-        'por_facturar',
+        'por_cobrar',
+        'cerrado',
         'nota_cerrar'
     ];
 

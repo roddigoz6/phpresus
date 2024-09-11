@@ -79,14 +79,14 @@
     <div id="orden" class="container">
         <div class="details">
             <div class="details-img">
-                <img  alt="Kasier">
+                <img src="data:image/jpeg;base64,{{ base64_encode(file_get_contents(public_path('assets/media/logos/kasier.jpg'))) }}" alt="Kasier">
             </div>
 
             <div class="details-content">
-                <h3></h3>
-                <p></p>
+                <h3><strong>AUXILIAR DE LA CONSTRUCCIÓN-ESTUDIOS-IMPERMEABILIZACIONES</strong></h3>
+                <p>TEJADOS Y FACHADAS, PLACAS ASFÁLTICAS, AISLAMIENTOS, TERRAZAS, CUBIERTAS DE ASFALTO Y TEJAS, ETC.</p>
                 <div class="user-info">
-                    <p><strong></strong> </p>
+                    <p><strong>KASIER</strong> - Pedro Icaza Nº 24 lonja, 48980 SANTURTZI Tel. 94 447 56 88</p>
                     <p><strong>{{$cliente->nombre}} {{$cliente->apellido}}</strong></p>
                     <p>{{$cliente->direccion}}</p>
                     <p>{{$cliente->cp}} {{$cliente->poblacion}}</p>
@@ -97,7 +97,7 @@
 
         <div class="project-info">
             <p style="margin: 0;">
-                Proyecto:
+                Proforma:
                 <strong>{{ $proyecto->proyecto_id }}</strong>
 
                 Referencia:
@@ -164,7 +164,7 @@
                     <tr>
                         <td><p style="margin: 0;">Pago: </p></td>
                         <td colspan="2"><strong>{{$proyecto->pago}}</strong></td>
-                        <td><strong>Total</strong></td>
+                        <td><strong>Total proforma</strong></td>
                         <td><strong>{{ round($productoPresupuestos->sum(function ($pp) use ($proyecto) {
                                 return ($pp->cantidad * $pp->precio) * (1 + ($proyecto->iva / 100));
                             }), 2) }}€

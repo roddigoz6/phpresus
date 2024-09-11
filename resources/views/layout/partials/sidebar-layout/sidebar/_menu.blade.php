@@ -28,16 +28,6 @@
                         </a>
                     </div>
 
-                    <div class="menu-item">
-                        <a class="menu-link ? 'active' : '' }}" href="{{ route('factura.index') }}">
-                            <span class="menu-bullet">
-                                <i class="fas fa-euro-sign"></i>
-                            </span>
-                            <span class="menu-title">Ver facturas <span class="menu-icon"></span>
-                        </span>
-                        </a>
-                    </div>
-
                 </div>
             </div>
 

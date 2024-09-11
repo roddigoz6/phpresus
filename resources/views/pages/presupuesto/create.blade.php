@@ -126,20 +126,22 @@
 
                 <div class="col">
                     <hr />
-                    <p class="mb-0">Info del proyecto</p>
-
                     <div class="row">
-                        <div class="col">
-                            <input class="form-control" type="text" name="serie_ref" placeholder="Nombre del proyecto / serie de referencia">
+                        <div class="col col-met">
+                            <label for="serie_ref">Nombre del proyecto ó serie de referencia</label>
+                            <input class="form-control" type="text" name="serie_ref" placeholder="987654321E">
                         </div>
 
-                        <div class="col">
-                            <input class="form-control" type="text" name="num_ref" placeholder="Número de referencia">
+                        <div class="col col-auto">
+                            <label for="num_ref">Número de referencia del proyecto</label>
+                            <input class="form-control" type="text"placeholder="{{$proyectoNum}}" value="{{$proyectoNum}}" disabled>
+                            <input type="hidden" name="num_ref" value="{{$proyectoNum}}">
                         </div>
                     </div>
 
-                    <div>
-                        <label for="pago">Forma de pago</label>
+                    <div class="row">
+                        <div class="col col-me">
+                            <label for="pago">Forma de pago</label>
                             <select class="form-select" id="pago" name="pago">
                                 <option value="Ver condiciones" {{ $cliente->pago == 'Ver condiciones' ? 'selected' : '' }}>Ver condiciones</option>
                                 <option value="50% inicio, 50% fin" {{ $cliente->pago == '50% inicio, 50% fin' ? 'selected' : '' }}>50% inicio, 50% fin</option>
@@ -153,6 +155,18 @@
                                 <option value="Letra de 90 dias" {{ $cliente->pago == 'Letra de 90 días' ? 'selected' : '' }}>Letra de 90 días</option>
                                 <option value="Letra a la vista" {{ $cliente->pago == 'Letra a la vista' ? 'selected' : '' }}>Letra a la vista</option>
                             </select>
+                        </div>
+                        <div class="col col-auto">
+                            <label for="pago">IVA</label>
+                            <select class="form-select" id="iva" name="iva">
+                                <option value="7">7</option>
+                                <option value="8">8</option>
+                                <option value="10">10</option>
+                                <option value="16">16</option>
+                                <option value="18">18</option>
+                                <option value="21">21</option>
+                            </select>
+                        </div>
                     </div>
                     <hr />
                 </div>
@@ -396,12 +410,22 @@ function drop2(event) {
     }
 }
 
-//Para agregar capítulos
 $('#agregarCap').on('click', function() {
     $('#capituloModal').modal('show');
 });
 
 $('#saveCapituloBtn').on('click', function() {
+    guardarCapitulo();
+});
+
+// Agregar capítulo al presionar Enter, 13 siendo el código de la tecla
+$('#capituloTitulo').on('keypress', function(e) {
+    if (e.which === 13) {
+        guardarCapitulo();
+    }
+});
+
+function guardarCapitulo() {
     const tituloCapitulo = $('#capituloTitulo').val().trim();
 
     if (tituloCapitulo === '') {
@@ -432,12 +456,11 @@ $('#saveCapituloBtn').on('click', function() {
     };
 
     productosArrastrados.push(nuevoCapitulo);
-
     actualizarListaProductos();
 
     $('#capituloModal').modal('hide');
     $('#capituloTitulo').val('');
-});
+}
 
 function actualizarListaProductos() {
     //console.log("FUN: actualizarListaProductos");

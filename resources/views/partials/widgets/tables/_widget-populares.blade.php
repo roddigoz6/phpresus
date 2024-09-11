@@ -44,7 +44,7 @@
                         </td>
 
                         <td class="align-middle">
-                            <strong>€{{$popular->precio}}</strong>
+                            <strong>{{$popular->precio}}€</strong>
                         </td>
 
                         @if ($popular->stock <= 5)

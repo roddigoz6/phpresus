@@ -548,12 +548,22 @@ function drop2(event) {
     actualizarListaProductos();
 }
 
-//Para agregar capítulos
 $('#agregarCap').on('click', function() {
     $('#capituloModal').modal('show');
 });
 
 $('#saveCapituloBtn').on('click', function() {
+    guardarCapitulo();
+});
+
+// Agregar capítulo al presionar Enter, 13 siendo el código de la tecla
+$('#capituloTitulo').on('keypress', function(e) {
+    if (e.which === 13) {
+        guardarCapitulo();
+    }
+});
+
+function guardarCapitulo() {
     const tituloCapitulo = $('#capituloTitulo').val().trim();
 
     if (tituloCapitulo === '') {
@@ -570,7 +580,7 @@ $('#saveCapituloBtn').on('click', function() {
         });
         Toast.fire({
             icon: "warning",
-            title: "El título es necesario."
+            title: "El título del capítulo no puede estar vacío."
         });
         return;
     }
@@ -584,12 +594,11 @@ $('#saveCapituloBtn').on('click', function() {
     };
 
     productosArrastrados.push(nuevoCapitulo);
-
     actualizarListaProductos();
 
     $('#capituloModal').modal('hide');
     $('#capituloTitulo').val('');
-});
+}
 
 function actualizarListaProductos() {
 

@@ -61,8 +61,10 @@ class PresupuestoController extends Controller
 
         $cliente_id = $request->query('cliente_id');
         $cliente = Cliente::findOrFail($cliente_id);
+        $proyectoCount = Proyecto::count();
+        $proyectoNum = $proyectoCount + 1;
 
-        return view('pages.presupuesto.create', compact('cliente'));
+        return view('pages.presupuesto.create', compact('cliente', 'proyectoNum'));
     }
 
 
@@ -134,6 +136,7 @@ class PresupuestoController extends Controller
             $proyecto->serie_ref = $validatedData['serie_ref'];
             $proyecto->num_ref = $validatedData['num_ref'];
             $proyecto->pago = $request->input('pago');
+            $proyecto->iva = $request->input('iva');
             $proyecto->save();
 
             // Crear un nuevo presupuesto asociado al proyecto
@@ -177,10 +180,7 @@ class PresupuestoController extends Controller
      */
     public function show(Request $request, Presupuesto $presupuesto)
     {
-        $presupuesto->load('cliente', 'productoPresupuestos.producto');
-        $presupuesto->setRelation('productoPresupuestos', $presupuesto->productoPresupuestos->sortBy('orden_prod'));
-
-        return view('pages/presupuesto.show', compact('presupuesto'));
+        return view();
     }
 
     /**
@@ -275,64 +275,6 @@ class PresupuestoController extends Controller
         }
 
         return redirect()->route('proyecto.index')->with('update_pres', 'Proyecto actualizado.')->with('clear_storage', true);
-    }
-
-    public function download(Presupuesto $presupuesto, $sendByEmail = false)
-    {
-        // Obtener datos del presupuesto
-        $cliente = $presupuesto->cliente;
-
-        $productos_print = $presupuesto->productoPresupuestos()
-            ->orderBy('orden_prod')
-            ->get();
-
-        $options = new Options();
-        $options->set('isHtml5ParserEnabled', true);
-        $options->set('isRemoteEnabled', true);
-
-        $dompdf = new Dompdf($options);
-
-        $html = view('pages/presupuesto.show', compact('presupuesto', 'productos_print'))->render();
-
-        $dompdf->loadHtml($html);
-        $dompdf->setPaper('A4', 'portrait');
-        $dompdf->render();
-
-        $output = $dompdf->output();
-        $pdfName = "presupuesto_{$cliente->nombre}_{$presupuesto->id}.pdf";
-        $pdfPath = "public/presupuestos/{$pdfName}";
-
-        // Guarda el PDF en el servidor
-        Storage::put($pdfPath, $output);
-
-        if ($sendByEmail) {
-            return $pdfPath; // Devuelve la ruta del PDF
-        } else {
-            // Envía el PDF al navegador para descarga
-            return response()->stream(function () use ($output) {
-                echo $output;
-            }, 200, [
-                'Content-Type' => 'application/pdf',
-                'Content-Disposition' => "attachment; filename=\"{$pdfName}\"",
-            ]);
-        }
-    }
-
-    public function sendMail($presupuestoId)
-    {
-        $presupuesto = Presupuesto::findOrFail($presupuestoId);
-
-        $pdfPath = $this->download($presupuesto, true);
-        $clienteEmail = $presupuesto->cliente->email;
-
-        try {
-            // Enviar correo electrónico con el PDF adjunto
-            Mail::to($clienteEmail)->send(new PresupuestoEnviado($presupuesto, Storage::path($pdfPath)));
-            // Log the CSRF token from the session
-            return response()->json(['success' => true]);
-        } catch (\Exception $e) {
-            return response()->json(['error' => 'Error al enviar el correo electrónico'], 500);
-        }
     }
 
     /**

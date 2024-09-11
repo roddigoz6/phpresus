@@ -1,77 +1,50 @@
 <div id="orden" class="container">
-    <div class="header"
-        style="background-color:#212529; color:white; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid black; padding: 10px; margin-bottom: 10px; border-radius:10px;">
-        <h1 class="m-0" style="margin: 0; color:white;">Kasier</h1>
-        <p class="date" style="margin: 0;">Fecha actual: {{ date('d/m/Y') }}</p>
-    </div>
     <div class="details" style="display: flex; justify-content: space-between; ">
-        <div class="col">
-            <strong>Datos del proyecto</strong>
-            <p>
-                Proyecto:
-                <strong>
-                    {{ $proyecto->proyecto_id }}
-                </strong>
+        <div class="row">
+            <div class="col">
+                <div class="header text-center">
+                    <img src="{{ asset('assets/media/logos/kasier.jpg') }}" style="height:300px; margin-bottom:25px;" alt="Kasier">
+                </div>
+            </div>
+            <div class="col">
+                <h3><strong>AUXILIAR DE LA CONSTRUCCIÓN-ESTUDIOS-IMPERMEABILIZACIONES</strong></h3>
+                <p>TEJADOS Y FACHADAS, PLACAS ASFÁLTICAS, AISLAMIENTOS, TERRAZAS, CUBIERTAS DE ASFALTO Y TEJAS, ETC.</p>
+                <fieldset style="border-radius: 10px; background-color:#F9F9F9; padding:5px;">
+                    <p><strong>KASIER</strong> - Pedro Icaza Nº 24 lonja, 48980 SANTURTZI Tel. 94 447 56 88</p>
+                    <p><strong>{{$cliente->nombre}} {{$cliente->apellido}}</strong></p>
+                    <p>{{$cliente->direccion}}</p>
+                    <p>{{$cliente->cp}} {{$cliente->poblacion}}</p>
+                    <p>{{$cliente->provincia}}</p>
+                </fieldset>
 
-                Fecha de creación:
-                <strong>
-                    {{ $proyecto->created_at }}
-                </strong>
-
-            </p>
-
-            <strong>Datos del cliente</strong>
-            <p>
-                Cliente:
-                <strong>
-                    {{ $cliente->nombre }} {{ $cliente->apellido }}
-                </strong>
-
-                DNI/NIE:
-                <strong>
-                    {{ $cliente->dni }}
-                </strong>
-
-                Email:
-                <strong>
-                    @if ($cliente->email === null)
-                        Cliente no tiene email registrado
-                    @else
-                        {{ $cliente->email }}
-                    @endif
-                </strong>
-
-                Móvil:
-                <strong>
-                    @if ($cliente->movil === null)
-                        Cliente no tiene móvil registrado
-                    @else
-                        {{ $cliente->movil }}
-                    @endif
-                </strong>
-
-                Código Postal (C.P.):
-                <strong>
-                    @if ($cliente->cp === null)
-                        No registrado.
-                    @else
-                        {{ $cliente->cp }}
-                    @endif
-                </strong>
-
-                Tipo de pago:
-                <strong>
-                    @if ($proyecto->pago === null)
-                        No registrado.
-                    @else
-                        {{ $proyecto->pago }}
-                    @endif
-                </strong>
-
-            </p>
+            </div>
         </div>
+
     </div>
 
+    <div class="row" style="width:100%; box-sizing:border-box;">
+        <p style="margin: 0;">
+            Proyecto:
+            <strong>
+                {{ $proyecto->proyecto_id }}
+            </strong>
+
+            Referencia:
+            <strong>
+                {{ $proyecto->serie_ref ?? 'No registrado'}}
+            </strong>
+
+            Nº referencia:
+            <strong>
+                {{ $proyecto->num_ref }}
+            </strong>
+
+            BILBAO
+            <strong>
+                {{ date('d/m/Y') }}
+            </strong>
+        </p>
+    </div>
     <div class="table-responsive" style="width: 100%; overflow-x: auto; border-radius: 10px;">
         <table class="table table-light text-center table-hover rounded-table" style="width: 100%; border-collapse: collapse; border-radius: 10px; overflow: hidden;">
             <thead class="table-dark" style="background-color: #252129; color: white;">
@@ -110,13 +83,10 @@
         </table>
     </div>
 
-    <p><strong>Productos</strong></p>
-
     <div class="table-responsive" style="width: 100%; overflow-x: auto; border-radius: 10px;">
         <table class="table table-light text-center table-hover rounded-table" style="width: 100%; border-collapse: collapse; border-radius: 10px; overflow: hidden;">
             <thead class="table-dark" style="background-color: #252129; color: white;">
                 <tr style="margin-top: 8px; margin-bottom: 8px;">
-                    <th>Id</th>
                     <th>Producto</th>
                     <th>Descripción</th>
                     <th>Cantidad</th>
@@ -129,18 +99,18 @@
                     @switch($productoPresupuesto->tipo)
                         @case('linea')
                             <tr style="margin-top: 8px; margin-bottom: 8px;">
-                                <td>{{ $productoPresupuesto->id }}</td>
                                 <td>{{ $productoPresupuesto->producto->nombre }}</td>
-                                <td>{{ $productoPresupuesto->descripcion }}</td>
+                                <td style="text-align:justify;">{{ $productoPresupuesto->descripcion }}</td>
                                 <td>{{ $productoPresupuesto->cantidad }}</td>
-                                <td>{{ $productoPresupuesto->precio }}</td>
-                                <td>{{ $productoPresupuesto->cantidad * $productoPresupuesto->precio }}</td>
+                                <td>{{ $productoPresupuesto->precio }}€</td>
+                                <td>{{ $productoPresupuesto->cantidad * $productoPresupuesto->precio }}€</td>
                             @break
 
                         @case('capitulo')
-                            <tr style="margin-top: 8px; margin-bottom: 8px; background-color:rgb(223, 223, 223);">
+                            <tr style="margin-top: 8px; margin-bottom: 8px; border-top:solid 1px black; background-color:rgb(223, 223, 223);">
                                 <td colspan="2"><strong>{{ $productoPresupuesto->titulo }}</strong></td>
-                                <td colspan="4">{{ $productoPresupuesto->descripcion }}</td>
+                                <td colspan="2" style="text-align:justify;">{{ $productoPresupuesto->descripcion }}</td>
+                                <td>-</td>
                             </tr>
                             @break
 
@@ -151,10 +121,27 @@
                     @endswitch
                 @endforeach
                 <tr style="border-top:1px solid black; margin-top: 8px; margin-bottom: 8px;">
-                    <td><strong>Total</strong></td>
-                    <td colspan="4"></td>
-                    <td><strong>€ {{ $productoPresupuestos->sum(function ($pp) { return $pp->cantidad * $pp->precio; }) }}</strong></td>
+                    <td colspan="3"></td>
+                    <td>Total productos</td>
+                    <td>{{ $productoPresupuestos->sum(function ($pp) { return $pp->cantidad * $pp->precio; }) }}€</td>
                 </tr>
+
+                <tr>
+                    <td colspan="3"></td>
+                    <td>I.V.A ({{$proyecto->iva}}%)</td>
+                    <td>{{ round($proyecto->presupuesto->precio_total * $proyecto->iva / 100, 2) }}€</td>
+                </tr>
+
+                <tr>
+                    <td><p style="margin: 0;">Pago: </p></td>
+                    <td colspan="2"><strong>{{$proyecto->pago}}</strong></td>
+                    <td><strong>Total</strong></td>
+                    <td><strong>{{ round($productoPresupuestos->sum(function ($pp) use ($proyecto) {
+                            return ($pp->cantidad * $pp->precio) * (1 + ($proyecto->iva / 100));
+                        }), 2) }}€
+                    </strong></td>
+                </tr>
+
             </tbody>
         </table>
     </div>

@@ -4,6 +4,8 @@
         <tr>
             <th scope="col">id</th>
             <th scope="col">Nombre</th>
+            <th scope="col">Leyenda</th>
+            <th scope="col">Precio</th>
             <th scope="col">Cantidad</th>
         </tr>
     </thead>
@@ -16,6 +18,8 @@
                 </div>
             </td>
             <td>{{ $producto->nombre }}</td>
+            <td>{{ $producto->leyenda }}</td>
+            <td><strong>{{ $producto->precio }}€</strong></td>
             <td><span class="badge badge-light-danger fs-base">{{ $producto->stock }}</span></td>
         </tr>
     @endforeach

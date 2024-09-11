@@ -14,7 +14,6 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProyectoController;
 use App\Http\Controllers\VisitaController;
 use App\Http\Controllers\ClienteController;
-use App\Http\Controllers\FacturaController;
 use App\Http\Controllers\PresupuestoController;
 use App\Http\Controllers\ProductoController;
 use App\Http\Controllers\UserController;
@@ -36,9 +35,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/clientes/data', [ClienteController::class, 'getClientesData'])->name('clientes.data');
 
     //
-    Route::resource('factura', FacturaController::class);
-
-    //
     Route::resource('presupuesto', PresupuestoController::class);
     Route::get('/presupuesto/create/getProductos', [PresupuestoController::class, 'getProductos'])->name('presupuesto.getProductos');
 
@@ -56,9 +52,17 @@ Route::middleware(['auth', 'verified'])->group(function () {
         ->where('id', '.*')
         ->name('proyecto.download');
 
+    Route::get('/proyecto/{id}/downloadBudget', [ProyectoController::class, 'downloadBudget'])
+        ->where('id', '.*')
+        ->name('proyecto.downloadBudget');
+
     Route::post('/proyecto/{id}/send-mail', [ProyectoController::class, 'sendMail'])
         ->where('id', '.*')
         ->name('proyecto.sendMail');
+
+    Route::post('/proyecto/{id}/send-mail-budget', [ProyectoController::class, 'sendMailBudget'])
+        ->where('id', '.*')
+        ->name('proyecto.sendMailBudget');
 
     Route::delete('/proyecto/{id}', [ProyectoController::class, 'destroy'])
         ->where('id', '.*')
@@ -75,7 +79,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     //
     Route::resource('visita', VisitaController::class);
     Route::post('/visita/{id}/cerrar', [VisitaController::class, 'cerrar'])->name('visita.cerrar');
-
+    Route::get('/visitas/semana', [DashboardController::class, 'getVisitasSemana'])->name('visita.semana');
     //
     Route::resource('producto', ProductoController::class);
     Route::get('/productos/bajo-stock', [DashboardController::class, 'getProductosBajoStock'])->name('productos.bajo.stock');
@@ -83,11 +87,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
     //
     Route::resource('user', UserController::class);
     Route::get('/user/{id}/getUltimaModif', [UserController::class, 'getUltimaModif'])->name('user.getUltimaModif');
-
-
-
-
-
 
 });
 

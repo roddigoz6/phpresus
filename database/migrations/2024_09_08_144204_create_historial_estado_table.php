@@ -18,9 +18,8 @@ return new class extends Migration
             $table->unsignedBigInteger('visita_id')->nullable();
             $table->timestamp('presupuestado')->nullable();
             $table->timestamp('presupuesto_aceptado')->nullable();
-            $table->timestamp('por_facturar')->nullable();
-            $table->timestamp('facturado_pendiente_cobro')->nullable();
-            $table->timestamp('factura_cobrada')->nullable();
+            $table->timestamp('por_cobrar')->nullable();
+            $table->timestamp('cerrado')->nullable();
             $table->timestamp('nota_cerrar')->nullable();
             $table->timestamps();
 
