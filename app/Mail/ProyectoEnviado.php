@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Mail;
 
 use App\Models\Proyecto;
@@ -12,28 +13,34 @@ class ProyectoEnviado extends Mailable
 {
     use Queueable, SerializesModels;
     public $proyecto;
-    public $pdfPath;
+    public $pdfName;
 
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct(Proyecto $proyecto, $pdfPath)
+    public function __construct(Proyecto $proyecto, $pdfName)
     {
         $this->proyecto = $proyecto;
-        $this->pdfPath = $pdfPath;
+        $this->pdfName = $pdfName;
     }
 
     public function build()
     {
-        return $this->subject('Nuevo Proyecto.')
-        ->view('mails.saludo')
-        ->attach($this->pdfPath, [
-            'as' => 'proyecto_' . $this->proyecto->cliente->nombre . '.pdf',
-            'mime' => 'application/pdf',
-        ]);
+        $pdfPath = storage_path('app/public/proyectos/' . $this->pdfName);
+
+        return $this->subject('Nuevo proyecto.')
+                    ->view('mails.saludo')
+                    ->with([
+                        'pdfUrl' => url('/storage/proyectos/' . $this->pdfName),
+                    ])
+                    ->attach($pdfPath, [
+                        'as' => 'proyecto.pdf',
+                        'mime' => 'application/pdf',
+                    ]);
     }
+
     /**
      * Get the message envelope.
      *

@@ -3,11 +3,11 @@
     $randomColor = $colors[array_rand($colors)];
 @endphp
 
-<div class="card card-flush h-md-100">
+<div class="card card-flush h-md-100" style="background-image:url('assets/media/auth/bg7-dark.jpg');background-size: cover; background-position: center; background-repeat: no-repeat; width: 100%; height: 100%;">
 
     <div class="card-header pt-7">
         <div class="card-title d-flex flex-column">
-            <span class="fs-2hx fw-bold me-2 lh-1 ls-n2">Productos más populares</span>
+            <span class="fs-2hx fw-bold text-white me-2 lh-1 ls-n2">Productos más populares</span>
         </div>
     </div>
 
@@ -15,8 +15,8 @@
     <div class="card-body pt-6">
     @if (!$productosMasPopulares->isEmpty())
         <div class="table-responsive d-flex justify-content-center">
-            <table class="table table-hover table-row-dashed text-center gs-0 gy-3 my-0 rounded-table">
-                <thead class="table-dark">
+            <table class="table table-light table-hover table-row-dashed text-center gs-0 gy-3 my-0 rounded-table">
+                <thead class="table-light">
                     <tr class="fs-7 fw-bold border-bottom-0 align-middle">
                         <th class="icon-table">Producto</th>
                         <th class="icon-table">Nombre de producto</th>
@@ -39,7 +39,7 @@
                             {{$popular->nombre}}
                         </td>
 
-                        <td class="align-middle" style="max-width: 200px; overflow: hidden; text-overflow: ellipsis; text-align:justify;">
+                        <td class="align-middle">
                             {{$popular->leyenda}}
                         </td>
 
@@ -86,9 +86,6 @@
                                 @endif
                             </div>
                         </td>
-
-
-
                     </tr>
                     @endforeach
                 </tbody>
@@ -96,7 +93,7 @@
         </div>
     </div>
     @else
-    <h3 class="text-center">
+    <h3 class="text-center text-white">
         Aún no hay productos registrados en <span class="text-danger opacity-75-hover">presupuestos</span>. :)
     </h3>
     @endif

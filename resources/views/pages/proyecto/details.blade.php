@@ -74,7 +74,7 @@
                         <td class="align-middle">{{ $visita->fecha_fin }} a las {{ $visita->hora_fin }}</td>
                         @endif
 
-                        <td class="align-middle">{{ $visita->nota_cerrar ?? 'No registrado'}}</td>
+                        <td class="align-middle">{{ $visita->nota_cerrar ?? 'Visita no cerrada.'}}</td>
                     </tr>
                     @endforeach
                 @endif

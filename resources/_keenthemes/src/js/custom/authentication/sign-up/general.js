@@ -18,14 +18,14 @@ var KTSignupGeneral = function () {
                     'first-name': {
                         validators: {
                             notEmpty: {
-                                message: 'First Name is required'
+                                message: 'El nombre es obligatorio.'
                             }
                         }
                     },
                     'last-name': {
                         validators: {
                             notEmpty: {
-                                message: 'Last Name is required'
+                                message: 'El apellido es obligatorio.'
                             }
                         }
                     },
@@ -33,20 +33,20 @@ var KTSignupGeneral = function () {
                         validators: {
                             regexp: {
                                 regexp: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-                                message: 'The value is not a valid email address',
+                                message: 'El email no es válido.',
                             },
                             notEmpty: {
-                                message: 'Email address is required'
+                                message: 'El email es obligatorio.'
                             }
                         }
                     },
                     'password': {
                         validators: {
                             notEmpty: {
-                                message: 'The password is required'
+                                message: 'La contraseña es obligatoria.'
                             },
                             callback: {
-                                message: 'Please enter valid password',
+                                message: 'Escribe una contraseña válida.',
                                 callback: function (input) {
                                     if (input.value.length > 0) {
                                         return validatePassword();
@@ -58,20 +58,20 @@ var KTSignupGeneral = function () {
                     'confirm-password': {
                         validators: {
                             notEmpty: {
-                                message: 'The password confirmation is required'
+                                message: 'Las contraseña es obligatoria.'
                             },
                             identical: {
                                 compare: function () {
                                     return form.querySelector('[name="password"]').value;
                                 },
-                                message: 'The password and its confirm are not the same'
+                                message: 'Las contraseñas no coinciden.'
                             }
                         }
                     },
                     'toc': {
                         validators: {
                             notEmpty: {
-                                message: 'You must accept the terms and conditions'
+                                message: 'Debes aceptar los término y condiciones.'
                             }
                         }
                     }
@@ -115,7 +115,7 @@ var KTSignupGeneral = function () {
 
                         // Show message popup. For more info check the plugin's official documentation: https://sweetalert2.github.io/
                         Swal.fire({
-                            text: "You have successfully reset your password!",
+                            text: "Contraseña restablecida con éxito.",
                             icon: "success",
                             buttonsStyling: false,
                             confirmButtonText: "¡Ok!",
@@ -170,7 +170,7 @@ var KTSignupGeneral = function () {
                     'name': {
                         validators: {
                             notEmpty: {
-                                message: 'Name is required'
+                                message: 'El nombre es obligatorio.'
                             }
                         }
                     },
@@ -178,20 +178,20 @@ var KTSignupGeneral = function () {
                         validators: {
                             regexp: {
                                 regexp: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-                                message: 'The value is not a valid email address',
+                                message: 'El email no es válido.',
                             },
                             notEmpty: {
-                                message: 'Email address is required'
+                                message: 'El email es obligatorio.'
                             }
                         }
                     },
                     'password': {
                         validators: {
                             notEmpty: {
-                                message: 'The password is required'
+                                message: 'La contraseña es obligatoria.'
                             },
                             callback: {
-                                message: 'Please enter valid password',
+                                message: 'Escribe una contraseña válida.',
                                 callback: function (input) {
                                     if (input.value.length > 0) {
                                         return validatePassword();
@@ -203,20 +203,20 @@ var KTSignupGeneral = function () {
                     'password_confirmation': {
                         validators: {
                             notEmpty: {
-                                message: 'The password confirmation is required'
+                                message: 'La contraseña de confirmación es obligatoria.'
                             },
                             identical: {
                                 compare: function () {
                                     return form.querySelector('[name="password"]').value;
                                 },
-                                message: 'The password and its confirm are not the same'
+                                message: 'Las contraseñas no coinciden.'
                             }
                         }
                     },
                     'toc': {
                         validators: {
                             notEmpty: {
-                                message: 'You must accept the terms and conditions'
+                                message: 'Debes aceptar los términos y condiciones.'
                             }
                         }
                     }

@@ -1,15 +1,15 @@
 "use strict";
 
-// Class definition
+// Definición de la clase
 var KTSigninGeneral = function () {
-    // Elements
+    // Elementos
     var form;
     var submitButton;
     var validator;
 
-    // Handle form
+    // Manejar validación del formulario
     var handleValidation = function (e) {
-        // Init form validation rules. For more info check the FormValidation plugin's official documentation:https://formvalidation.io/
+        // Inicializar reglas de validación del formulario. Para más información, consulta la documentación oficial del plugin FormValidation: https://formvalidation.io/
         validator = FormValidation.formValidation(
             form,
             {
@@ -18,17 +18,17 @@ var KTSigninGeneral = function () {
                         validators: {
                             regexp: {
                                 regexp: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-                                message: 'The value is not a valid email address',
+                                message: 'El valor no es una dirección de correo electrónico válida',
                             },
                             notEmpty: {
-                                message: 'Email address is required'
+                                message: 'El correo electrónico es obligatorio'
                             }
                         }
                     },
                     'password': {
                         validators: {
                             notEmpty: {
-                                message: 'The password is required'
+                                message: 'La contraseña es obligatoria'
                             }
                         }
                     }
@@ -37,8 +37,8 @@ var KTSigninGeneral = function () {
                     trigger: new FormValidation.plugins.Trigger(),
                     bootstrap: new FormValidation.plugins.Bootstrap5({
                         rowSelector: '.fv-row',
-                        eleInvalidClass: '',  // comment to enable invalid state icons
-                        eleValidClass: '' // comment to enable valid state icons
+                        eleInvalidClass: '',  // comente para habilitar iconos de estado inválido
+                        eleValidClass: '' // comente para habilitar iconos de estado válido
                     })
                 }
             }
@@ -46,30 +46,29 @@ var KTSigninGeneral = function () {
     }
 
     var handleSubmitDemo = function (e) {
-        // Handle form submit
+        // Manejar envío del formulario
         submitButton.addEventListener('click', function (e) {
-            // Prevent button default action
+            // Prevenir acción predeterminada del botón
             e.preventDefault();
 
-            // Validate form
+            // Validar formulario
             validator.validate().then(function (status) {
                 if (status == 'Valid') {
-                    // Show loading indication
+                    // Mostrar indicador de carga
                     submitButton.setAttribute('data-kt-indicator', 'on');
 
-                    // Disable button to avoid multiple click
+                    // Deshabilitar el botón para evitar múltiples clics
                     submitButton.disabled = true;
 
-
-                    // Simulate ajax request
+                    // Simular petición AJAX
                     setTimeout(function () {
-                        // Hide loading indication
+                        // Ocultar indicador de carga
                         submitButton.removeAttribute('data-kt-indicator');
 
-                        // Enable button
+                        // Habilitar el botón
                         submitButton.disabled = false;
 
-                        // Show message popup. For more info check the plugin's official documentation: https://sweetalert2.github.io/
+                        // Mostrar mensaje emergente. Para más información, consulta la documentación oficial del plugin: https://sweetalert2.github.io/
                         Swal.fire({
                             text: "¡Bienvenido!",
                             icon: "success",
@@ -83,7 +82,7 @@ var KTSigninGeneral = function () {
                                 form.querySelector('[name="email"]').value = "";
                                 form.querySelector('[name="password"]').value = "";
 
-                                //form.submit(); // submit form
+                                //form.submit(); // enviar formulario
                                 var redirectUrl = form.getAttribute('data-kt-redirect-url');
                                 if (redirectUrl) {
                                     location.href = redirectUrl;
@@ -92,7 +91,7 @@ var KTSigninGeneral = function () {
                         });
                     }, 2000);
                 } else {
-                    // Show error popup. For more info check the plugin's official documentation: https://sweetalert2.github.io/
+                    // Mostrar mensaje de error emergente. Para más información, consulta la documentación oficial del plugin: https://sweetalert2.github.io/
                     Swal.fire({
                         text: "Oops, parece que hay errores, inténtalo de nuevo.",
                         icon: "error",
@@ -108,26 +107,26 @@ var KTSigninGeneral = function () {
     }
 
     var handleSubmitAjax = function (e) {
-        // Handle form submit
+        // Manejar envío del formulario
         submitButton.addEventListener('click', function (e) {
-            // Prevent button default action
+            // Prevenir acción predeterminada del botón
             e.preventDefault();
 
-            // Validate form
+            // Validar formulario
             validator.validate().then(function (status) {
                 if (status == 'Valid') {
-                    // Show loading indication
+                    // Mostrar indicador de carga
                     submitButton.setAttribute('data-kt-indicator', 'on');
 
-                    // Disable button to avoid multiple click
+                    // Deshabilitar el botón para evitar múltiples clics
                     submitButton.disabled = true;
 
-                    // Check axios library docs: https://axios-http.com/docs/intro
+                    // Consulta la documentación de la librería axios: https://axios-http.com/docs/intro
                     axios.post(submitButton.closest('form').getAttribute('action'), new FormData(form)).then(function (response) {
                         if (response) {
                             form.reset();
 
-                            // Show message popup. For more info check the plugin's official documentation: https://sweetalert2.github.io/
+                            // Mostrar mensaje emergente. Para más información, consulta la documentación oficial del plugin: https://sweetalert2.github.io/
                             Swal.fire({
                                 text: "¡Bienvenido!",
                                 icon: "success",
@@ -144,9 +143,9 @@ var KTSigninGeneral = function () {
                                 location.href = redirectUrl;
                             }
                         } else {
-                            // Show error popup. For more info check the plugin's official documentation: https://sweetalert2.github.io/
+                            // Mostrar mensaje de error emergente. Para más información, consulta la documentación oficial del plugin: https://sweetalert2.github.io/
                             Swal.fire({
-                                text: "Oops, email o contraseña incorrecta, inténtalo de nuevo.",
+                                text: "Oops, el correo electrónico o la contraseña son incorrectos, inténtalo de nuevo.",
                                 icon: "error",
                                 buttonsStyling: false,
                                 confirmButtonText: "¡Ok!",
@@ -166,14 +165,14 @@ var KTSigninGeneral = function () {
                             }
                         });
                     }).then(() => {
-                        // Hide loading indication
+                        // Ocultar indicador de carga
                         submitButton.removeAttribute('data-kt-indicator');
 
-                        // Enable button
+                        // Habilitar botón
                         submitButton.disabled = false;
                     });
                 } else {
-                    // Show error popup. For more info check the plugin's official documentation: https://sweetalert2.github.io/
+                    // Mostrar mensaje de error emergente. Para más información, consulta la documentación oficial del plugin: https://sweetalert2.github.io/
                     Swal.fire({
                         text: "Oops, parece que hay errores, inténtalo de nuevo.",
                         icon: "error",
@@ -197,9 +196,9 @@ var KTSigninGeneral = function () {
         }
     }
 
-    // Public functions
+    // Funciones públicas
     return {
-        // Initialization
+        // Inicialización
         init: function () {
             form = document.querySelector('#kt_sign_in_form');
             submitButton = document.querySelector('#kt_sign_in_submit');
@@ -207,15 +206,15 @@ var KTSigninGeneral = function () {
             handleValidation();
 
             if (isValidUrl(submitButton.closest('form').getAttribute('action'))) {
-                handleSubmitAjax(); // use for ajax submit
+                handleSubmitAjax(); // usar para envío ajax
             } else {
-                handleSubmitDemo(); // used for demo purposes only
+                handleSubmitDemo(); // usado solo para propósitos de demostración
             }
         }
     };
 }();
 
-// On document ready
+// Cuando el documento esté listo
 KTUtil.onDOMContentLoaded(function () {
     KTSigninGeneral.init();
 });

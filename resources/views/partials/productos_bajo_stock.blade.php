@@ -1,6 +1,6 @@
 @if (!$productosBajoStock->isEmpty())
-<table class="table table-light text-center table-hover rounded-table">
-    <thead class="table-dark">
+<table class="table  text-center table-hover rounded-table">
+    <thead class="">
         <tr>
             <th scope="col">id</th>
             <th scope="col">Nombre</th>
@@ -17,10 +17,10 @@
                     <span class="symbol-label bg-info text-inverse-info fw-bold">{{$producto->id}}</span>
                 </div>
             </td>
-            <td>{{ $producto->nombre }}</td>
-            <td>{{ $producto->leyenda }}</td>
-            <td><strong>{{ $producto->precio }}€</strong></td>
-            <td><span class="badge badge-light-danger fs-base">{{ $producto->stock }}</span></td>
+            <td class="align-middle">{{ $producto->nombre }}</td>
+            <td class="align-middle">{{ $producto->leyenda }}</td>
+            <td class="align-middle"><strong>{{ $producto->precio }}€</strong></td>
+            <td class="align-middle"><span class="badge badge-light-danger fs-base">{{ $producto->stock }}</span></td>
         </tr>
     @endforeach
     </tbody>

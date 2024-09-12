@@ -1,10 +1,9 @@
-<div class="card card-flush h-100">
+
+<div class="card card-flush h-100" style="background-image:url('assets/media/patterns/pattern-1.jpg');background-size: cover; background-position: center; background-repeat: no-repeat; width: 100%; height: 100%;">
     <div class="card-header pt-5">
         <div class="card-title d-flex flex-column">
-            <span class="text-gray-500 pt-1 fw-semibold fs-6">Visitas agendadas esta semana, del</span>
-
             <div class="d-flex align-items-center">
-                <span class="fs-2hx fw-bold text-gray-900 me-2 lh-1 ls-n2">Visitas agendadas esta semana, del {{ $rangoSemana }}</span>
+                <span class="fs-2hx fw-bold text-white me-2 lh-1 ls-n2">Visitas agendadas esta semana, del {{ $rangoSemana }}</span>
                 <i class="fa-regular fa-calendar fa-shake"></i>
             </div>
         </div>

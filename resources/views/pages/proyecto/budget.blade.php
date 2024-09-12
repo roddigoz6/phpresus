@@ -79,7 +79,7 @@
     <div id="orden" class="container">
         <div class="details">
             <div class="details-img">
-                <img src="data:image/jpeg;base64,{{ base64_encode(file_get_contents(public_path('assets/media/logos/kasier.jpg'))) }}" alt="Kasier">
+                <img src="data:image/jpeg;base64,{{ base64_encode(file_get_contents(public_path('assets/media/logos/kasier-logo.jpg'))) }}" alt="Kasier">
             </div>
 
             <div class="details-content">

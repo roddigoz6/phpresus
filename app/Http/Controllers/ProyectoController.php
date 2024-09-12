@@ -289,7 +289,7 @@ class ProyectoController extends Controller
 
         if ($sendByEmail) {
             // Devuelve la ruta del archivo PDF para el envío por correo
-            return $pdfPath;
+            return $pdfName;
         } else {
             return response()->stream(function () use ($output) {
                 echo $output;
@@ -305,13 +305,8 @@ class ProyectoController extends Controller
         $proyecto = Proyecto::find($id);
 
         $cliente = $proyecto->cliente;
-
         $presupuesto = $proyecto->presupuesto;
-        if ($presupuesto) {
-            $productoPresupuestos = $presupuesto->productoPresupuestos->sortBy('orden');
-        } else {
-            $productoPresupuestos = collect();
-        }
+        $productoPresupuestos = $presupuesto ? $presupuesto->productoPresupuestos->sortBy('orden') : collect();
 
         $options = new Options();
         $options->set('isHtml5ParserEnabled', true);
@@ -321,7 +316,6 @@ class ProyectoController extends Controller
 
         $dompdf = new Dompdf($options);
 
-        // Renderizar la vista como HTML
         $html = view('pages/proyecto.budget', compact('proyecto', 'cliente', 'productoPresupuestos'))->render();
 
         $dompdf->loadHtml($html);
@@ -332,12 +326,10 @@ class ProyectoController extends Controller
         $pdfName = "proforma_{$cliente->nombre}_{$proyecto->proyecto_id}.pdf";
         $pdfPath = "public/proformas/{$pdfName}";
 
-        // Guarda el PDF en el servidor
         Storage::put($pdfPath, $output);
 
         if ($sendByEmail) {
-            // Devuelve la ruta del archivo PDF para el envío por correo
-            return $pdfPath;
+            return $pdfName;  // Devuelve la ruta relativa
         } else {
             return response()->stream(function () use ($output) {
                 echo $output;
@@ -353,16 +345,16 @@ class ProyectoController extends Controller
         $proyecto = Proyecto::findOrFail($id);
         $cliente = $proyecto->cliente;
 
-        $pdfPath = $this->download($id, true);
+        $pdfName = $this->download($id, true);
+        $pdfUrl = url('/storage/proyectos/' . $pdfName);
         $clienteEmail = $cliente->email;
 
         try {
             // Enviar correo electrónico con el PDF adjunto
-            Mail::to($clienteEmail)->send(new ProyectoEnviado($proyecto, Storage::path($pdfPath)));
-            // Log the CSRF token from the session
+            Mail::to($clienteEmail)->send(new ProyectoEnviado($proyecto, $pdfName));
             return response()->json(['success' => true]);
         } catch (\Exception $e) {
-            return response()->json(['error' => $e], 500);
+            return response()->json(['error' => $e->getMessage()], 500);
         }
     }
 
@@ -371,18 +363,19 @@ class ProyectoController extends Controller
         $proyecto = Proyecto::findOrFail($id);
         $cliente = $proyecto->cliente;
 
-        $pdfPath = $this->downloadBudget($id, true);
+        $pdfName = $this->downloadBudget($id, true);
+        $pdfUrl = url('/storage/proformas/' . $pdfName);
         $clienteEmail = $cliente->email;
 
         try {
             // Enviar correo electrónico con el PDF adjunto
-            Mail::to($clienteEmail)->send(new ProformaEnviada($proyecto, Storage::path($pdfPath)));
-            // Log the CSRF token from the session
+            Mail::to($clienteEmail)->send(new ProformaEnviada($proyecto, $pdfName));
             return response()->json(['success' => true]);
         } catch (\Exception $e) {
-            return response()->json(['error' => $e], 500);
+            return response()->json(['error' => $e->getMessage()], 500);
         }
     }
+
     /**
      * Remove the specified resource from storage.
      */

@@ -108,7 +108,7 @@ class DashboardController extends Controller
 
         $visitas = Visita::whereBetween('fecha_inicio', [$inicioSemana, $finSemana])
                         ->where('eliminado', false)
-                        ->paginate(5);
+                        ->paginate(4);
 
         return view('partials.visitas_semana', compact('visitas'));
     }

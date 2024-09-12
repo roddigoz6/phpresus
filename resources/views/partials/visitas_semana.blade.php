@@ -1,7 +1,12 @@
 <div class="card-body d-flex flex-column align-items-center overflow-auto">
+    @if ($visitas->isEmpty())
+            <div class="d-flex flex-column align-items-center">
+                <span class="fs-3 text-white">No hay visitas esta semana.</span>
+            </div>
+        @else
     <div class="table-responsive w-100">
         <table class="table table-light text-center table-hover rounded-table">
-            <thead class="table-dark">
+            <thead>
                 <tr>
                     <th scope="col">Prioridad</th>
                     <th scope="col">Motivo de visita</th>
@@ -12,11 +17,7 @@
                 </tr>
             </thead>
             <tbody>
-                @if ($visitas->isEmpty())
-                    <div class="d-flex flex-column align-items-center">
-                        <span class="fs-3 text-gray-500">No hay visitas esta semana.</span>
-                    </div>
-                @else
+
                 @foreach ($visitas as $visita)
                     <tr>
                         @switch($visita->prioridad)
@@ -49,7 +50,6 @@
                         </td>
                     </tr>
                 @endforeach
-                @endif
             </tbody>
         </table>
     </div>
@@ -96,4 +96,6 @@
         </ul>
 
     </div>
+    @endif
+
 </div>

@@ -168,7 +168,7 @@ class PresupuestoController extends Controller
         } catch (\Illuminate\Validation\ValidationException $e) {
             return response()->json(['success' => false, 'message' => 'La validación falló.', 'errors' => $e->errors()], 422);
         } catch (\Exception $e) {
-            return response()->json(['success' => false, 'message' => 'Hubo un problema al guardar los datos.'], 500);
+            return response()->json(['success' => false, 'message' => $e], 500);
         }
     }
 

@@ -2,7 +2,6 @@
 
 namespace App\Mail;
 
-
 use App\Models\Proyecto;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
@@ -14,25 +13,31 @@ class ProformaEnviada extends Mailable
 {
     use Queueable, SerializesModels;
     public $proyecto;
-    public $pdfPath;
+    public $pdfName;
     /**
      * Create a new message instance.
      */
-    public function __construct(Proyecto $proyecto, $pdfPath)
+    public function __construct(Proyecto $proyecto, $pdfName)
     {
         $this->proyecto = $proyecto;
-        $this->pdfPath = $pdfPath;
+        $this->pdfName = $pdfName;
     }
 
     public function build()
     {
+        $pdfPath = storage_path('app/public/proformas/' . $this->pdfName);
+
         return $this->subject('Nueva proforma.')
-        ->view('mails.saludoProf')
-        ->attach($this->pdfPath, [
-            'as' => 'proforma_' . $this->proyecto->cliente->nombre . '.pdf',
-            'mime' => 'application/pdf',
-        ]);
+                    ->view('mails.saludoProf')
+                    ->with([
+                        'pdfUrl' => url('/storage/proformas/' . $this->pdfName),
+                    ])
+                    ->attach($pdfPath, [
+                        'as' => 'proforma.pdf',
+                        'mime' => 'application/pdf',
+                    ]);
     }
+
 
     /**
      * Get the message envelope.
