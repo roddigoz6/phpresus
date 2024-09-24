@@ -96,7 +96,7 @@
                     </button>
                 </div>
             </form>
-            <div id="productos-container">
+            <div id="productos-content">
             </div>
         </div>
 

@@ -47,7 +47,7 @@ class Proyecto extends Model
 
             if ($proyecto->isDirty('estado')) {
 
-                $historial = HistorialEstado::where('proyecto_id', $proyecto->id)->first();
+                $historial = HistorialEstado::where('proyecto_id', $proyecto->proyecto_id)->first();
 
                 if ($historial) {
                     $estado = $proyecto->estado;
@@ -57,7 +57,7 @@ class Proyecto extends Model
 
             if ($proyecto->isDirty('cerrado') && $proyecto->cerrado) {
 
-                $historial = HistorialEstado::where('proyecto_id', $proyecto->id)->first();
+                $historial = HistorialEstado::where('proyecto_id', $proyecto->proyecto_id)->first();
 
                 if ($historial) {
                     $historial->update(['cerrado' => now()]);
