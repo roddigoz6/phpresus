@@ -38,7 +38,7 @@
                 <div class="d-flex flex-column flex-center py-7 py-lg-15 px-5 px-md-15 w-100">
                     <!--begin::Logo-->
                     <a href="{{ route('dashboard') }}" class="mb-12">
-                        <img alt="Logo" src="{{ image('logos/custom-1.png') }}" class="h-60px h-lg-75px"/>
+                        <img alt="Logo" src="{{ image('logos/kasier-01.png') }}" class="h-60px h-lg-75px"/>
                     </a>
                     <!--end::Logo-->
 
@@ -48,14 +48,14 @@
 
                     <!--begin::Title-->
                     <h1 class="d-none d-lg-block text-white fs-2qx fw-bolder text-center mb-7">
-                        Tu portal de presupuestos y facturación.
+                        Tu portal de presupuestos y gestión de proyectos.
                     </h1>
                     <!--end::Title-->
 
                     <!--begin::Text-->
                     <div class="d-none d-lg-block text-white fs-base text-center">
                         Crea presupuestos para tus clientes, administra tus productos, genara <br/>
-                        las facturas y mantén el orden de tu negocio.
+                        proyectos y mantén el orden de tu negocio.
                     </div>
                     <!--end::Text-->
                 </div>

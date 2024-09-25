@@ -394,7 +394,6 @@
 });
 
 $(document).ready(function() {
-    // Inicializar select2 cuando se carga el documento
     function initializeSelect2() {
         $('#clienteSelectMaster').select2({
             placeholder: 'Seleccionar cliente',

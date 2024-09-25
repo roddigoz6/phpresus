@@ -98,37 +98,7 @@
                                         </td>
                                         @break
 
-                                    @case('por_facturar')
-                                        <td class="align-middle">
-                                            <a href="#"
-                                            class="btn btn-light-secondary"
-                                            data-presupuesto-id="{{ $proyecto->proyecto_id }}"
-                                            data-bs-toggle="modal"
-                                            data-bs-target="#detallesProyectoModal"
-                                            data-proyecto-id="{{ $proyecto->proyecto_id }}"
-                                            title="Ver detalle del proyecto">
-                                            {{ $proyecto->proyecto_id }}
-                                            <span class="badge badge-secondary">P</span>
-                                            </a>
-                                        </td>
-                                        @break
-
-                                    @case('facturado_pendiente_cobro')
-                                        <td class="align-middle">
-                                            <a href="#"
-                                            class="btn btn-light-secondary"
-                                            data-presupuesto-id="{{ $proyecto->proyecto_id }}"
-                                            data-bs-toggle="modal"
-                                            data-bs-target="#detallesProyectoModal"
-                                            data-proyecto-id="{{ $proyecto->proyecto_id }}"
-                                            title="Ver detalle del proyecto">
-                                            {{ $proyecto->proyecto_id }}
-                                            <span class="badge badge-warning">C</span>
-                                            </a>
-                                        </td>
-                                        @break
-
-                                    @case('factura_cobrada')
+                                    @case('por_cobrar')
                                         <td class="align-middle">
                                             <a href="#"
                                             class="btn btn-light-secondary"
@@ -142,7 +112,6 @@
                                             </a>
                                         </td>
                                         @break
-
                                     @default
 
                                 @endswitch
@@ -929,6 +898,8 @@ document.addEventListener('DOMContentLoaded', function() {
     clienteModal.addEventListener('show.bs.modal', function(event) {
         var button = event.relatedTarget;
 
+        var establecido = button.getAttribute('data-establecido') == '1' ? 'Establecido' : 'No establecido';
+
         var clienteContent = `
             <div class="row mt-3 mx-3">
                 <div class="col">
@@ -965,7 +936,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     <p><strong>Forma de Pago:</strong> ${button.getAttribute('data-pago') || "<span class='badge px-4 fs-7 badge-light-warning'>No registrado</span>"}</p>
                 </div>
                 <div class="col">
-                    <p><strong>Establecido:</strong> ${button.getAttribute('data-establecido') || "<span class='badge px-4 fs-7 badge-light-warning'>No registrado</span>"}</p>
+                    <p><strong>Establecido:</strong> ${establecido}</p>
                 </div>
             </div>
         `;

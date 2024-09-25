@@ -93,9 +93,9 @@ class VisitaController extends Controller
         ]);
 
         // Verifica el estado del proyecto y actualiza solo si es necesario
-        if ($proyecto->estado !== 'por_facturar') {
+        if ($proyecto->estado !== 'por_cobrar') {
             $proyecto->update([
-                'estado' => 'por_facturar',
+                'estado' => 'por_cobrar',
             ]);
             $mensaje = 'Visita cerrada. Proyecto ' . $proyecto->proyecto_id . ' pendiente de factura.';
         } else {
