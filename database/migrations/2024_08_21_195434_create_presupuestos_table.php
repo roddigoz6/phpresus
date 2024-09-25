@@ -15,7 +15,6 @@ return new class extends Migration
     {
         Schema::create('TPresupuestos', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('cliente_id')->constrained('TClientes')->onDelete('cascade');
             $table->string('proyecto_id');
             $table->foreign('proyecto_id')->references('proyecto_id')->on('TProyectos')->onDelete('cascade');
             $table->float('precio_total')->nullable();

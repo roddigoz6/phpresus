@@ -1149,7 +1149,9 @@ document.addEventListener('click', function(event) {
 });
 </script>
 @endpush
-@include('partials/modals/_asignar-visita')
+@if (!isset($proyectos) || empty($proyectos))
+    @include('partials.modals._asignar-visita')
+@endif
 @include('partials/modals/_detalles-proyecto')
 @include('partials/modals/_cliente-proyecto')
 </x-default-layout>

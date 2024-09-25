@@ -5,14 +5,12 @@
     </div>
 
     @if (!$proyecto->cerrado)
-        @if ($proyecto->estado == 'presupuestado')
-            <div class="menu-item px-3">
-                <a href="#" class="menu-link px-3 aceptar-proyecto-btn" data-proyecto-id="{{ $proyecto->proyecto_id }}">
-                    <span class="menu-title">Aceptar proyecto</span>
-                    <span><i class="fa-solid fa-circle-check"></i></span>
-                </a>
-            </div>
-        @endif
+        <div class="menu-item px-3">
+            <a href="#" class="menu-link px-3 aceptar-proyecto-btn" data-proyecto-id="{{ $proyecto->proyecto_id }}">
+                <span class="menu-title">Aceptar proyecto</span>
+                <span><i class="fa-solid fa-circle-check"></i></span>
+            </a>
+        </div>
 
         <div class="menu-item px-3">
             <a href="{{ route('proyecto.download', ['id' => $proyecto->proyecto_id]) }}" class="menu-link px-3 descargar-proyecto-btn" data-proyecto-id="{{ $proyecto->proyecto_id }}">

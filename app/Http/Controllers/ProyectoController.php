@@ -17,7 +17,7 @@ use App\Models\Visita;
 
 use Dompdf\Dompdf;
 use Dompdf\Options;
-
+use Exception;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Mail;
@@ -115,6 +115,7 @@ class ProyectoController extends Controller
     public function create()
     {
         //
+
     }
 
     /**
@@ -122,7 +123,28 @@ class ProyectoController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        try {
+            // Validar los datos de entrada
+            $validatedData = $request->validate([
+                'cliente_id' => 'required|exists:TClientes,id',
+                'serie_ref' => 'string|max:255|nullable',
+                'num_ref' => 'string|max:255|nullable'
+            ]);
+
+            // Crear un nuevo proyecto
+            $proyecto = new Proyecto();
+            $proyecto->cliente_id = $validatedData['cliente_id'];
+            $proyecto->estado = 'Presupuestado';
+            $proyecto->serie_ref = $validatedData['serie_ref'];
+            $proyecto->num_ref = $validatedData['num_ref'];
+            $proyecto->pago = $request->input('pago');
+            $proyecto->iva = $request->input('iva');
+            $proyecto->save();
+
+            return response()->json(['success' => true, 'message' => 'Proyecto creado correctamente.']);
+        } catch (Exception $e) {
+            return response()->json(['success' => false, 'message' => $e], 500);
+        }
     }
 
     /**

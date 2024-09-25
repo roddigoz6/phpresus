@@ -61,10 +61,8 @@ class PresupuestoController extends Controller
 
         $cliente_id = $request->query('cliente_id');
         $cliente = Cliente::findOrFail($cliente_id);
-        $proyectoCount = Proyecto::count();
-        $proyectoNum = $proyectoCount + 1;
 
-        return view('pages.presupuesto.create', compact('cliente', 'proyectoNum'));
+        return view('pages.presupuesto.create', compact('cliente', ));
     }
 
 
@@ -119,30 +117,16 @@ class PresupuestoController extends Controller
     public function store(Request $request)
     {
         try {
-            //dd($request);
             // Validar los datos de entrada
             $validatedData = $request->validate([
-                'cliente_id' => 'required|exists:TClientes,id',
+                'proyecto_id' => 'required|exists:TProyectos,proyecto_id',
                 'precio_total' => 'required|numeric|min:0',
                 'lista_productos' => 'required|json',
-                'serie_ref' => 'string|max:255|nullable',
-                'num_ref' => 'string|max:255|nullable'
             ]);
-
-            // Crear un nuevo proyecto
-            $proyecto = new Proyecto();
-            $proyecto->cliente_id = $validatedData['cliente_id'];
-            $proyecto->estado = 'Presupuestado';
-            $proyecto->serie_ref = $validatedData['serie_ref'];
-            $proyecto->num_ref = $validatedData['num_ref'];
-            $proyecto->pago = $request->input('pago');
-            $proyecto->iva = $request->input('iva');
-            $proyecto->save();
 
             // Crear un nuevo presupuesto asociado al proyecto
             $presupuesto = new Presupuesto();
-            $presupuesto->cliente_id = $validatedData['cliente_id'];
-            $presupuesto->proyecto_id = $proyecto->proyecto_id;
+            $presupuesto->proyecto_id = $validatedData['proyecto_id'];
             $presupuesto->precio_total = $validatedData['precio_total'];
             $presupuesto->save();
 

@@ -97,7 +97,7 @@ class DashboardController extends Controller
             'clientesEstablecidos',
             'clientesNoEstablecidos',
             'proyectoDetails',
-            'rangoSemana'
+            'rangoSemana',
         ));
     }
 

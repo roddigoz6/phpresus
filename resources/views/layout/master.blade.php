@@ -120,12 +120,61 @@
                             <select data-dropdown-parent="#clienteModalLabel" id="clienteSelectMaster" name="cliente" class="form-control">
                             </select>
                         </div>
-                        <div class="col col-auto">
-                            <button type="button" class="btn btn-light-primary" id="goToPresupuesto"><i class="fa-solid fa-arrow-right"></i></button>
+                    </div>
+                </div>
+
+                <div class="form-group mt-6">
+                    <div class="col">
+                        <hr />
+                        <div class="row">
+                            <div class="col">
+                                <label for="serie_ref">Nombre del proyecto</label>
+                                <input class="form-control" type="text" name="serie_ref" placeholder="987654321E">
+                            </div>
+
+                            <div class="col col-auto">
+                                <label for="num_ref">Número de referencia del proyecto</label>
+                                <input class="form-control" type="text" placeholder="" value="{{ $proyectoNum }}" disabled>
+                                <input type="hidden" name="num_ref" value="">
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col">
+                                <label for="pago">Forma de pago</label>
+                                <select class="form-select" id="pago" name="pago">
+                                    <option value="Ver condiciones">Ver condiciones</option>
+                                    <option value="50% inicio, 50% fin">50% inicio, 50% fin</option>
+                                    <option value="50% termino de obra, resto a 90 dias">50% termino de obra, resto a 90 días</option>
+                                    <option value="50% comienzo de obra, resto a convenir">50% comienzo de obra, resto a convenir</option>
+                                    <option value="Certificaciones quincenales">Certificaciones quincenales</option>
+                                    <option value="Como siempre">Como siempre</option>
+                                    <option value="Contado termino de obra">Contado termino de obra</option>
+                                    <option value="Convenir">Convenir</option>
+                                    <option value="Fin de ejercicio, 15 de diciembre">Fin de ejercicio, 15 de diciembre</option>
+                                    <option value="Letra de 90 dias">Letra de 90 días</option>
+                                    <option value="Letra a la vista">Letra a la vista</option>
+                                </select>
+                            </div>
+
+                            <div class="col col-auto">
+                                <label for="iva">IVA</label>
+                                <select class="form-select" id="iva" name="iva">
+                                    <option value="7">7</option>
+                                    <option value="8">8</option>
+                                    <option value="10">10</option>
+                                    <option value="16">16</option>
+                                    <option value="18">18</option>
+                                    <option value="21">21</option>
+                                </select>
+                            </div>
                         </div>
                     </div>
                 </div>
 
+                <div class="col col-auto">
+                    <button type="button" class="btn btn-light-primary" id="goToPresupuesto"><i class="fa-solid fa-arrow-right"></i></button>
+                </div>
             </div>
 
         </div>

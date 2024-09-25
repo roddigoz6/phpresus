@@ -124,53 +124,6 @@
                     </div>
                 </div>
 
-                <div class="col">
-                    <hr />
-                    <div class="row">
-                        <div class="col col-met">
-                            <label for="serie_ref">Nombre del proyecto ó serie de referencia</label>
-                            <input class="form-control" type="text" name="serie_ref" placeholder="987654321E">
-                        </div>
-
-                        <div class="col col-auto">
-                            <label for="num_ref">Número de referencia del proyecto</label>
-                            <input class="form-control" type="text"placeholder="{{$proyectoNum}}" value="{{$proyectoNum}}" disabled>
-                            <input type="hidden" name="num_ref" value="{{$proyectoNum}}">
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col col-me">
-                            <label for="pago">Forma de pago</label>
-                            <select class="form-select" id="pago" name="pago">
-                                <option value="Ver condiciones" {{ $cliente->pago == 'Ver condiciones' ? 'selected' : '' }}>Ver condiciones</option>
-                                <option value="50% inicio, 50% fin" {{ $cliente->pago == '50% inicio, 50% fin' ? 'selected' : '' }}>50% inicio, 50% fin</option>
-                                <option value="50% termino de obra, resto a 90 dias" {{ $cliente->pago == '50% termino de obra, resto a 90 días' ? 'selected' : '' }}>50% termino de obra, resto a 90 días</option>
-                                <option value="50% comienzo de obra, resto a convenir" {{ $cliente->pago == '50% comienzo de obra, resto a convenir' ? 'selected' : '' }}>50% comienzo de obra, resto a convenir</option>
-                                <option value="Certificaciones quincenales" {{ $cliente->pago == 'Certificaciones quincenales' ? 'selected' : '' }}>Certificaciones quincenales</option>
-                                <option value="Como siempre" {{ $cliente->pago == 'Como siempre' ? 'selected' : '' }}>Como siempre</option>
-                                <option value="Contado termino de obra" {{ $cliente->pago == 'Contado termino de obra' ? 'selected' : '' }}>Contado termino de obra</option>
-                                <option value="Convenir" {{ $cliente->pago == 'Convenir' ? 'selected' : '' }}>Convenir</option>
-                                <option value="Fin de ejercicio, 15 de diciembre" {{ $cliente->pago == 'Fin de ejercicio, 15 de diciembre' ? 'selected' : '' }}>Fin de ejercicio, 15 de diciembre</option>
-                                <option value="Letra de 90 dias" {{ $cliente->pago == 'Letra de 90 días' ? 'selected' : '' }}>Letra de 90 días</option>
-                                <option value="Letra a la vista" {{ $cliente->pago == 'Letra a la vista' ? 'selected' : '' }}>Letra a la vista</option>
-                            </select>
-                        </div>
-                        <div class="col col-auto">
-                            <label for="pago">IVA</label>
-                            <select class="form-select" id="iva" name="iva">
-                                <option value="7">7</option>
-                                <option value="8">8</option>
-                                <option value="10">10</option>
-                                <option value="16">16</option>
-                                <option value="18">18</option>
-                                <option value="21">21</option>
-                            </select>
-                        </div>
-                    </div>
-                    <hr />
-                </div>
-
                 <p>Arrastra aquí los productos para agregarlos al presupuesto.</p>
                 <div id="canvas" class="border p-2" style="min-height: 500px; overflow-y: auto;" ondrop="drop(event)" ondragover="allowDrop(event)">
                     <div id="lista-presupuesto" class="table-responsive">

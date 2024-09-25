@@ -263,7 +263,7 @@
                                 <form id="delete-form-{{ $cliente->id }}" action="{{ route('cliente.destroy', $cliente->id) }}" method="POST" style="display: inline;">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="button" class="btn btn-light-danger delete-btn" data-cliente-id="{{ $cliente->id }}" data-nombre="{{ $cliente->nombre }}" data-has-presupuestos="{{ $cliente->presupuestos()->exists() ? 'true' : 'false' }}">
+                                    <button type="button" class="btn btn-light-danger delete-btn" data-cliente-id="{{ $cliente->id }}" data-nombre="{{ $cliente->nombre }}" data-has-proyectos="{{ $cliente->proyectos()->exists() ? 'true' : 'false' }}">
                                         <i class="fas fa-trash"></i>
                                     </button>
                                 </form>
@@ -367,7 +367,7 @@
                                 <form id="delete-form-{{ $cliente->id }}" action="{{ route('cliente.destroy', $cliente->id) }}" method="POST" style="display: inline;">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="button" class="btn btn-light-danger delete-btn" data-cliente-id="{{ $cliente->id }}" data-nombre="{{ $cliente->nombre }}" data-has-presupuestos="{{ $cliente->presupuestos()->exists() ? 'true' : 'false' }}">
+                                    <button type="button" class="btn btn-light-danger delete-btn" data-cliente-id="{{ $cliente->id }}" data-nombre="{{ $cliente->nombre }}" data-has-proyectos="{{ $cliente->proyectos()->exists() ? 'true' : 'false' }}">
                                         <i class="fa-solid fa-trash"></i>
                                     </button>
                                 </form>
@@ -472,7 +472,7 @@
                                 <form id="delete-form-{{ $cliente->id }}" action="{{ route('cliente.destroy', $cliente->id) }}" method="POST" style="display: inline;">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="button" class="btn btn-light-danger delete-btn" data-cliente-id="{{ $cliente->id }}" data-nombre="{{ $cliente->nombre }}" data-has-presupuestos="{{ $cliente->presupuestos()->exists() ? 'true' : 'false' }}">
+                                    <button type="button" class="btn btn-light-danger delete-btn" data-cliente-id="{{ $cliente->id }}" data-nombre="{{ $cliente->nombre }}" data-has-proyectos="{{ $cliente->proyectos()->exists() ? 'true' : 'false' }}">
                                         <i class="fa-solid fa-trash"></i>
                                     </button>
                                 </form>
@@ -751,15 +751,15 @@
                 cancelButtonText: "Cancelar"
             }).then((result) => {
                 if (result.isConfirmed) {
-                    // Verificar si el cliente tiene presupuestos asociados
-                    var hasPresupuestos = $(this).data('has-presupuestos');
+                    // Verificar si el cliente tiene proyectos asociados
+                    var hasProyectos = $(this).data('has-proyectos');
 
-                    if (hasPresupuestos) {
-                        // Mostrar segunda confirmación si hay presupuestos asociados
+                    if (hasProyectos) {
+                        // Mostrar segunda confirmación si hay proyectos asociados
                         Swal.fire({
                             title: "¡Advertencia!",
-                            html: `<p>El cliente <strong>${clienteNombre}</strong> tiene presupuestos asociados.
-                                   Eliminar al cliente eliminará sus presupuestos también.</p>
+                            html: `<p>El cliente <strong>${clienteNombre}</strong> tiene proyectos asociados.
+                                   Eliminar al cliente eliminará sus proyectos también.</p>
                                    <p>¿Estás seguro de querer eliminarlo?</p>`,
                             icon: "warning",
                             showCancelButton: true,

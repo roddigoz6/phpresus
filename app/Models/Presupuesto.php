@@ -11,7 +11,6 @@ class Presupuesto extends Model
     protected $table = 'TPresupuestos';
 
     protected $fillable = [
-        'cliente_id',
         'proyecto_id',
         'precio_total',
         'aceptado',
@@ -22,11 +21,6 @@ class Presupuesto extends Model
         'aceptado' => 'bool',
         'eliminado' => 'bool',
     ];
-
-    public function cliente()
-    {
-        return $this->belongsTo(Cliente::class, 'cliente_id');
-    }
 
     public function proyecto()
     {

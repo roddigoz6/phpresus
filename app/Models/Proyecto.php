@@ -73,7 +73,7 @@ class Proyecto extends Model
 
     public function presupuesto()
     {
-        return $this->hasOne(Presupuesto::class, 'proyecto_id');
+        return $this->hasMany(Presupuesto::class, 'proyecto_id');
     }
 
     public function visitas()
