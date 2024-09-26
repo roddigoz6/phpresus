@@ -17,7 +17,9 @@ return new class extends Migration
             $table->id();
             $table->string('proyecto_id');
             $table->foreign('proyecto_id')->references('proyecto_id')->on('TProyectos')->onDelete('cascade');
+            $table->string('nom_pres')->nullable();
             $table->float('precio_total')->nullable();
+            $table->enum('estado', ['presupuestado', 'presupuesto_aceptado', 'por_cobrar'])->nullable();
             $table->boolean('aceptado')->default(false);
             $table->boolean('eliminado')->default(false);
             $table->timestamps();

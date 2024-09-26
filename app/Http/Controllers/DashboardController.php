@@ -52,7 +52,6 @@ class DashboardController extends Controller
             ->count();
 
         $proyectoCerrado = Proyecto::where('eliminado', false)
-            ->where('cerrado', true)
             ->count();
 
         // Productos

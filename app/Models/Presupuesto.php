@@ -12,6 +12,7 @@ class Presupuesto extends Model
 
     protected $fillable = [
         'proyecto_id',
+        'nom_pres',
         'precio_total',
         'aceptado',
         'eliminado',

@@ -102,40 +102,160 @@
 @yield('content')
 <!-- Modal -->
 <div class="modal fade" id="clienteModal" aria-labelledby="clienteModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="clienteModalLabel">Crear nuevo proyecto</h5>
+                <h5 class="modal-title" id="clienteModalLabel">Nuevo proyecto</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
 
+            <form id="createProyectoForm" method="post" action="{{route('proyecto.store')}}">
+            @csrf
             <div class="modal-body">
 
-                <button type="button" class="btn btn-light-primary" id="clienteNuevoBtn" data-bs-toggle="modal" data-bs-target="#crearClienteModal">Cliente nuevo <span class="menu-icon"><i class="fa-solid fa-user-plus"></i></span></button>
-                <button type="button" class="btn btn-light-info" id="clienteExistenteBtn">Cliente existente <i class="fa-solid fa-user-check"></i></button>
+                <button type="button" class="btn btn-light-primary text-start" id="clienteNuevoBtn">Cliente nuevo <span class="menu-icon"><i class="fa-solid fa-user-plus"></i></span></button>
+
+                <button type="button" class="btn btn-light-info text-end" id="clienteExistenteBtn">Cliente existente <i class="fa-solid fa-user-check"></i></button>
 
                 <div class="form-group mt-6" id="clienteSelectContainer" style="display: none;">
                     <div class="row">
                         <div class="col me-auto">
-                            <select data-dropdown-parent="#clienteModalLabel" id="clienteSelectMaster" name="cliente" class="form-control">
+                            <select data-dropdown-parent="#clienteModalLabel" id="clienteSelectMaster" name="cliente_id" id="cliente_id" class="form-control">
                             </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group mt-6" id="clienteNuevoContainer" style="display: none;">
+                    <div class="row">
+                        <div class="col me-auto" id="clienteNuevoBtn">
+                            <div class="row">
+                                <div class="col">
+                                    <div class="header-modal">
+                                        <h4>Datos del cliente</h4>
+                                        <input type="hidden" name="context" value="form">
+                                    </div>
+                                    <div class="row">
+                                        <div class="col">
+                                            <div class="">
+                                                <label for="nombre">Nombre</label> <strong class="required"></strong>
+                                                <input type="text" class="form-control" id="nombre" name="nombre" required>
+                                            </div>
+                                        </div>
+                                        <div class="col">
+                                            <div class="">
+                                                <label for="apellido">Apellido</label> <strong class="required"></strong>
+                                                <input type="text" class="form-control" id="apellido" name="apellido" required>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col">
+                                            <div class="">
+                                                <label for="dni">DNI</label> <strong class="required"></strong>
+                                                <input type="text" class="form-control" id="dni" name="dni" required>
+                                            </div>
+                                        </div>
+                                        <div class="col">
+                                            <div>
+                                                <label for="movil">Móvil</label> <strong class="required"></strong>
+                                                <input type="text" class="form-control" id="movil" name="movil" required>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="">
+                                        <label for="email">Correo Electrónico</label>
+                                        <input type="email" class="form-control" id="email" name="email">
+                                    </div>
+                                    <div class="">
+                                        <label for="direccion">Direccion</label> <strong class="required"></strong>
+                                        <input type="text" class="form-control" id="direccion" name="direccion" required>
+                                    </div>
+                                    <div class="">
+                                        <label for="cp">Código postal</label> <strong class="required"></strong>
+                                        <input type="text" class="form-control" id="cp" name="cp" required>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col">
+                                            <div class="">
+                                                <label for="poblacion">Población</label> <strong class="required"></strong>
+                                                <input type="text" class="form-control" id="poblacion" name="poblacion" required>
+                                            </div>
+                                        </div>
+                                        <div class="col">
+                                            <div class="">
+                                                <label for="provincia">Provincia</label> <strong class="required"></strong>
+                                                <input type="text" class="form-control" id="provincia" name="provincia" required>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col">
+                                            <div class="">
+                                                <label for="fax">Fax</label>
+                                                <input type="text" class="form-control" id="fax" name="fax">
+                                            </div>
+                                        </div>
+                                        <div class="col">
+                                            <div>
+                                                <label for="cargo">Cargo</label>
+                                                <input type="text" class="form-control" id="cargo" name="cargo">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col">
+                                    <div class="header-modal">
+                                        <h4>Datos de envío</h4>
+                                    </div>
+                                    <div class="">
+                                        <label for="contacto">Contacto</label>
+                                        <input type="text" class="form-control" id="contacto" name="contacto">
+                                    </div>
+                                    <div class="">
+                                        <label for="titular_nom">Nombre de titular</label>
+                                        <input type="text" class="form-control" id="titular_nom" name="titular_nom">
+                                    </div>
+                                    <div class="">
+                                        <label for="titular_ape">Apellido de titular</label>
+                                        <input type="text" class="form-control" id="titular_ape" name="titular_ape">
+                                    </div>
+                                    <div class="">
+                                        <label for="direccion_envio">Dirección de envío</label>
+                                        <input type="text" class="form-control" id="direccion_envio" name="direccion_envio">
+                                    </div>
+                                    <div class="">
+                                        <label for="cp_envio">Código postal de dirección de envío</label>
+                                        <input type="text" class="form-control" id="cp_envio" name="cp_envio">
+                                    </div>
+                                    <div class="">
+                                        <label for="poblacion_envio">Población de dirección de envío</label>
+                                        <input type="text" class="form-control" id="poblacion_envio" name="poblacion_envio">
+                                    </div>
+                                    <div class="">
+                                        <label for="provincia_envio">Provincia de dirección de envío</label>
+                                        <input type="text" class="form-control" id="provincia_envio" name="provincia_envio">
+                                    </div>
+
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
 
                 <div class="form-group mt-6">
                     <div class="col">
-                        <hr />
                         <div class="row">
                             <div class="col">
                                 <label for="serie_ref">Nombre del proyecto</label>
-                                <input class="form-control" type="text" name="serie_ref" placeholder="987654321E">
+                                <input class="form-control" type="text" name="serie_ref" id="serie_ref" placeholder="987654321E">
                             </div>
 
                             <div class="col col-auto">
                                 <label for="num_ref">Número de referencia del proyecto</label>
                                 <input class="form-control" type="text" placeholder="" value="{{ $proyectoNum }}" disabled>
-                                <input type="hidden" name="num_ref" value="">
+                                <input type="hidden" name="num_ref" id="num_ref" value="{{$proyectoNum}}">
                             </div>
                         </div>
 
@@ -171,180 +291,16 @@
                         </div>
                     </div>
                 </div>
-
-                <div class="col col-auto">
-                    <button type="button" class="btn btn-light-primary" id="goToPresupuesto"><i class="fa-solid fa-arrow-right"></i></button>
+            </div>
+            <div class="modal-footer">
+                <div class="">
+                    <button type="button" class="btn btn-light-primary" id="crearProyecto">Crear proyecto <i class="fa-solid fa-arrow-right"></i></button>
                 </div>
             </div>
-
+            </form>
         </div>
     </div>
 </div>
-
-<!--Modal para agregar clientes-->
-<div class="modal fade" id="crearClienteModal" tabindex="1" aria-labelledby="crearClienteModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-xl modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-body">
-                <form id="createClientForm" action="{{ route('cliente.store') }}" method="POST">
-                    @csrf
-                    <div class="row">
-                        <div class="col">
-                            <div class="header-modal">
-                                <h4>Datos del cliente</h4>
-                                <input type="hidden" name="context" value="form">
-                            </div>
-                            <div class="row">
-                                <div class="col">
-                                    <div class="">
-                                        <label for="nombre">Nombre</label> <strong class="required"></strong>
-                                        <input type="text" class="form-control" id="nombre" name="nombre" required>
-                                    </div>
-                                </div>
-                                <div class="col">
-                                    <div class="">
-                                        <label for="apellido">Apellido</label> <strong class="required"></strong>
-                                        <input type="text" class="form-control" id="apellido" name="apellido" required>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col">
-                                    <div class="">
-                                        <label for="dni">DNI</label> <strong class="required"></strong>
-                                        <input type="text" class="form-control" id="dni" name="dni" required>
-                                    </div>
-                                </div>
-                                <div class="col">
-                                    <div>
-                                        <label for="movil">Móvil</label> <strong class="required"></strong>
-                                        <input type="text" class="form-control" id="movil" name="movil" required>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="">
-                                <label for="email">Correo Electrónico</label>
-                                <input type="email" class="form-control" id="email" name="email">
-                            </div>
-                            <div class="">
-                                <label for="direccion">Direccion</label> <strong class="required"></strong>
-                                <input type="text" class="form-control" id="direccion" name="direccion" required>
-                            </div>
-                            <div class="">
-                                <label for="cp">Código postal</label> <strong class="required"></strong>
-                                <input type="text" class="form-control" id="cp" name="cp" required>
-                            </div>
-                            <div class="row">
-                                <div class="col">
-                                    <div class="">
-                                        <label for="poblacion">Población</label> <strong class="required"></strong>
-                                        <input type="text" class="form-control" id="poblacion" name="poblacion" required>
-                                    </div>
-                                </div>
-                                <div class="col">
-                                    <div class="">
-                                        <label for="provincia">Provincia</label> <strong class="required"></strong>
-                                        <input type="text" class="form-control" id="provincia" name="provincia" required>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col">
-                                    <div class="">
-                                        <label for="fax">Fax</label>
-                                        <input type="text" class="form-control" id="fax" name="fax">
-                                    </div>
-                                </div>
-                                <div class="col">
-                                    <div>
-                                        <label for="cargo">Cargo</label>
-                                        <input type="text" class="form-control" id="cargo" name="cargo">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="col">
-                            <div class="header-modal">
-                                <h4>Datos de envío</h4>
-                            </div>
-                            <div class="">
-                                <label for="contacto">Contacto</label>
-                                <input type="text" class="form-control" id="contacto" name="contacto">
-                            </div>
-                            <div class="">
-                                <label for="titular_nom">Nombre de titular</label>
-                                <input type="text" class="form-control" id="titular_nom" name="titular_nom">
-                            </div>
-                            <div class="">
-                                <label for="titular_ape">Apellido de titular</label>
-                                <input type="text" class="form-control" id="titular_ape" name="titular_ape">
-                            </div>
-                            <div class="">
-                                <label for="direccion_envio">Dirección de envío</label>
-                                <input type="text" class="form-control" id="direccion_envio" name="direccion_envio">
-                            </div>
-                            <div class="">
-                                <label for="cp_envio">Código postal de dirección de envío</label>
-                                <input type="text" class="form-control" id="cp_envio" name="cp_envio">
-                            </div>
-                            <div class="">
-                                <label for="poblacion_envio">Población de dirección de envío</label>
-                                <input type="text" class="form-control" id="poblacion_envio" name="poblacion_envio">
-                            </div>
-                            <div class="">
-                                <label for="provincia_envio">Provincia de dirección de envío</label>
-                                <input type="text" class="form-control" id="provincia_envio" name="provincia_envio">
-                            </div>
-
-                        </div>
-                        <div class="header-modal">
-                            <h4>Pago</h4>
-                        </div>
-                        <div class="">
-                            <label for="pago">Forma de pago</label>
-                            <select class="form-select" id="pago" name="pago">
-                                <option value="Ver condiciones">Ver condiciones</option>
-                                <option value="50% inicio, 50% fin">50% inicio, 50% fin</option>
-                                <option value="50% termino de obra, resto a 90 dias">50% termino de obra, resto a 90 días</option>
-                                <option value="50% comienzo de obra, resto a convenir">50% comienzo de obra, resto a convenir</option>
-                                <option value="Certificaciones quincenales">Certificaciones quincenales</option>
-                                <option value="Como siempre">Como siempre</option>
-                                <option value="Contado termino de obra">Contado termino de obra</option>
-                                <option value="Convenir">Convenir</option>
-                                <option value="Fin de ejercicio, 15 de diciembre">Fin de ejercicio, 15 de diciembre</option>
-                                <option value="Letra de 90 dias">Letra de 90 días</option>
-                                <option value="Letra a la vista">Letra a la vista</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="mt-3">Los campos <strong class="required"></strong> son requeridos.</div>
-                    <div class="d-flex justify-content-end">
-                        <button type="submit" class="btn btn-light-primary mt-3">Guardar <i class="fas fa-check-circle"></i></button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- Modal de acción después de crear un cliente -->
-<div class="modal fade" id="postCreateClienteModal" tabindex="1" aria-labelledby="postCreateClienteModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="postCreateClienteModalLabel">Cliente creado</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <p>El cliente ha sido creado. ¿Qué te gustaría hacer?</p>
-                <button type="button" class="btn btn-light-primary" id="goToPresupuestoBtn">Crear proyecto <i class="fa-solid fa-arrow-right fa-shake"></i></button>
-                <button type="button" class="btn btn-light-secondary" id="goToClientesBtn">Ir a clientes <i class="fa-regular fa-user"></i></button>
-            </div>
-        </div>
-    </div>
-</div>
-
 
 <!--begin::Javascript-->
 <!--begin::Global Javascript Bundle(mandatory for all pages)-->
@@ -416,27 +372,21 @@
             .then(response => response.json())
             .then(data => {
                 if (data.id) {
-                    const postCreateModal = new bootstrap.Modal(document.getElementById('postCreateClienteModal'));
-                    const createPres = "{{route('presupuesto.create')}}";
-                    const clientIndx = "{{route('cliente.index')}}";
+                    const createProyecto = "{{ route('proyecto.store') }}";
                     const clienteId = data.id;
 
-                    postCreateModal.show();
+                    window.location.href = `${createProyecto}?cliente_id=${clienteId}`;
 
-                    document.getElementById('goToPresupuestoBtn').addEventListener('click', function() {
-                        window.location.href = `${createPres}?cliente_id=${clienteId}`;
-                    });
-
-                    document.getElementById('goToClientesBtn').addEventListener('click', function() {
-                        window.location.href = `${clientIndx}`;
-                    });
-
-                    const crearClienteModal = bootstrap.Modal.getInstance(document.getElementById('crearClienteModal'));
-                    crearClienteModal.hide();
+                    document.getElementById('createClientForm').reset();
+                    const clienteModal = bootstrap.Modal.getInstance(document.getElementById('crearClienteModal'));
+                    clienteModal.hide();
+                } else {
+                    alert('Error al crear el cliente. Por favor, inténtalo de nuevo.');
                 }
             })
             .catch(error => {
                 console.error('Error:', error);
+                alert('Ocurrió un error. Por favor, inténtalo de nuevo.');
             });
         }
     });
@@ -458,8 +408,10 @@ $(document).ready(function() {
 
     initializeSelect2();
 
+    // Mostrar el contenedor de selección de cliente existente
     $('#clienteExistenteBtn').on('click', function() {
         $('#clienteSelectContainer').slideDown();
+        $('#clienteNuevoContainer').slideUp();
 
         $.ajax({
             url: '{{ route("clientes.data") }}',
@@ -488,30 +440,102 @@ $(document).ready(function() {
         });
     });
 
-    $('#clienteNuevoBtn').on('click', function() {
-        $('#clienteSelectContainer').hide();
+     // Mostrar el formulario de creación de cliente nuevo
+     $('#clienteNuevoBtn').on('click', function() {
+        $('#clienteSelectContainer').slideUp();
+        $('#clienteNuevoContainer').slideDown();
     });
 
-    $('#goToPresupuesto').on('click', function() {
-        const clienteId = $('#clienteSelectMaster').val();
-        if (clienteId) {
-            const createPres = "{{route('presupuesto.create')}}";
-            window.location.href = `${createPres}?cliente_id=${clienteId}`;
-        } else {
-            const Toast = Swal.mixin({
-                toast: true,
-                position: "top-end",
-                showConfirmButton: false,
-                timer: 3000,
-                timerProgressBar: true,
-                didOpen: (toast) => {
-                    toast.onmouseenter = Swal.stopTimer;
-                    toast.onmouseleave = Swal.resumeTimer;
+    $('#crearProyecto').on('click', function() {
+        const isClienteSelectVisible = $('#clienteSelectMaster').is(':visible');
+        const clienteId = isClienteSelectVisible ? $('#clienteSelectMaster').val() : null;
+        const serieRef = $('#serie_ref').val();
+        const numRef = $('#num_ref').val();
+        const pago = $('#pago').val();
+
+        const createProyecto = "{{ route('proyecto.store') }}";
+
+        // Si se selecciona un cliente existente
+        if (isClienteSelectVisible && clienteId) {
+            $.ajax({
+                url: createProyecto,
+                method: 'POST',
+                data: {
+                    cliente_id: clienteId,
+                    serie_ref: serieRef,
+                    num_ref: numRef,
+                    pago: pago,
+                    _token: '{{ csrf_token() }}'
+                },
+                success: function(data) {
+                    if (data.success) {
+                        window.location.href = "{{ route('proyecto.index') }}";
+                    } else {
+                        alert(data.message || 'Error al crear el proyecto.');
+                    }
+                },
+                error: function(error) {
+                    console.error('Error al crear el proyecto:', error);
                 }
             });
-            Toast.fire({
-                icon: "error",
-                title: "Selecciona un cliente."
+        } else {
+
+            const nombreCli = $('#nombre').val();
+            const apellidoCli = $('#apellido').val();
+            const dni = $('#dni').val();
+            const email = $('#email').val();
+            const movil = $('#movil').val();
+            const contacto = $('#contacto').val();
+            const direccion = $('#direccion').val();
+            const cp = $('#cp').val();
+            const poblacion = $('#poblacion').val();
+            const provincia = $('#provincia').val();
+            const fax = $('#fax').val();
+            const cargo = $('#cargo').val();
+            const titularNom = $('#titular_nom').val();
+            const titularApe = $('#titular_ape').val();
+            const direccionEnvio = $('#direccion_envio').val();
+            const cpEnvio = $('#cp_envio').val();
+            const poblacionEnvio = $('#poblacion_envio').val();
+            const provinciaEnvio = $('#provincia_envio').val();
+
+            $.ajax({
+                url: createProyecto,
+                method: 'POST',
+                data: {
+                    nombre: nombreCli,
+                    apellido: apellidoCli,
+                    dni: dni,
+                    email: email,
+                    movil: movil,
+                    contacto: contacto,
+                    direccion: direccion,
+                    cp: cp,
+                    poblacion: poblacion,
+                    provincia: provincia,
+                    fax: fax,
+                    cargo: cargo,
+                    titular_nom: titularNom,
+                    titular_ape: titularApe,
+                    direccion_envio: direccionEnvio,
+                    cp_envio: cpEnvio,
+                    poblacion_envio: poblacionEnvio,
+                    provincia_envio: provinciaEnvio,
+                    serie_ref: serieRef,
+                    num_ref: numRef,
+                    pago: pago,
+                    _token: '{{ csrf_token() }}'
+                },
+                success: function(data) {
+                    if (data.success) {
+                        window.location.href = "{{ route('proyecto.index') }}";
+                    } else {
+                        alert(data.message || 'Error al crear el proyecto.');
+                    }
+                },
+                error: function(error) {
+                    console.error('Error al crear el proyecto:', error);
+                }
             });
         }
     });

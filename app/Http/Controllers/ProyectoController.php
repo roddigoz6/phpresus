@@ -37,7 +37,6 @@ class ProyectoController extends Controller
 
         // Consulta base para proyectos activos
         $query = Proyecto::where('eliminado', false)
-                    ->where('cerrado', false)
                     ->with('cliente');
 
         if ($search) {
@@ -57,33 +56,60 @@ class ProyectoController extends Controller
                     ->paginate(15);
 
         // Proyectos por estado
-        $proyectosPresupuestado = Proyecto::where('eliminado', false)
-                                            ->where('estado', 'presupuestado')
-                                            ->where('cerrado', false)
-                                            ->with('cliente')
-                                            ->orderBy('proyecto_id', 'desc')
-                                            ->paginate(15);
+        $proyectosAbiertos = Proyecto::where('eliminado', false)
+            ->where('estado', 'abierto')
+            ->with('cliente')
+            ->orderBy('proyecto_id', 'desc')
+            ->paginate(15);
 
-        $proyectosPresupuestoAceptado = Proyecto::where('eliminado', false)
-                                                ->where('estado', 'presupuesto_aceptado')
-                                                ->where('cerrado', false)
-                                                ->with('cliente')
-                                                ->orderBy('proyecto_id', 'desc')
-                                                ->paginate(15);
+        $proyectosCerrados = Proyecto::where('eliminado', false)
+            ->where('estado', 'cerrado')
+            ->with('cliente')
+            ->orderBy('proyecto_id', 'desc')
+            ->paginate(15);
 
-        $proyectosPorCobr = Proyecto::where('eliminado', false)
-                                    ->where('estado', 'por_cobrar')
-                                    ->where('cerrado', false)
-                                    ->with('cliente')
-                                    ->orderBy('proyecto_id', 'desc')
-                                    ->paginate(15);
+       // Proyectos activos
+        $proyectos = $query
+        ->orderBy('proyecto_id', 'desc')
+        ->paginate(15);
 
-        // Nuevos proyectos cerrados
-        $proyectosCerrado = Proyecto::where('cerrado', true)
-                                    ->where('eliminado', false)
-                                    ->with('cliente')
-                                    ->orderBy('proyecto_id', 'desc')
-                                    ->paginate(15);
+        // Proyectos por estado
+        $proyectosAbiertos = Proyecto::where('eliminado', false)
+        ->where('estado', 'abierto')
+        ->orderBy('proyecto_id', 'desc')
+        ->paginate(15);
+
+        $proyectosCerrados = Proyecto::where('eliminado', false)
+        ->where('estado', 'cerrado')
+        ->orderBy('proyecto_id', 'desc')
+        ->paginate(15);
+
+        $proyectosPresupuestados = Proyecto::where('eliminado', false)
+            ->whereHas('presupuestos', function($query) {
+                $query->where('eliminado', false)
+                ->where('estado', 'presupuestado');
+                })
+            ->with('cliente')
+            ->orderBy('proyecto_id', 'desc')
+            ->paginate(15);
+
+        $proyectosPresupuestosAceptados = Proyecto::where('eliminado', false)
+            ->whereHas('presupuestos', function($query) {
+                $query->where('eliminado', false)
+                ->where('estado', 'presupuesto_aceptado');
+                })
+            ->with('cliente')
+            ->orderBy('proyecto_id', 'desc')
+            ->paginate(15);
+
+        $proyectosPresupuestosPorCobrar = Proyecto::where('eliminado', false)
+            ->whereHas('presupuestos', function($query) {
+                $query->where('eliminado', false)
+                ->where('estado', 'por_cobrar');
+                })
+            ->with('cliente')
+            ->orderBy('proyecto_id', 'desc')
+            ->paginate(15);
 
         // Configuración para visitas de la semana
         $inicioSemana = Carbon::now()->startOfWeek();
@@ -100,10 +126,11 @@ class ProyectoController extends Controller
         return view('pages/proyecto.index', compact(
             'visitas',
             'proyectos',
-            'proyectosPresupuestado',
-            'proyectosPresupuestoAceptado',
-            'proyectosPorCobr',
-            'proyectosCerrado',
+            'proyectosAbiertos',
+            'proyectosCerrados',
+            'proyectosPresupuestados',
+            'proyectosPresupuestosAceptados',
+            'proyectosPresupuestosPorCobrar',
             'rangoSemana',
             'tab'
         ));
@@ -124,26 +151,58 @@ class ProyectoController extends Controller
     public function store(Request $request)
     {
         try {
-            // Validar los datos de entrada
+            //
             $validatedData = $request->validate([
-                'cliente_id' => 'required|exists:TClientes,id',
+                'cliente_id' => 'nullable|exists:TClientes,id',
                 'serie_ref' => 'string|max:255|nullable',
-                'num_ref' => 'string|max:255|nullable'
+                'num_ref' => 'string|max:255|nullable',
+                'pago' => 'string|max:255|nullable',
+                'iva' => 'string|max:255|nullable',
             ]);
 
-            // Crear un nuevo proyecto
+            if (empty($validatedData['cliente_id'])) {
+                $validatedClient = $request->validate([
+                    'nombre' => 'nullable|string|max:255',
+                    'apellido' => 'nullable|string|max:255',
+                    'dni' => 'nullable|string|max:9',
+                    'email' => 'nullable|string|max:255',
+                    'movil' => 'nullable|string|max:20',
+                    'contacto' => 'nullable|string|max:255',
+                    'direccion' => 'nullable|string|max:255',
+                    'cp' => 'nullable|string|max:9',
+                    'poblacion' => 'nullable|string|max:255',
+                    'provincia' => 'nullable|string|max:255',
+                    'fax' => 'nullable|string|max:255',
+                    'cargo' => 'nullable|string|max:255',
+                    'titular_nom' => 'nullable|string|max:255',
+                    'titular_ape' => 'nullable|string|max:255',
+                    'direccion_envio' => 'nullable|string|max:255',
+                    'cp_envio' => 'nullable|string|max:9',
+                    'poblacion_envio' => 'nullable|string|max:255',
+                    'provincia_envio' => 'nullable|string|max:255',
+                    'pago' => 'nullable|string|max:255',
+                ]);
+
+                $cliente = new Cliente();
+                $cliente->fill($validatedClient);
+                $cliente->pago = $validatedData['pago'];
+                $cliente->save();
+
+                $validatedData['cliente_id'] = $cliente->id;
+            }
+
             $proyecto = new Proyecto();
             $proyecto->cliente_id = $validatedData['cliente_id'];
-            $proyecto->estado = 'Presupuestado';
+            $proyecto->estado = 'abierto';
             $proyecto->serie_ref = $validatedData['serie_ref'];
             $proyecto->num_ref = $validatedData['num_ref'];
-            $proyecto->pago = $request->input('pago');
-            $proyecto->iva = $request->input('iva');
+            $proyecto->pago = $validatedData['pago'];
+            $proyecto->iva = $validatedData['iva'];
             $proyecto->save();
 
             return response()->json(['success' => true, 'message' => 'Proyecto creado correctamente.']);
         } catch (Exception $e) {
-            return response()->json(['success' => false, 'message' => $e], 500);
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 500);
         }
     }
 
@@ -192,6 +251,9 @@ class ProyectoController extends Controller
     public function edit(Proyecto $proyecto)
     {
         //
+        $clientes = Cliente::where('eliminado', false)->get();
+
+        return response()->json([$clientes]);
     }
 
     /**
@@ -199,7 +261,57 @@ class ProyectoController extends Controller
      */
     public function update(Request $request, Proyecto $proyecto)
     {
-        //
+        try {
+            $validatedData = $request->validate([
+                'cliente_id' => 'nullable|exists:TClientes,id',
+                'serie_ref' => 'string|max:255|nullable',
+                'pago' => 'string|max:255|nullable',
+                'iva' => 'string|max:255|nullable',
+            ]);
+
+            if (empty($validatedData['cliente_id'])) {
+                $validatedClient = $request->validate([
+                    'nombre' => 'nullable|string|max:255',
+                    'apellido' => 'nullable|string|max:255',
+                    'dni' => 'nullable|string|max:9',
+                    'email' => 'nullable|string|max:255',
+                    'movil' => 'nullable|string|max:20',
+                    'contacto' => 'nullable|string|max:255',
+                    'direccion' => 'nullable|string|max:255',
+                    'cp' => 'nullable|string|max:9',
+                    'poblacion' => 'nullable|string|max:255',
+                    'provincia' => 'nullable|string|max:255',
+                    'fax' => 'nullable|string|max:255',
+                    'cargo' => 'nullable|string|max:255',
+                    'titular_nom' => 'nullable|string|max:255',
+                    'titular_ape' => 'nullable|string|max:255',
+                    'direccion_envio' => 'nullable|string|max:255',
+                    'cp_envio' => 'nullable|string|max:9',
+                    'poblacion_envio' => 'nullable|string|max:255',
+                    'provincia_envio' => 'nullable|string|max:255',
+                    'pago' => 'nullable|string|max:255',
+                ]);
+
+                $cliente = new Cliente();
+                $cliente->fill($validatedClient);
+                $cliente->pago = $validatedData['pago'];
+                $cliente->save();
+
+                $validatedData['cliente_id'] = $cliente->id;
+            }
+
+            //
+            $proyecto->update([
+                'cliente_id' => $validatedData['cliente_id'],
+                'serie_ref' => $validatedData['serie_ref'],
+                'pago' => $validatedData['pago'],
+                'iva' => $validatedData['iva'],
+            ]);
+
+            return response()->json(['success' => true, 'message' => 'Proyecto actualizado correctamente.']);
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 500);
+        }
     }
 
     public function aceptar(Request $request, $id)

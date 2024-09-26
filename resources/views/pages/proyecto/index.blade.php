@@ -24,20 +24,24 @@
                 aria-controls="all" aria-selected="true">Todos</a>
         </li>
         <li class="nav-item" role="presentation">
-            <a class="nav-link bg-info text-white" id="presupuestos-tab" data-bs-toggle="tab" href="#presupuestos" role="tab"
-                aria-controls="presupuestos" aria-selected="false">Presupuestados </a>
+            <a class="nav-link bg-info text-white" id="abiertos-tab" data-bs-toggle="tab" href="#abiertos" role="tab"
+                aria-controls="abiertos" aria-selected="false">Abiertos</a>
         </li>
         <li class="nav-item" role="presentation">
-            <a class="nav-link bg-primary text-white" id="presAcept-tab" data-bs-toggle="tab" href="#presAcept" role="tab"
-                aria-controls="presAcept" aria-selected="false">Presupuestos aceptados</a>
+            <a class="nav-link bg-warning text-white" id="presupuestados-tab" data-bs-toggle="tab" href="#presupuestados" role="tab"
+                aria-controls="presupuestados" aria-selected="false">Presupuestados</a>
         </li>
         <li class="nav-item" role="presentation">
-            <a class="nav-link bg-success text-white" id="porCobr-tab" data-bs-toggle="tab" href="#porCobr" role="tab"
-                aria-controls="porCobr" aria-selected="false">Por cobrar</a>
+            <a class="nav-link bg-primary text-white" id="aceptados-tab" data-bs-toggle="tab" href="#aceptados" role="tab"
+                aria-controls="aceptados" aria-selected="false">Presupuestos aceptados</a>
         </li>
         <li class="nav-item" role="presentation">
-            <a class="nav-link bg-warning text-white" id="cerrada-tab" data-bs-toggle="tab" href="#cerrada" role="tab"
-                aria-controls="cerrada" aria-selected="false">Historial proyectos cerrados</a>
+            <a class="nav-link bg-success text-white" id="por_cobrar-tab" data-bs-toggle="tab" href="#por_cobrar" role="tab"
+                aria-controls="por_cobrar" aria-selected="false">Por cobrar</a>
+        </li>
+        <li class="nav-item" role="presentation">
+            <a class="nav-link bg-secondary" id="cerrados-tab" data-bs-toggle="tab" href="#cerrados" role="tab"
+                aria-controls="cerrados" aria-selected="false">Cerrados</a>
         </li>
     </ul>
 
@@ -50,6 +54,7 @@
                 <thead class="table-dark">
                     <tr class="align-middle">
                         <th class="icon-table">Proyecto</th>
+                        <th class="icon-table">Presupuesto</th>
                         <th class="icon-table">Título / Serie de referencia</th>
                         <th class="icon-table">Cliente</th>
                         <th class="icon-table">Precio total</th>
@@ -68,22 +73,7 @@
                         @foreach ($proyectos as $proyecto)
                             <tr class="text-center">
                                 @switch($proyecto->estado)
-                                    @case('presupuestado')
-                                    <td class="align-middle">
-                                        <a href="#"
-                                        class="btn btn-light-secondary"
-                                        data-presupuesto-id="{{ $proyecto->proyecto_id }}"
-                                        data-bs-toggle="modal"
-                                        data-bs-target="#detallesProyectoModal"
-                                        data-proyecto-id="{{ $proyecto->proyecto_id }}"
-                                        title="Ver detalle del proyecto">
-                                        {{ $proyecto->proyecto_id }}
-                                        <span class="badge badge-info">P</span>
-                                        </a>
-                                    </td>
-                                    @break
-
-                                    @case('presupuesto_aceptado')
+                                    @case('abierto')
                                         <td class="align-middle">
                                             <a href="#"
                                             class="btn btn-light-secondary"
@@ -93,12 +83,12 @@
                                             data-proyecto-id="{{ $proyecto->proyecto_id }}"
                                             title="Ver detalle del proyecto">
                                             {{ $proyecto->proyecto_id }}
-                                            <span class="badge badge-primary">A</span>
+                                            <span class="badge badge-info">A</span>
                                             </a>
                                         </td>
                                         @break
 
-                                    @case('por_cobrar')
+                                    @case('cerrado')
                                         <td class="align-middle">
                                             <a href="#"
                                             class="btn btn-light-secondary"
@@ -108,13 +98,19 @@
                                             data-proyecto-id="{{ $proyecto->proyecto_id }}"
                                             title="Ver detalle del proyecto">
                                             {{ $proyecto->proyecto_id }}
-                                            <span class="badge badge-success">F</span>
+                                            <span class="badge badge-secondary">C</span>
                                             </a>
                                         </td>
                                         @break
+
                                     @default
-
+                                        <td class="align-middle">Estado desconocido</td>
                                 @endswitch
+                                @if ($proyecto->presupuestos->isEmpty())
+                                    <td class="align-middle">No hay presupuestos.</td>
+                                @else
+                                    <td class="align-middle">{{$proyecto->presupuestos->count()}} presupuestos.</td>
+                                @endif
                                 <td class="align-middle"> {{ $proyecto->serie_ref ?? 'No registrado' }} - {{ $proyecto->num_ref ?? 'No registrado' }} </td>
                                 <td class="align-middle">
                                     <a
@@ -145,8 +141,11 @@
                                         {{ $proyecto->cliente->nombre }} {{ $proyecto->cliente->apellido }}
                                     </a>
                                 </td>
-
-                                <td class="align-middle">€{{ $proyecto->presupuesto->precio_total }}</td>
+                                @if ($proyecto->presupuestos->isEmpty())
+                                    <td class="align-middle">No hay presupuestos</td>
+                                @else
+                                    <td class="align-middle">-</td>
+                                @endif
                                 <td class="align-middle">{{ $proyecto->pago }}</td>
 
                                 <td class="align-middle">
@@ -166,6 +165,46 @@
                                     </div>
                                 </td>
                             </tr>
+                            @foreach ($proyecto->presupuestos as $presupuesto)
+                                <tr>
+                                    <td>-</td>
+                                    @switch($presupuesto->estado)
+                                        @case('presupuestado')
+                                        <td class="align-middle">
+                                            {{$presupuesto->nom_pres ?? 'No registrado'}}
+                                            <span class="badge badge-warning">P</span>
+                                        </td>
+                                            @break
+                                        @case('presupuesto_aceptado')
+                                            <td class="align-middle">
+                                                {{$presupuesto->nom_pres ?? 'No registrado'}}
+                                                <span class="badge badge-primary">A</span>
+                                            </td>
+                                                @break
+
+                                        @case('por_cobrar')
+                                            <td class="align-middle">
+                                                {{$presupuesto->nom_pres ?? 'No registrado'}}
+                                                <span class="badge badge-success">C</span>
+                                            </td>
+                                                @break
+                                        @default
+
+                                    @endswitch
+                                    <td class="align-middle">-</td>
+                                    <td class="align-middle">-</td>
+                                    <td class="align-middle">€{{$presupuesto->precio_total}}</td>
+                                    <td class="align-middle">-</td>
+                                    <td class="align-middle">-</td>
+                                    <td class="align-middle">{{$presupuesto->created_at->format('d/m/Y H:i')}}</td>
+                                    <td class="align-middel">
+                                        <div class="card-toolbar">
+                                            <button type="button" class="btn btn-sm btn-icon btn-light-primary me-n3" data-kt-menu-trigger="{default: 'click', lg: 'hover'}" data-kt-menu-placement="bottom-end"><i class="fa-solid fa-bars"></i></button>
+                                            @include('partials/menus/_acciones_presupuesto', ['proyecto' => $proyecto])
+                                        </div>
+                                    </td>
+                                </tr>
+                            @endforeach
                         @endforeach
                     @endif
                 </tbody>
@@ -217,15 +256,14 @@
         </div>
 
         <!-- Proyectos presupuestados -->
-        <div class="tab-pane fade {{ $tab == 'presupuestos' ? 'show active' : '' }}" id="presupuestos" role="tabpanel"
-            aria-labelledby="presupuestos-tab">
+        <div class="tab-pane fade {{ $tab == 'abiertos' ? 'show active' : '' }}" id="abiertos" role="tabpanel"
+            aria-labelledby="abiertos-tab">
             <table class="table table-light text-center table-hover rounded-table">
                 <thead class="table-dark">
                     <tr class="align-middle">
                         <th class="icon-table">Proyecto</th>
                         <th class="icon-table">Título / Serie de referencia</th>
                         <th class="icon-table">Cliente</th>
-                        <th class="icon-table">Precio total</th>
                         <th class="icon-table">Forma de pago</th>
                         <th class="icon-table">Visita asignada</th>
                         <th class="icon-table">Fecha de creación</th>
@@ -233,12 +271,12 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @if ($proyectosPresupuestado->isEmpty())
+                    @if ($proyectosAbiertos->isEmpty())
                         <tr>
                             <td colspan="9" class="text-center">No hay proyectos creados.</td>
                         </tr>
                     @else
-                        @foreach ($proyectosPresupuestado as $proyecto)
+                        @foreach ($proyectosAbiertos as $proyecto)
                             <tr class="text-center">
                                 <td class="align-middle">
                                     <a href="#"
@@ -283,7 +321,6 @@
                                     </a>
                                 </td>
 
-                                <td class="align-middle">€{{ $proyecto->presupuesto->precio_total }}</td>
                                 <td class="align-middle">{{ $proyecto->pago }}</td>
 
                                 <td class="align-middle">
@@ -309,8 +346,8 @@
             </table>
 
             @php
-                $totalPages = $proyectosPresupuestado->lastPage();
-                $currentPage = $proyectosPresupuestado->currentPage();
+                $totalPages = $proyectosAbiertos->lastPage();
+                $currentPage = $proyectosAbiertos->currentPage();
                 $maxPagesToShow = 5; // Número máximo de enlaces de página a mostrar
 
                 $startPage = max($currentPage - floor($maxPagesToShow / 2), 1);
@@ -326,7 +363,7 @@
                 <ul class="pagination">
                     @if ($startPage > 1)
                         <li class="page-item">
-                            <a class="page-link" href="{{ $proyectosPresupuestado->url(1) }}&tab=presupuestados">1</a>
+                            <a class="page-link" href="{{ $proyectosAbiertos->url(1) }}&tab=abiertos">1</a>
                         </li>
                         @if ($startPage > 2)
                             <li class="page-item disabled"><span class="page-link">...</span></li>
@@ -334,9 +371,9 @@
                     @endif
 
                     @for ($i = $startPage; $i <= $endPage; $i++)
-                        <li class="page-item {{ $proyectosPresupuestado->currentPage() == $i ? 'active' : '' }}">
+                        <li class="page-item {{ $proyectosAbiertos->currentPage() == $i ? 'active' : '' }}">
                             <a class="page-link"
-                                href="{{ $proyectosPresupuestado->url($i) }}&tab=presupuestados">{{ $i }}</a>
+                                href="{{ $proyectosAbiertos->url($i) }}&tab=abiertos">{{ $i }}</a>
                         </li>
                     @endfor
 
@@ -346,7 +383,7 @@
                         @endif
                         <li class="page-item">
                             <a class="page-link"
-                                href="{{ $proyectosPresupuestado->url($totalPages) }}&tab=presupuestados">{{ $totalPages }}</a>
+                                href="{{ $proyectosAbiertos->url($totalPages) }}&tab=abiertos">{{ $totalPages }}</a>
                         </li>
                     @endif
                 </ul>
@@ -354,15 +391,14 @@
         </div>
 
         <!-- Presupuestos aceptados -->
-        <div class="tab-pane fade {{ $tab == 'presAcept' ? 'show active' : '' }}" id="presAcept" role="tabpanel"
-            aria-labelledby="presAcept-tab">
+        <div class="tab-pane fade {{ $tab == 'presupuestados' ? 'show active' : '' }}" id="presupuestados" role="tabpanel"
+            aria-labelledby="presupuestados-tab">
             <table class="table table-light text-center table-hover rounded-table">
                 <thead class="table-dark">
                     <tr class="align-middle">
                         <th class="icon-table">Proyecto</th>
                         <th class="icon-table">Título / Serie de referencia</th>
                         <th class="icon-table">Cliente</th>
-                        <th class="icon-table">Precio total</th>
                         <th class="icon-table">Forma de pago</th>
                         <th class="icon-table">Visita asignada</th>
                         <th class="icon-table">Fecha de creación</th>
@@ -370,12 +406,12 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @if ($proyectosPresupuestoAceptado->isEmpty())
+                    @if ($proyectosPresupuestados->isEmpty())
                         <tr>
                             <td colspan="9" class="text-center">No hay proyectos creados.</td>
                         </tr>
                     @else
-                        @foreach ($proyectosPresupuestoAceptado as $proyecto)
+                        @foreach ($proyectosPresupuestados as $proyecto)
                             <tr class="text-center">
                                 <td class="align-middle">
                                     <a href="#"
@@ -422,7 +458,6 @@
                                     </a>
                                 </td>
 
-                                <td class="align-middle">€{{ $proyecto->presupuesto->precio_total }}</td>
                                 <td class="align-middle">{{ $proyecto->pago }}</td>
 
                                 <td class="align-middle">
@@ -448,8 +483,8 @@
             </table>
 
             @php
-                $totalPages = $proyectosPresupuestoAceptado->lastPage();
-                $currentPage = $proyectosPresupuestoAceptado->currentPage();
+                $totalPages = $proyectosPresupuestados->lastPage();
+                $currentPage = $proyectosPresupuestados->currentPage();
                 $maxPagesToShow = 5; // Número máximo de enlaces de página a mostrar
 
                 $startPage = max($currentPage - floor($maxPagesToShow / 2), 1);
@@ -465,7 +500,7 @@
                 <ul class="pagination">
                     @if ($startPage > 1)
                         <li class="page-item">
-                            <a class="page-link" href="{{ $proyectosPresupuestoAceptado->url(1) }}&tab=presAcept">1</a>
+                            <a class="page-link" href="{{ $proyectosPresupuestados->url(1) }}&tab=presupuestados">1</a>
                         </li>
                         @if ($startPage > 2)
                             <li class="page-item disabled"><span class="page-link">...</span></li>
@@ -473,9 +508,9 @@
                     @endif
 
                     @for ($i = $startPage; $i <= $endPage; $i++)
-                        <li class="page-item {{ $proyectosPresupuestoAceptado->currentPage() == $i ? 'active' : '' }}">
+                        <li class="page-item {{ $proyectosPresupuestados->currentPage() == $i ? 'active' : '' }}">
                             <a class="page-link"
-                                href="{{ $proyectosPresupuestoAceptado->url($i) }}&tab=presAcept">{{ $i }}</a>
+                                href="{{ $proyectosPresupuestados->url($i) }}&tab=presupuestados">{{ $i }}</a>
                         </li>
                     @endfor
 
@@ -485,7 +520,7 @@
                         @endif
                         <li class="page-item">
                             <a class="page-link"
-                                href="{{ $proyectosPresupuestoAceptado->url($totalPages) }}&tab=presAcept">{{ $totalPages }}</a>
+                                href="{{ $proyectosPresupuestados->url($totalPages) }}&tab=presupuestados">{{ $totalPages }}</a>
                         </li>
                     @endif
                 </ul>
@@ -493,15 +528,14 @@
         </div>
 
         <!-- Por cobrar -->
-        <div class="tab-pane fade {{ $tab == 'porCobr' ? 'show active' : '' }}" id="porCobr" role="tabpanel"
-        aria-labelledby="porCobr-tab">
+        <div class="tab-pane fade {{ $tab == 'por_cobrar' ? 'show active' : '' }}" id="por_cobrar" role="tabpanel"
+        aria-labelledby="por_cobrar-tab">
             <table class="table table-light text-center table-hover rounded-table">
                 <thead class="table-dark">
                     <tr class="align-middle">
                         <th class="icon-table">Proyecto</th>
                         <th class="icon-table">Título / Serie de referencia</th>
                         <th class="icon-table">Cliente</th>
-                        <th class="icon-table">Precio total</th>
                         <th class="icon-table">Forma de pago</th>
                         <th class="icon-table">Visita asignada</th>
                         <th class="icon-table">Fecha de creación</th>
@@ -509,12 +543,12 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @if ($proyectosPorCobr->isEmpty())
+                    @if ($proyectosPresupuestosPorCobrar->isEmpty())
                         <tr>
                             <td colspan="9" class="text-center">No hay proyectos creados.</td>
                         </tr>
                     @else
-                        @foreach ($proyectosPorCobr as $proyecto)
+                        @foreach ($proyectosPresupuestosPorCobrar as $proyecto)
                             <tr class="text-center">
                                 <td class="align-middle">
                                     <a href="#"
@@ -560,7 +594,6 @@
                                     </a>
                                 </td>
 
-                                <td class="align-middle">€{{ $proyecto->presupuesto->precio_total }}</td>
                                 <td class="align-middle">{{ $proyecto->pago }}</td>
 
                                 <td class="align-middle">
@@ -586,8 +619,8 @@
             </table>
 
             @php
-                $totalPages = $proyectosPorCobr->lastPage();
-                $currentPage = $proyectosPorCobr->currentPage();
+                $totalPages = $proyectosPresupuestosPorCobrar->lastPage();
+                $currentPage = $proyectosPresupuestosPorCobrar->currentPage();
                 $maxPagesToShow = 5; // Número máximo de enlaces de página a mostrar
 
                 $startPage = max($currentPage - floor($maxPagesToShow / 2), 1);
@@ -603,7 +636,7 @@
                 <ul class="pagination">
                     @if ($startPage > 1)
                         <li class="page-item">
-                            <a class="page-link" href="{{ $proyectosPorCobr->url(1) }}&tab=porCobr">1</a>
+                            <a class="page-link" href="{{ $proyectosPresupuestosPorCobrar->url(1) }}&tab=por_cobrar">1</a>
                         </li>
                         @if ($startPage > 2)
                             <li class="page-item disabled"><span class="page-link">...</span></li>
@@ -611,9 +644,9 @@
                     @endif
 
                     @for ($i = $startPage; $i <= $endPage; $i++)
-                        <li class="page-item {{ $proyectosPorCobr->currentPage() == $i ? 'active' : '' }}">
+                        <li class="page-item {{ $proyectosPresupuestosPorCobrar->currentPage() == $i ? 'active' : '' }}">
                             <a class="page-link"
-                                href="{{ $proyectosPorCobr->url($i) }}&tab=porCobr">{{ $i }}</a>
+                                href="{{ $proyectosPresupuestosPorCobrar->url($i) }}&tab=por_cobrar">{{ $i }}</a>
                         </li>
                     @endfor
 
@@ -623,7 +656,7 @@
                         @endif
                         <li class="page-item">
                             <a class="page-link"
-                                href="{{ $proyectosPorCobr->url($totalPages) }}&tab=porCobr">{{ $totalPages }}</a>
+                                href="{{ $proyectosPresupuestosPorCobrar->url($totalPages) }}&tab=por_cobrar">{{ $totalPages }}</a>
                         </li>
                     @endif
                 </ul>
@@ -631,15 +664,14 @@
         </div>
 
         <!-- Cerrados -->
-        <div class="tab-pane fade {{ $tab == 'cerrada' ? 'show active' : '' }}" id="cerrada" role="tabpanel"
-        aria-labelledby="cerrada-tab">
+        <div class="tab-pane fade {{ $tab == 'cerrados' ? 'show active' : '' }}" id="cerrados" role="tabpanel"
+        aria-labelledby="cerrados-tab">
             <table class="table table-light text-center table-hover rounded-table">
                 <thead class="table-dark">
                     <tr class="align-middle">
                         <th class="icon-table">Proyecto</th>
                         <th class="icon-table">Título / Serie de referencia</th>
                         <th class="icon-table">Cliente</th>
-                        <th class="icon-table">Precio total</th>
                         <th class="icon-table">Forma de pago</th>
                         <th class="icon-table">Visita asignada</th>
                         <th class="icon-table">Fecha de creación</th>
@@ -647,12 +679,12 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @if ($proyectosCerrado->isEmpty())
+                    @if ($proyectosCerrados->isEmpty())
                         <tr>
                             <td colspan="9" class="text-center">No hay proyectos creados.</td>
                         </tr>
                     @else
-                        @foreach ($proyectosCerrado as $proyecto)
+                        @foreach ($proyectosCerrados as $proyecto)
                             <tr class="text-center">
                                 <td class="align-middle">
                                     <a href="#"
@@ -723,8 +755,8 @@
             </table>
 
             @php
-                $totalPages = $proyectosCerrado->lastPage();
-                $currentPage = $proyectosCerrado->currentPage();
+                $totalPages = $proyectosCerrados->lastPage();
+                $currentPage = $proyectosCerrados->currentPage();
                 $maxPagesToShow = 5; // Número máximo de enlaces de página a mostrar
 
                 $startPage = max($currentPage - floor($maxPagesToShow / 2), 1);
@@ -740,7 +772,7 @@
                 <ul class="pagination">
                     @if ($startPage > 1)
                         <li class="page-item">
-                            <a class="page-link" href="{{ $proyectosCerrado->url(1) }}&tab=cerrada">1</a>
+                            <a class="page-link" href="{{ $proyectosCerrados->url(1) }}&tab=cerrados">1</a>
                         </li>
                         @if ($startPage > 2)
                             <li class="page-item disabled"><span class="page-link">...</span></li>
@@ -748,9 +780,9 @@
                     @endif
 
                     @for ($i = $startPage; $i <= $endPage; $i++)
-                        <li class="page-item {{ $proyectosCerrado->currentPage() == $i ? 'active' : '' }}">
+                        <li class="page-item {{ $proyectosCerrados->currentPage() == $i ? 'active' : '' }}">
                             <a class="page-link"
-                                href="{{ $proyectosCerrado->url($i) }}&tab=cerrada">{{ $i }}</a>
+                                href="{{ $proyectosCerrados->url($i) }}&tab=cerrados">{{ $i }}</a>
                         </li>
                     @endfor
 
@@ -760,7 +792,7 @@
                         @endif
                         <li class="page-item">
                             <a class="page-link"
-                                href="{{ $proyectosCerrado->url($totalPages) }}&tab=cerrada">{{ $totalPages }}</a>
+                                href="{{ $proyectosCerrados->url($totalPages) }}&tab=cerrados">{{ $totalPages }}</a>
                         </li>
                     @endif
                 </ul>
@@ -958,43 +990,6 @@ document.addEventListener('DOMContentLoaded', function() {
             toast.onmouseleave = Swal.resumeTimer;
         }
     });
-
-    $(document).on('click', '.aceptar-proyecto-btn', function(event) {
-        event.preventDefault();
-
-        var proyectoId = $(this).data('proyecto-id');
-
-        $.ajax({
-            url: '{{ route('proyecto.aceptar', ['id' => ':proyectoId']) }}'.replace(':proyectoId', proyectoId),
-            type: 'POST',
-            data: {
-                _token: $('meta[name="csrf-token"]').attr('content')
-            },
-            success: function(response) {
-                if (response.success) {
-                    location.reload();
-                    Toast.fire({
-                        icon: "success",
-                        title: "Proyecto con presupuesto aceptado.",
-                        timer: 3000
-                    });
-                } else {
-                    Toast.fire({
-                        icon: "error",
-                        title: "Hubo un problema al aceptar el proyecto.",
-                        timer: 3000
-                    });
-                }
-            },
-            error: function(xhr, status, error) {
-                Toast.fire({
-                    icon: "error",
-                    title: error,
-                    timer: 3000
-                });
-            }
-        });
-    });
 });
 
 document.addEventListener('DOMContentLoaded', function() {
@@ -1147,11 +1142,53 @@ document.addEventListener('click', function(event) {
         contactoInput.value = contacto;
     }
 });
+
+
+
+
+
+
+
+
+
+document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('submit', function(e) {
+        if (e.target && e.target.id === 'editProyectoForm') {
+            e.preventDefault();
+
+            const formData = new FormData(e.target);
+            fetch(e.target.action, {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'X-CSRF-Token': formData.get('_token')
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert('Proyecto actualizado correctamente');
+                    window.location.href = "{{ route('proyecto.index') }}";
+                } else {
+                    alert('Error al actualizar el proyecto. Por favor, inténtalo de nuevo.');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Ocurrió un error. Por favor, inténtalo de nuevo.');
+            });
+        }
+    });
+});
+
+
 </script>
 @endpush
 @if (!isset($proyectos) || empty($proyectos))
     @include('partials.modals._asignar-visita')
 @endif
+@include('partials/modals/_proyecto-editar')
 @include('partials/modals/_detalles-proyecto')
 @include('partials/modals/_cliente-proyecto')
 </x-default-layout>

@@ -71,7 +71,7 @@ class Proyecto extends Model
         'eliminado' => 'bool',
     ];
 
-    public function presupuesto()
+    public function presupuestos()
     {
         return $this->hasMany(Presupuesto::class, 'proyecto_id');
     }

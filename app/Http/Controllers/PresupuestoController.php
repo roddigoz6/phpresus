@@ -56,15 +56,14 @@ class PresupuestoController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create(Request $request)
+    public function create($proyecto_id)
     {
+        // Encuentra el proyecto por su ID
+        $proyecto = Proyecto::findOrFail($proyecto_id);
 
-        $cliente_id = $request->query('cliente_id');
-        $cliente = Cliente::findOrFail($cliente_id);
-
-        return view('pages.presupuesto.create', compact('cliente', ));
+        // Devuelve la vista con el proyecto
+        return view('pages.presupuesto.create', compact('proyecto'));
     }
-
 
     public function getProductos(Request $request)
     {
@@ -116,10 +115,12 @@ class PresupuestoController extends Controller
      */
     public function store(Request $request)
     {
+
         try {
             // Validar los datos de entrada
             $validatedData = $request->validate([
                 'proyecto_id' => 'required|exists:TProyectos,proyecto_id',
+                'nom_pres' => 'nullable|string|max:255',
                 'precio_total' => 'required|numeric|min:0',
                 'lista_productos' => 'required|json',
             ]);
@@ -127,7 +128,9 @@ class PresupuestoController extends Controller
             // Crear un nuevo presupuesto asociado al proyecto
             $presupuesto = new Presupuesto();
             $presupuesto->proyecto_id = $validatedData['proyecto_id'];
+            $presupuesto->nom_pres = $validatedData['nom_pres'];
             $presupuesto->precio_total = $validatedData['precio_total'];
+            $presupuesto->estado = 'presupuestado';
             $presupuesto->save();
 
             // Guardar los productos y capítulos asociados al presupuesto
@@ -175,10 +178,7 @@ class PresupuestoController extends Controller
      */
     public function edit(Presupuesto $presupuesto)
     {
-        $clientes = Cliente::where('eliminado', false)->get();
-
-        $presupuesto->load('cliente', 'productoPresupuestos.producto', 'proyecto');
-
+        $presupuesto->load('productoPresupuestos.producto', 'proyecto');
         $proyecto = $presupuesto->proyecto;
 
         $productosArrastrados = $presupuesto->productoPresupuestos->map(function($pp) {
@@ -198,7 +198,7 @@ class PresupuestoController extends Controller
 
         $productosArrastrados = $productosArrastrados->sortBy('orden')->values();
 
-        return view('pages/presupuesto.edit', compact('presupuesto', 'proyecto', 'clientes', 'productosArrastrados'));
+        return view('pages/presupuesto.edit', compact('presupuesto', 'proyecto',  'productosArrastrados'));
     }
 
     /**
@@ -211,24 +211,15 @@ class PresupuestoController extends Controller
     public function update(Request $request, Presupuesto $presupuesto)
     {
         $validatedData = $request->validate([
-            'cliente_id' => 'required|exists:tclientes,id',
+            'proyecto_id' => 'required|exists:tproyectos,proyecto_id',
+            'nom_pres' => 'nullable|string|max:255',
             'precio_total' => 'required|numeric|min:0',
             'lista_productos' => 'required|json',
-            'serie_ref' => 'string|max:255|nullable',
-            'num_ref' => 'string|max:255|nullable',
-            'pago' => 'string|nullable'
         ]);
 
         $presupuesto->update([
-            'cliente_id' => $validatedData['cliente_id'],
+            'proyecto_id' => $validatedData['proyecto_id'],
             'precio_total' => $validatedData['precio_total'],
-        ]);
-
-        $presupuesto->proyecto->update([
-            'cliente_id' => $validatedData['cliente_id'],
-            'serie_ref' => $validatedData['serie_ref'],
-            'num_ref' => $validatedData['num_ref'],
-            'pago' => $validatedData['pago']
         ]);
 
         $presupuesto->productoPresupuestos()->delete();

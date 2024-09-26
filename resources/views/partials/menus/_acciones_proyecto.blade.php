@@ -4,54 +4,21 @@
         <div class="menu-content text-muted pb-2 px-3 fs-7 text-uppercase">Gestionar proyecto: {{ $proyecto->proyecto_id }}</div>
     </div>
 
-    @if (!$proyecto->cerrado)
+    @if ($proyecto->estado!='cerrado')
         <div class="menu-item px-3">
-            <a href="#" class="menu-link px-3 aceptar-proyecto-btn" data-proyecto-id="{{ $proyecto->proyecto_id }}">
-                <span class="menu-title">Aceptar proyecto</span>
+            <a href="{{ route('presupuesto.create', $proyecto->proyecto_id) }}" class="menu-link px-3 crear-presupuesto-btn" data-proyecto-id="{{ $proyecto->proyecto_id }}">
+                <span class="menu-title">Crear presupuesto</span>
                 <span><i class="fa-solid fa-circle-check"></i></span>
             </a>
         </div>
 
         <div class="menu-item px-3">
-            <a href="{{ route('proyecto.download', ['id' => $proyecto->proyecto_id]) }}" class="menu-link px-3 descargar-proyecto-btn" data-proyecto-id="{{ $proyecto->proyecto_id }}">
-                <span class="menu-title">Descargar PDF simple</span>
-                <span><i class="fa-solid fa-file-pdf"></i></span>
-            </a>
-        </div>
-
-        @if ($proyecto->estado != 'presupuestado')
-        <div class="menu-item px-3">
-            <a href="{{ route('proyecto.downloadBudget', ['id' => $proyecto->proyecto_id]) }}" class="menu-link px-3 descargar-proforma-btn" data-proyecto-id="{{ $proyecto->proyecto_id }}">
-                <span class="menu-title">Descargar proforma</span>
-                <span><i class="fa-solid fa-circle-down"></i></span>
-            </a>
-        </div>
-        @endif
-
-        <div class="menu-item px-3">
-            <a href="" class="menu-link px-3 enviar-proyecto-btn" data-proyecto-id="{{ $proyecto->proyecto_id }}">
-                <span class="menu-title">Enviar PDF simple</span>
-                <span><i class="fa-solid fa-envelope"></i></span>
-            </a>
-        </div>
-
-        @if ($proyecto->estado != 'presupuestado')
-        <div class="menu-item px-3">
-            <a href="" class="menu-link px-3 enviar-proforma-btn" data-proyecto-id="{{ $proyecto->proyecto_id }}">
-                <span class="menu-title">Enviar proforma</span>
-                <span><i class="fa-solid fa-envelopes-bulk"></i></span>
-            </a>
-        </div>
-        @endif
-
-        <div class="menu-item px-3">
-            <a href="{{ route('presupuesto.edit', $proyecto->presupuesto->id) }}" class="menu-link px-3">
+            <a class="menu-link px-3" data-bs-toggle="modal" data-bs-target="#editarProyectoModal">
                 <span class="menu-title">Editar proyecto</span>
                 <span><i class="fa-solid fa-pen-to-square"></i></span>
             </a>
         </div>
 
-        @if ($proyecto->estado != 'presupuestado')
         <div class="menu-item px-3">
             <a href="#" class="menu-link px-3"
                 data-bs-toggle="modal"
@@ -63,15 +30,12 @@
                 <span><i class="fa-solid fa-calendar-check"></i></span>
             </a>
         </div>
-
         <div class="menu-item px-3">
             <a href="#" class="menu-link px-3 cerrar-proyecto-btn" data-proyecto-id="{{ $proyecto->proyecto_id }}">
                 <span class="menu-title">Cerrar proyecto</span>
                 <span><i class="fa-solid fa-circle-check"></i></span>
             </a>
         </div>
-
-        @endif
     @endif
 
     <div class="menu-item px-3">

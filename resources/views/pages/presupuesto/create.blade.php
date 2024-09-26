@@ -104,23 +104,27 @@
         <div class="col-md-8">
             <form id="presupuesto-form" method="POST" class="mb-3">
                 @csrf
-
-                <h3>Crear proyecto</h3>
+                <h3>Nuevo presupuesto, proyecto {{$proyecto->serie_ref}}
+                    <span class="badge badge-secondary">{{$proyecto->proyecto_id}}</span>
+                </h3>
+                <div class="row">
+                    <div class="col">
+                        <div class="input-group mb-3">
+                            <input type="text" class="form-control" name="nom_pres" id="nom_pres" placeholder="Ingresa el nombre del presupuesto">
+                        </div>
+                    </div>
+                </div>
 
                 <div class="row">
-                    <hr />
                     <div class="col form-group">
                     <p class="mb-0">Datos del cliente</p>
-
-                        Cliente: <strong>{{$cliente->nombre}} {{$cliente->apellido}}</strong>
-                        <input type="hidden" value="{{$cliente->id}}" id="cliente_id" name="cliente_id">
+                        Cliente: <strong>{{$proyecto->cliente->nombre}} {{$proyecto->cliente->apellido}}</strong>
+                        <input type="hidden" id="proyecto_id" value="{{$proyecto->proyecto_id}}">
                     </div>
 
                     <div class="col form-group">
-
-                        Contacto: <strong>{{$cliente->contacto ?: "No registrado" }}</strong>
-                        Forma de pago de cliente: <strong>{{$cliente->pago ?: "No registrado"}}</strong>
-
+                        Contacto: <strong>{{$proyecto->cliente->contacto ?: "No registrado" }}</strong>
+                        Forma de pago de cliente: <strong>{{$proyecto->pago ?: "No registrado"}}</strong>
                     </div>
                 </div>
 
@@ -715,6 +719,10 @@ document.addEventListener('DOMContentLoaded', function() {
         }
 
         var formData = new FormData(this);
+        var proyectoId = $('#proyecto_id').val();
+        var nomPres = $('#nom_pres').val();
+        formData.append('proyecto_id', proyectoId);
+        formData.append('nom_pres', nomPres);
 
         $.ajax({
             url: '{{ route('presupuesto.store') }}',

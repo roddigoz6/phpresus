@@ -14,12 +14,11 @@ return new class extends Migration
         Schema::create('TProyectos', function (Blueprint $table) {
             $table->string('proyecto_id')->primary();
             $table->foreignId('cliente_id')->constrained('TClientes')->onDelete('cascade');
-            $table->enum('estado', ['presupuestado', 'presupuesto_aceptado', 'por_cobrar'])->nullable();
+            $table->enum('estado', ['abierto', 'cerrado'])->nullable();
             $table->string('serie_ref')->nullable();
             $table->integer('num_ref')->nullable();
             $table->string('pago')->nullable();
             $table->string('iva')->nullable();
-            $table->boolean('cerrado')->default(false);
             $table->boolean('eliminado')->default(false);
             $table->timestamps();
         });

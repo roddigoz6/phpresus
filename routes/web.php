@@ -36,6 +36,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     //
     Route::resource('presupuesto', PresupuestoController::class);
+    Route::get('/presupuesto/{id}/create', [PresupuestoController::class, 'create'])
+        ->where('id', '.*')
+        ->name('presupuesto.create');
     Route::get('/presupuesto/create/getProductos', [PresupuestoController::class, 'getProductos'])->name('presupuesto.getProductos');
 
     //
