@@ -45,6 +45,13 @@
                 </a>
             </div>
 
+            <div data-kt-menu-trigger="click" class="menu-item menu-accordion ? 'active' : '' }}">
+                <a href="{{ route('log.index') }}" class="menu-link">
+                    <span class="menu-icon" data-bs-toggle="popover" data-bs-trigger="hover" title=" [Buscar actualizaciones]"><i class="fa-solid fa-gear"></i></span>
+                    <span class="menu-title">Versión 1.0</span>
+                </a>
+            </div>
+
         </div>
 	</div>
 </div>

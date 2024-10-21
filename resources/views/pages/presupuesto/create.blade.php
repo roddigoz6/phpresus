@@ -139,6 +139,7 @@
                                     <th class="icon-table">Cantidad</th>
                                     <th class="icon-table">Precio x Unidad</th>
                                     <th class="icon-table">Precio</th>
+                                    <th class="icon-table">Actualizar</th>
                                     <th class="icon-table"></th>
                                 </tr>
                             </thead>
@@ -502,8 +503,6 @@ function actualizarListaProductos() {
             descripcionInput.val(producto.descripcion || '');
 
             descripcionInput.on('change', function() {
-                //console.log("CP1", descripcionInput);
-                //console.log(producto);
                 producto.descripcion = $(this).val();
                 document.getElementById("lista_productos").value = JSON.stringify(productosArrastrados);
             });
@@ -548,6 +547,25 @@ function actualizarListaProductos() {
             tdPrecioTotal.addClass('precio-total-producto text-center');
             tdPrecioTotal.text((producto.cantidad * producto.precio).toFixed(2) + '€');
 
+            // Crear celda para el checkbox de actualización de precio
+            const tdActualizarPrecio = $('<td class="align-middle form-check text-center"></td>');
+            const actualizarPrecio = $('<input>');
+            actualizarPrecio.addClass('form-check-input');
+            actualizarPrecio.attr({
+                type: 'checkbox',
+            });
+
+            // Opcional: Puedes agregar un evento para manejar el cambio del checkbox
+            actualizarPrecio.on('change', function() {
+                const isChecked = $(this).is(':checked');
+                producto.actualizarPrecio = isChecked;
+                console.log(`Actualizar precio: ${isChecked}`);
+            });
+
+            // Añadir el checkbox a la celda
+            tdActualizarPrecio.append(actualizarPrecio);
+
+            // Crear celda para acciones
             const tdAcciones = $('<td class="align-middle"></td>');
             const eliminarBtn = $('<button></button>');
             eliminarBtn.attr('type', 'button');
@@ -561,6 +579,7 @@ function actualizarListaProductos() {
             });
             tdAcciones.append(eliminarBtn);
 
+            // Crear campos ocultos para orden y tipo
             const ordenInput = $('<input>');
             ordenInput.attr({
                 type: 'hidden',
@@ -577,7 +596,9 @@ function actualizarListaProductos() {
                 value: producto.tipo
             });
 
-            tr.append(tdNombre, tdDescripcion, tdCantidad, tdPrecio, tdPrecioTotal, tdAcciones, ordenInput, tipoInput);
+            // Añadir todas las celdas a la fila
+            tr.append(tdNombre, tdDescripcion, tdCantidad, tdPrecio, tdPrecioTotal, tdActualizarPrecio, tdAcciones, ordenInput, tipoInput);
+
         }
 
         tableBody.append(tr);

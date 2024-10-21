@@ -205,8 +205,8 @@
     <div class="tab-content mt-3" id="clienteTabsContent">
         <!-- Todos los clientes -->
         <div class="tab-pane fade show active" id="all" role="tabpanel" aria-labelledby="all-tab">
-            <table class="table table-light text-center table-hover rounded-table">
-                <thead class="table-dark">
+            <table class="table text-center table-hover rounded-table">
+                <thead class="bg-secondary">
                     <tr class="align-middle">
                         <th class="icon-table">Cliente</th>
                         <th class="icon-table">Nombre</th>
@@ -228,7 +228,7 @@
                     @foreach ($clientes as $cliente)
                         <tr>
                             <td class="align-middle">
-                                <button class="btn btn-light-info" data-bs-toggle="modal" data-bs-target="#detalleClienteModal" data-cliente-id="{{ $cliente->id }}" data-bs-toggle="popover" title="Ver detalle de cliente">
+                                <button class="btn btn-sm btn-icon btn-light-info" data-bs-toggle="modal" data-bs-target="#detalleClienteModal" data-cliente-id="{{ $cliente->id }}" data-bs-toggle="popover" title="Ver detalle de cliente">
                                     {{ $cliente->id }}
                                 </button>
                             </td>
@@ -256,14 +256,14 @@
                             <td class="align-middle">{{ $cliente->created_at->format('d/m/Y H:i') }}</td>
                             <td class="align-middle">
                                 <!-- Botón para abrir el modal de edición -->
-                                <button type="button" class="btn btn-light-primary" data-bs-toggle="modal" data-bs-target="#editarClienteModal{{ $cliente->id }}">
+                                <button type="button" class="btn btn-sm btn-icon btn-light-primary" data-bs-toggle="modal" data-bs-target="#editarClienteModal{{ $cliente->id }}">
                                     <i class="fa-solid fa-pen-to-square"></i>
                                 </button>
 
                                 <form id="delete-form-{{ $cliente->id }}" action="{{ route('cliente.destroy', $cliente->id) }}" method="POST" style="display: inline;">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="button" class="btn btn-light-danger delete-btn" data-cliente-id="{{ $cliente->id }}" data-nombre="{{ $cliente->nombre }}" data-has-proyectos="{{ $cliente->proyectos()->exists() ? 'true' : 'false' }}">
+                                    <button type="button" class="btn btn-sm btn-icon btn-light-danger delete-btn" data-cliente-id="{{ $cliente->id }}" data-nombre="{{ $cliente->nombre }}" data-has-proyectos="{{ $cliente->proyectos()->exists() ? 'true' : 'false' }}">
                                         <i class="fas fa-trash"></i>
                                     </button>
                                 </form>
@@ -318,8 +318,8 @@
 
         <!-- Clientes establecidos -->
         <div class="tab-pane fade" id="stablished" role="tabpanel" aria-labelledby="stablished-tab">
-            <table class="table table-light text-center table-hover rounded-table">
-                <thead class="table-dark">
+            <table class="table text-center table-hover rounded-table">
+                <thead class="bg-secondary">
                     <tr class="align-middle">
                         <th class="icon-table">Cliente</th>
                         <th class="icon-table">Nombre</th>
@@ -340,7 +340,7 @@
                     @foreach ($clientes->where('establecido', 1) as $cliente)
                         <tr>
                             <td class="align-middle">
-                                <button class="btn btn-light-info" data-bs-toggle="modal" data-bs-target="#detalleClienteModal" data-cliente-id="{{ $cliente->id }}" data-bs-toggle="popover" title="Ver detalle de cliente">
+                                <button class="btn btn-sm btn-icon btn-light-info" data-bs-toggle="modal" data-bs-target="#detalleClienteModal" data-cliente-id="{{ $cliente->id }}" data-bs-toggle="popover" title="Ver detalle de cliente">
                                     {{ $cliente->id }}
                                 </button>
                             </td>
@@ -361,13 +361,13 @@
                             <td class="align-middle">{{ $cliente->created_at->format('d/m/Y H:i') }}</td>
                             <td class="align-middle">
                                 <!-- Botón para abrir el modal de edición -->
-                                <button type="button" class="btn btn-light-primary" data-bs-toggle="modal" data-bs-target="#editarClienteModal{{ $cliente->id }}">
+                                <button type="button" class="btn btn-sm btn-icon btn-light-primary" data-bs-toggle="modal" data-bs-target="#editarClienteModal{{ $cliente->id }}">
                                     <i class="fa-solid fa-pen-to-square"></i>
                                 </button>
                                 <form id="delete-form-{{ $cliente->id }}" action="{{ route('cliente.destroy', $cliente->id) }}" method="POST" style="display: inline;">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="button" class="btn btn-light-danger delete-btn" data-cliente-id="{{ $cliente->id }}" data-nombre="{{ $cliente->nombre }}" data-has-proyectos="{{ $cliente->proyectos()->exists() ? 'true' : 'false' }}">
+                                    <button type="button" class="btn btn-sm btn-icon btn-light-danger delete-btn" data-cliente-id="{{ $cliente->id }}" data-nombre="{{ $cliente->nombre }}" data-has-proyectos="{{ $cliente->proyectos()->exists() ? 'true' : 'false' }}">
                                         <i class="fa-solid fa-trash"></i>
                                     </button>
                                 </form>
@@ -424,7 +424,7 @@
         <!-- Clientes no establecidos -->
         <div class="tab-pane fade" id="not-stablished" role="tabpanel" aria-labelledby="not-stablished-tab">
             <table class="table table-light text-center table-hover rounded-table">
-                <thead class="table-dark">
+                <thead class="bg-secondary">
                     <tr class="align-middle">
                         <th class="icon-table">Cliente</th>
                         <th class="icon-table">Nombre</th>
@@ -445,7 +445,7 @@
                     @foreach ($clientes->where('establecido', 0) as $cliente)
                         <tr>
                             <td class="align-middle">
-                                <button class="btn btn-light-info" data-bs-toggle="modal" data-bs-target="#detalleClienteModal" data-cliente-id="{{ $cliente->id }}" data-bs-toggle="popover" title="Ver detalle de cliente">
+                                <button class="btn btn-sm btn-icon btn-light-info" data-bs-toggle="modal" data-bs-target="#detalleClienteModal" data-cliente-id="{{ $cliente->id }}" data-bs-toggle="popover" title="Ver detalle de cliente">
                                     {{ $cliente->id }}
                                 </button>
                             </td>
@@ -466,13 +466,13 @@
                             <td class="align-middle">{{ $cliente->created_at->format('d/m/Y H:i') }}</td>
                             <td class="align-middle">
                                 <!-- Botón para abrir el modal de edición -->
-                                <button type="button" class="btn btn-light-primary" data-bs-toggle="modal" data-bs-target="#editarClienteModal{{ $cliente->id }}">
+                                <button type="button" class="btn btn-sm btn-icon btn-light-primary" data-bs-toggle="modal" data-bs-target="#editarClienteModal{{ $cliente->id }}">
                                     <i class="fa-solid fa-pen-to-square"></i>
                                 </button>
                                 <form id="delete-form-{{ $cliente->id }}" action="{{ route('cliente.destroy', $cliente->id) }}" method="POST" style="display: inline;">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="button" class="btn btn-light-danger delete-btn" data-cliente-id="{{ $cliente->id }}" data-nombre="{{ $cliente->nombre }}" data-has-proyectos="{{ $cliente->proyectos()->exists() ? 'true' : 'false' }}">
+                                    <button type="button" class="btn btn-sm btn-icon btn-light-danger delete-btn" data-cliente-id="{{ $cliente->id }}" data-nombre="{{ $cliente->nombre }}" data-has-proyectos="{{ $cliente->proyectos()->exists() ? 'true' : 'false' }}">
                                         <i class="fa-solid fa-trash"></i>
                                     </button>
                                 </form>

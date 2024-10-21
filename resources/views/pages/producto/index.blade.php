@@ -95,7 +95,7 @@
         <div class="tab-pane fade show active" id="todas" role="tabpanel" aria-labelledby="todas_tab">
             <div class="table-responsive">
                 <table class="table table-light text-center table-hover rounded-table">
-                    <thead class="table-dark">
+                    <thead class="bg-secondary">
                         <tr class="align-middle">
                             <th class="icon-table">Id</th>
                             <th class="icon-table">Nombre</th>
@@ -120,11 +120,11 @@
                                 @endif
                                 <td class="align-middle">{{ $producto->created_at->format('d/m/Y H:i') }}</td>
                                 <td class="align-middle">
-                                    <a href="#" class="btn btn-light-primary" data-bs-toggle="modal" data-bs-target="#editarProductoModal{{ $producto->id }}" data-bs-toggle="popover" title="Editar producto"><i class="fa-solid fa-pen-to-square"></i></a>
+                                    <a href="#" class="btn btn-sm btn-icon btn-light-primary" data-bs-toggle="modal" data-bs-target="#editarProductoModal{{ $producto->id }}" data-bs-toggle="popover" title="Editar producto"><i class="fa-solid fa-pen-to-square"></i></a>
                                     <form id="delete-form-{{ $producto->id }}" action="{{ route('producto.destroy', $producto->id) }}" method="POST" style="display: inline;">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="button" class="btn btn-light-danger delete-btn" data-producto-id="{{ $producto->id }}" data-bs-toggle="popover" title="Eliminar producto"><i class="fa-solid fa-trash"></i></button>
+                                        <button type="button" class="btn btn-sm btn-icon btn-light-danger delete-btn" data-producto-id="{{ $producto->id }}" data-bs-toggle="popover" title="Eliminar producto"><i class="fa-solid fa-trash"></i></button>
                                     </form>
                                 </td>
                             </tr>

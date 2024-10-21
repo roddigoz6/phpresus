@@ -18,34 +18,44 @@
                             <div class="row">
                                 <div class="col">
                                     <label for="serie_ref">Nombre del proyecto</label>
-                                    <input class="form-control" type="text" name="serie_ref" id="serie_ref" value="{{ $proyecto->serie_ref }}" required>
+                                    <input class="form-control" type="text" name="serie_ref" id="serie_ref-edit" value="{{ $proyecto->serie_ref }}" required>
                                 </div>
 
                                 <div class="col col-auto">
                                     <label for="num_ref">Número de referencia del proyecto</label>
                                     <input class="form-control" type="text" value="{{ $proyecto->num_ref }}" disabled>
-                                    <input type="hidden" name="num_ref" id="num_ref" value="{{ $proyecto->num_ref }}">
+                                    <input type="hidden" name="num_ref" id="num_ref-edit" value="{{ $proyecto->num_ref }}">
                                 </div>
                             </div>
 
                             <div class="row">
                                 <div class="col">
                                     <label for="pago">Forma de pago</label>
-                                    <select class="form-select" id="pago" name="pago">
+                                    <select class="form-select" id="pago-edit" name="pago">
                                         <option value="Ver condiciones" {{ $proyecto->pago == 'Ver condiciones' ? 'selected' : '' }}>Ver condiciones</option>
                                         <option value="50% inicio, 50% fin" {{ $proyecto->pago == '50% inicio, 50% fin' ? 'selected' : '' }}>50% inicio, 50% fin</option>
                                         <option value="50% termino de obra, resto a 90 dias" {{ $proyecto->pago == '50% termino de obra, resto a 90 dias' ? 'selected' : '' }}>50% termino de obra, resto a 90 días</option>
-                                        <!-- Otros valores de opción -->
+
+                                        <option value="50% comienzo de obra, resto a convenir" {{ $proyecto->pago == '50% comienzo de obra, resto a convenir' ? 'selected' : '' }}>50% comienzo de obra, resto a convenir</option>
+                                        <option value="Certificaciones quincenales" {{ $proyecto->pago == 'Certificaciones quincenales' ? 'selected' : '' }}>Certificaciones quincenales</option>
+                                        <option value="Como siempre" {{ $proyecto->pago == 'Como siempre' ? 'selected' : '' }}>Como siempre</option>
+                                        <option value="Contado termino de obra" {{ $proyecto->pago == 'Contado termino de obra' ? 'selected' : '' }}>Contado termino de obra</option>
+                                        <option value="Convenir" {{ $proyecto->pago == 'Convenir' ? 'selected' : '' }}>Convenir</option>
+                                        <option value="Fin de ejercicio, 15 de diciembre" {{ $proyecto->pago == 'Fin de ejercicio, 15 de diciembre' ? 'selected' : '' }}>Fin de ejercicio, 15 de diciembre</option>
+                                        <option value="Letra de 90 dias" {{ $proyecto->pago == 'Letra de 90 dias' ? 'selected' : '' }}>Letra de 90 días</option>
+                                        <option value="Letra a la vista" {{ $proyecto->pago == 'Letra a la vista' ? 'selected' : '' }}>Letra a la vista</option>
                                     </select>
                                 </div>
 
                                 <div class="col col-auto">
                                     <label for="iva">IVA</label>
-                                    <select class="form-select" id="iva" name="iva">
-                                        <option value="7" {{ $proyecto->iva == 7 ? 'selected' : '' }}>7</option>
-                                        <option value="8" {{ $proyecto->iva == 8 ? 'selected' : '' }}>8</option>
-                                        <option value="10" {{ $proyecto->iva == 10 ? 'selected' : '' }}>10</option>
-                                        <!-- Otros valores de IVA -->
+                                    <select class="form-select" id="iva-edit" name="iva">
+                                        <option value="7" {{ $proyecto->iva == '7' ? 'selected' : '' }}>7</option>
+                                        <option value="8" {{ $proyecto->iva == '8' ? 'selected' : '' }}>8</option>
+                                        <option value="10" {{ $proyecto->iva == '10' ? 'selected' : '' }}>10</option>
+                                        <option value="16" {{ $proyecto->iva == '16' ? 'selected' : '' }}>16</option>
+                                        <option value="18" {{ $proyecto->iva == '18' ? 'selected' : '' }}>18</option>
+                                        <option value="21" {{ $proyecto->iva == '21' ? 'selected' : '' }}>21</option>
                                     </select>
                                 </div>
                             </div>

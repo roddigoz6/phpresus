@@ -84,33 +84,6 @@ class ProyectoController extends Controller
         ->orderBy('proyecto_id', 'desc')
         ->paginate(15);
 
-        $proyectosPresupuestados = Proyecto::where('eliminado', false)
-            ->whereHas('presupuestos', function($query) {
-                $query->where('eliminado', false)
-                ->where('estado', 'presupuestado');
-                })
-            ->with('cliente')
-            ->orderBy('proyecto_id', 'desc')
-            ->paginate(15);
-
-        $proyectosPresupuestosAceptados = Proyecto::where('eliminado', false)
-            ->whereHas('presupuestos', function($query) {
-                $query->where('eliminado', false)
-                ->where('estado', 'presupuesto_aceptado');
-                })
-            ->with('cliente')
-            ->orderBy('proyecto_id', 'desc')
-            ->paginate(15);
-
-        $proyectosPresupuestosPorCobrar = Proyecto::where('eliminado', false)
-            ->whereHas('presupuestos', function($query) {
-                $query->where('eliminado', false)
-                ->where('estado', 'por_cobrar');
-                })
-            ->with('cliente')
-            ->orderBy('proyecto_id', 'desc')
-            ->paginate(15);
-
         // Configuración para visitas de la semana
         $inicioSemana = Carbon::now()->startOfWeek();
         $finSemana = Carbon::now()->endOfWeek();
@@ -128,9 +101,6 @@ class ProyectoController extends Controller
             'proyectos',
             'proyectosAbiertos',
             'proyectosCerrados',
-            'proyectosPresupuestados',
-            'proyectosPresupuestosAceptados',
-            'proyectosPresupuestosPorCobrar',
             'rangoSemana',
             'tab'
         ));

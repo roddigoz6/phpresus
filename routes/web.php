@@ -17,6 +17,7 @@ use App\Http\Controllers\ClienteController;
 use App\Http\Controllers\PresupuestoController;
 use App\Http\Controllers\ProductoController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\LogController;
 
 Route::middleware(['auth', 'verified'])->group(function () {
 
@@ -91,6 +92,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::resource('user', UserController::class);
     Route::get('/user/{id}/getUltimaModif', [UserController::class, 'getUltimaModif'])->name('user.getUltimaModif');
 
+    Route::resource('log', LogController::class);
 });
 
 Route::get('/error', function () {

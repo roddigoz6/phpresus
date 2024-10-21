@@ -109,194 +109,194 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
 
-            <form id="createProyectoForm" method="post" action="{{route('proyecto.store')}}">
+            <form id="createProyectoForm" method="post" action="{{route('proyecto.store')}}" autocomplete="off">
             @csrf
-            <div class="modal-body">
+                <div class="modal-body">
 
-                <button type="button" class="btn btn-light-primary text-start" id="clienteNuevoBtn">Cliente nuevo <span class="menu-icon"><i class="fa-solid fa-user-plus"></i></span></button>
+                    <button type="button" class="btn btn-light-primary text-start" id="clienteNuevoBtn">Cliente nuevo <span class="menu-icon"><i class="fa-solid fa-user-plus"></i></span></button>
 
-                <button type="button" class="btn btn-light-info text-end" id="clienteExistenteBtn">Cliente existente <i class="fa-solid fa-user-check"></i></button>
+                    <button type="button" class="btn btn-light-info text-end" id="clienteExistenteBtn">Cliente existente <i class="fa-solid fa-user-check"></i></button>
 
-                <div class="form-group mt-6" id="clienteSelectContainer" style="display: none;">
-                    <div class="row">
-                        <div class="col me-auto">
-                            <select data-dropdown-parent="#clienteModalLabel" id="clienteSelectMaster" name="cliente_id" id="cliente_id" class="form-control">
-                            </select>
+                    <div class="form-group mt-6" id="clienteSelectContainer" style="display: none;">
+                        <div class="row">
+                            <div class="col me-auto">
+                                <select data-dropdown-parent="#clienteModalLabel" id="clienteSelectMaster" name="cliente_id" id="cliente_id" class="form-control">
+                                </select>
+                            </div>
                         </div>
                     </div>
-                </div>
 
-                <div class="form-group mt-6" id="clienteNuevoContainer" style="display: none;">
-                    <div class="row">
-                        <div class="col me-auto" id="clienteNuevoBtn">
+                    <div class="form-group mt-6" id="clienteNuevoContainer" style="display: none;">
+                        <div class="row">
+                            <div class="col me-auto" id="clienteNuevoBtn">
+                                <div class="row">
+                                    <div class="col">
+                                        <div class="header-modal">
+                                            <h4>Datos del cliente</h4>
+                                            <input type="hidden" name="context" value="form">
+                                        </div>
+                                        <div class="row">
+                                            <div class="col">
+                                                <div class="">
+                                                    <label for="nombre">Nombre</label> <strong class="required"></strong>
+                                                    <input type="text" class="form-control" id="nombre" name="nombre" required>
+                                                </div>
+                                            </div>
+                                            <div class="col">
+                                                <div class="">
+                                                    <label for="apellido">Apellido</label> <strong class="required"></strong>
+                                                    <input type="text" class="form-control" id="apellido" name="apellido" required>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col">
+                                                <div class="">
+                                                    <label for="dni">DNI</label> <strong class="required"></strong>
+                                                    <input type="text" class="form-control" id="dni" name="dni" required>
+                                                </div>
+                                            </div>
+                                            <div class="col">
+                                                <div>
+                                                    <label for="movil">Móvil</label> <strong class="required"></strong>
+                                                    <input type="text" class="form-control" id="movil" name="movil" required>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="">
+                                            <label for="email">Correo Electrónico</label>
+                                            <input type="email" class="form-control" id="email" name="email">
+                                        </div>
+                                        <div class="">
+                                            <label for="direccion">Direccion</label> <strong class="required"></strong>
+                                            <input type="text" class="form-control" id="direccion" name="direccion" required>
+                                        </div>
+                                        <div class="">
+                                            <label for="cp">Código postal</label> <strong class="required"></strong>
+                                            <input type="text" class="form-control" id="cp" name="cp" required>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col">
+                                                <div class="">
+                                                    <label for="poblacion">Población</label> <strong class="required"></strong>
+                                                    <input type="text" class="form-control" id="poblacion" name="poblacion" required>
+                                                </div>
+                                            </div>
+                                            <div class="col">
+                                                <div class="">
+                                                    <label for="provincia">Provincia</label> <strong class="required"></strong>
+                                                    <input type="text" class="form-control" id="provincia" name="provincia" required>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col">
+                                                <div class="">
+                                                    <label for="fax">Fax</label>
+                                                    <input type="text" class="form-control" id="fax" name="fax">
+                                                </div>
+                                            </div>
+                                            <div class="col">
+                                                <div>
+                                                    <label for="cargo">Cargo</label>
+                                                    <input type="text" class="form-control" id="cargo" name="cargo">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col">
+                                        <div class="header-modal">
+                                            <h4>Datos de envío</h4>
+                                        </div>
+                                        <div class="">
+                                            <label for="contacto">Contacto</label>
+                                            <input type="text" class="form-control" id="contacto" name="contacto">
+                                        </div>
+                                        <div class="">
+                                            <label for="titular_nom">Nombre de titular</label>
+                                            <input type="text" class="form-control" id="titular_nom" name="titular_nom">
+                                        </div>
+                                        <div class="">
+                                            <label for="titular_ape">Apellido de titular</label>
+                                            <input type="text" class="form-control" id="titular_ape" name="titular_ape">
+                                        </div>
+                                        <div class="">
+                                            <label for="direccion_envio">Dirección de envío</label>
+                                            <input type="text" class="form-control" id="direccion_envio" name="direccion_envio">
+                                        </div>
+                                        <div class="">
+                                            <label for="cp_envio">Código postal de dirección de envío</label>
+                                            <input type="text" class="form-control" id="cp_envio" name="cp_envio">
+                                        </div>
+                                        <div class="">
+                                            <label for="poblacion_envio">Población de dirección de envío</label>
+                                            <input type="text" class="form-control" id="poblacion_envio" name="poblacion_envio">
+                                        </div>
+                                        <div class="">
+                                            <label for="provincia_envio">Provincia de dirección de envío</label>
+                                            <input type="text" class="form-control" id="provincia_envio" name="provincia_envio">
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group mt-6">
+                        <div class="col">
                             <div class="row">
                                 <div class="col">
-                                    <div class="header-modal">
-                                        <h4>Datos del cliente</h4>
-                                        <input type="hidden" name="context" value="form">
-                                    </div>
-                                    <div class="row">
-                                        <div class="col">
-                                            <div class="">
-                                                <label for="nombre">Nombre</label> <strong class="required"></strong>
-                                                <input type="text" class="form-control" id="nombre" name="nombre" required>
-                                            </div>
-                                        </div>
-                                        <div class="col">
-                                            <div class="">
-                                                <label for="apellido">Apellido</label> <strong class="required"></strong>
-                                                <input type="text" class="form-control" id="apellido" name="apellido" required>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col">
-                                            <div class="">
-                                                <label for="dni">DNI</label> <strong class="required"></strong>
-                                                <input type="text" class="form-control" id="dni" name="dni" required>
-                                            </div>
-                                        </div>
-                                        <div class="col">
-                                            <div>
-                                                <label for="movil">Móvil</label> <strong class="required"></strong>
-                                                <input type="text" class="form-control" id="movil" name="movil" required>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="">
-                                        <label for="email">Correo Electrónico</label>
-                                        <input type="email" class="form-control" id="email" name="email">
-                                    </div>
-                                    <div class="">
-                                        <label for="direccion">Direccion</label> <strong class="required"></strong>
-                                        <input type="text" class="form-control" id="direccion" name="direccion" required>
-                                    </div>
-                                    <div class="">
-                                        <label for="cp">Código postal</label> <strong class="required"></strong>
-                                        <input type="text" class="form-control" id="cp" name="cp" required>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col">
-                                            <div class="">
-                                                <label for="poblacion">Población</label> <strong class="required"></strong>
-                                                <input type="text" class="form-control" id="poblacion" name="poblacion" required>
-                                            </div>
-                                        </div>
-                                        <div class="col">
-                                            <div class="">
-                                                <label for="provincia">Provincia</label> <strong class="required"></strong>
-                                                <input type="text" class="form-control" id="provincia" name="provincia" required>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col">
-                                            <div class="">
-                                                <label for="fax">Fax</label>
-                                                <input type="text" class="form-control" id="fax" name="fax">
-                                            </div>
-                                        </div>
-                                        <div class="col">
-                                            <div>
-                                                <label for="cargo">Cargo</label>
-                                                <input type="text" class="form-control" id="cargo" name="cargo">
-                                            </div>
-                                        </div>
-                                    </div>
+                                    <label for="serie_ref">Nombre del proyecto</label>
+                                    <input class="form-control" type="text" name="serie_ref" id="serie_ref" placeholder="987654321E" autocomplete="off">
                                 </div>
 
+                                <div class="col col-auto">
+                                    <label for="num_ref">Número de referencia del proyecto</label>
+                                    <input class="form-control" type="text" value="{{ $proyectoNum }}" disabled>
+                                    <input type="hidden" name="num_ref" id="num_ref" value="{{ $proyectoNum }}" autocomplete="off">
+                                </div>
+                            </div>
+
+                            <div class="row">
                                 <div class="col">
-                                    <div class="header-modal">
-                                        <h4>Datos de envío</h4>
-                                    </div>
-                                    <div class="">
-                                        <label for="contacto">Contacto</label>
-                                        <input type="text" class="form-control" id="contacto" name="contacto">
-                                    </div>
-                                    <div class="">
-                                        <label for="titular_nom">Nombre de titular</label>
-                                        <input type="text" class="form-control" id="titular_nom" name="titular_nom">
-                                    </div>
-                                    <div class="">
-                                        <label for="titular_ape">Apellido de titular</label>
-                                        <input type="text" class="form-control" id="titular_ape" name="titular_ape">
-                                    </div>
-                                    <div class="">
-                                        <label for="direccion_envio">Dirección de envío</label>
-                                        <input type="text" class="form-control" id="direccion_envio" name="direccion_envio">
-                                    </div>
-                                    <div class="">
-                                        <label for="cp_envio">Código postal de dirección de envío</label>
-                                        <input type="text" class="form-control" id="cp_envio" name="cp_envio">
-                                    </div>
-                                    <div class="">
-                                        <label for="poblacion_envio">Población de dirección de envío</label>
-                                        <input type="text" class="form-control" id="poblacion_envio" name="poblacion_envio">
-                                    </div>
-                                    <div class="">
-                                        <label for="provincia_envio">Provincia de dirección de envío</label>
-                                        <input type="text" class="form-control" id="provincia_envio" name="provincia_envio">
-                                    </div>
+                                    <label for="pago">Forma de pago</label>
+                                    <select class="form-select" id="pago" name="pago" autocomplete="off" >
+                                        <option value="Ver condiciones">Ver condiciones</option>
+                                        <option value="50% inicio, 50% fin">50% inicio, 50% fin</option>
+                                        <option value="50% termino de obra, resto a 90 dias">50% termino de obra, resto a 90 días</option>
+                                        <option value="50% comienzo de obra, resto a convenir">50% comienzo de obra, resto a convenir</option>
+                                        <option value="Certificaciones quincenales">Certificaciones quincenales</option>
+                                        <option value="Como siempre">Como siempre</option>
+                                        <option value="Contado termino de obra">Contado termino de obra</option>
+                                        <option value="Convenir">Convenir</option>
+                                        <option value="Fin de ejercicio, 15 de diciembre">Fin de ejercicio, 15 de diciembre</option>
+                                        <option value="Letra de 90 dias">Letra de 90 días</option>
+                                        <option value="Letra a la vista">Letra a la vista</option>
+                                    </select>
+                                </div>
 
+                                <div class="col col-auto">
+                                    <label for="iva">IVA</label>
+                                    <select class="form-select" id="iva" name="iva" autocomplete="off">
+                                        <option value="7">7</option>
+                                        <option value="8">8</option>
+                                        <option value="10">10</option>
+                                        <option value="16">16</option>
+                                        <option value="18">18</option>
+                                        <option value="21">21</option>
+                                    </select>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-
-                <div class="form-group mt-6">
-                    <div class="col">
-                        <div class="row">
-                            <div class="col">
-                                <label for="serie_ref">Nombre del proyecto</label>
-                                <input class="form-control" type="text" name="serie_ref" id="serie_ref" placeholder="987654321E">
-                            </div>
-
-                            <div class="col col-auto">
-                                <label for="num_ref">Número de referencia del proyecto</label>
-                                <input class="form-control" type="text" placeholder="" value="{{ $proyectoNum }}" disabled>
-                                <input type="hidden" name="num_ref" id="num_ref" value="{{$proyectoNum}}">
-                            </div>
-                        </div>
-
-                        <div class="row">
-                            <div class="col">
-                                <label for="pago">Forma de pago</label>
-                                <select class="form-select" id="pago" name="pago">
-                                    <option value="Ver condiciones">Ver condiciones</option>
-                                    <option value="50% inicio, 50% fin">50% inicio, 50% fin</option>
-                                    <option value="50% termino de obra, resto a 90 dias">50% termino de obra, resto a 90 días</option>
-                                    <option value="50% comienzo de obra, resto a convenir">50% comienzo de obra, resto a convenir</option>
-                                    <option value="Certificaciones quincenales">Certificaciones quincenales</option>
-                                    <option value="Como siempre">Como siempre</option>
-                                    <option value="Contado termino de obra">Contado termino de obra</option>
-                                    <option value="Convenir">Convenir</option>
-                                    <option value="Fin de ejercicio, 15 de diciembre">Fin de ejercicio, 15 de diciembre</option>
-                                    <option value="Letra de 90 dias">Letra de 90 días</option>
-                                    <option value="Letra a la vista">Letra a la vista</option>
-                                </select>
-                            </div>
-
-                            <div class="col col-auto">
-                                <label for="iva">IVA</label>
-                                <select class="form-select" id="iva" name="iva">
-                                    <option value="7">7</option>
-                                    <option value="8">8</option>
-                                    <option value="10">10</option>
-                                    <option value="16">16</option>
-                                    <option value="18">18</option>
-                                    <option value="21">21</option>
-                                </select>
-                            </div>
-                        </div>
+                <div class="modal-footer">
+                    <div class="">
+                        <button type="button" class="btn btn-light-primary" id="crearProyecto">Crear proyecto <i class="fa-solid fa-arrow-right"></i></button>
                     </div>
                 </div>
-            </div>
-            <div class="modal-footer">
-                <div class="">
-                    <button type="button" class="btn btn-light-primary" id="crearProyecto">Crear proyecto <i class="fa-solid fa-arrow-right"></i></button>
-                </div>
-            </div>
             </form>
         </div>
     </div>
@@ -449,37 +449,62 @@ $(document).ready(function() {
     $('#crearProyecto').on('click', function() {
         const isClienteSelectVisible = $('#clienteSelectMaster').is(':visible');
         const clienteId = isClienteSelectVisible ? $('#clienteSelectMaster').val() : null;
-        const serieRef = $('#serie_ref').val();
-        const numRef = $('#num_ref').val();
-        const pago = $('#pago').val();
-
         const createProyecto = "{{ route('proyecto.store') }}";
 
         // Si se selecciona un cliente existente
         if (isClienteSelectVisible && clienteId) {
+
             $.ajax({
                 url: createProyecto,
                 method: 'POST',
                 data: {
                     cliente_id: clienteId,
-                    serie_ref: serieRef,
-                    num_ref: numRef,
-                    pago: pago,
+                    serie_ref: $('#serie_ref').val(),
+                    num_ref: $('#num_ref').val(),
+                    pago: $('#pago').val(),
+                    iva: $('#iva').val(),
                     _token: '{{ csrf_token() }}'
                 },
                 success: function(data) {
                     if (data.success) {
-                        window.location.href = "{{ route('proyecto.index') }}";
+                        // Mostrar toast de éxito
+                        Swal.fire({
+                            toast: true,
+                            icon: 'success',
+                            title: 'Proyecto creado con éxito',
+                            position: 'top-end',
+                            showConfirmButton: false,
+                            timer: 3000
+                        }).then(function() {
+                            window.location.href = "{{ route('proyecto.index') }}";
+                        });
                     } else {
-                        alert(data.message || 'Error al crear el proyecto.');
+                        // Mostrar toast de error
+                        Swal.fire({
+                            toast: true,
+                            icon: 'error',
+                            title: data.message || 'Error al crear el proyecto.',
+                            position: 'top-end',
+                            showConfirmButton: false,
+                            timer: 3000
+                        });
                     }
                 },
                 error: function(error) {
+                    // Mostrar toast de error con mensaje específico
+                    Swal.fire({
+                        toast: true,
+                        icon: 'error',
+                        title: 'Error al crear el proyecto.',
+                        text: error.responseJSON?.message || 'Error inesperado.',
+                        position: 'top-end',
+                        showConfirmButton: false,
+                        timer: 3000
+                    });
                     console.error('Error al crear el proyecto:', error);
                 }
             });
         } else {
-
             const nombreCli = $('#nombre').val();
             const apellidoCli = $('#apellido').val();
             const dni = $('#dni').val();
@@ -521,20 +546,49 @@ $(document).ready(function() {
                     cp_envio: cpEnvio,
                     poblacion_envio: poblacionEnvio,
                     provincia_envio: provinciaEnvio,
-                    serie_ref: serieRef,
-                    num_ref: numRef,
-                    pago: pago,
+                    serie_ref: $('#serie_ref').val(),
+                    num_ref: $('#num_ref').val(),
+                    pago: $('#pago').val(),
+                    iva: $('#iva').val(),
                     _token: '{{ csrf_token() }}'
                 },
                 success: function(data) {
                     if (data.success) {
-                        window.location.href = "{{ route('proyecto.index') }}";
+                        // Mostrar toast de éxito
+                        Swal.fire({
+                            toast: true,
+                            icon: 'success',
+                            title: 'Cliente y proyecto creados con éxito',
+                            position: 'top-end',
+                            showConfirmButton: false,
+                            timer: 3000
+                        }).then(function() {
+                            window.location.href = "{{ route('proyecto.index') }}";
+                        });
                     } else {
-                        alert(data.message || 'Error al crear el proyecto.');
+                        // Mostrar toast de error
+                        Swal.fire({
+                            toast: true,
+                            icon: 'error',
+                            title: data.message || 'Error al crear el cliente y el proyecto.',
+                            position: 'top-end',
+                            showConfirmButton: false,
+                            timer: 3000
+                        });
                     }
                 },
                 error: function(error) {
-                    console.error('Error al crear el proyecto:', error);
+                    // Mostrar toast de error con mensaje específico
+                    Swal.fire({
+                        toast: true,
+                        icon: 'error',
+                        title: 'Error al crear el cliente y el proyecto.',
+                        text: error.responseJSON?.message || 'Error inesperado.',
+                        position: 'top-end',
+                        showConfirmButton: false,
+                        timer: 3000
+                    });
+                    console.error('Error al crear el cliente y el proyecto:', error);
                 }
             });
         }

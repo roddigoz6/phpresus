@@ -115,7 +115,7 @@ class PresupuestoController extends Controller
      */
     public function store(Request $request)
     {
-
+        dd($request->all());
         try {
             // Validar los datos de entrada
             $validatedData = $request->validate([
