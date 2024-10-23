@@ -41,6 +41,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
         ->where('id', '.*')
         ->name('presupuesto.create');
     Route::get('/presupuesto/create/getProductos', [PresupuestoController::class, 'getProductos'])->name('presupuesto.getProductos');
+    Route::post('/presupuesto/{id}/aceptar', [PresupuestoController::class, 'aceptar'])->name('presupuesto.aceptar');
+    Route::delete('/presupuesto/{id}', [PresupuestoController::class, 'destroy'])->name('presupuesto.destroy');
+    Route::post('/presupuesto/{id}', [PresupuestoController::class, 'facturar'])->name('presupuesto.facturar');
 
     //
     Route::resource('proyecto', ProyectoController::class);
@@ -71,10 +74,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::delete('/proyecto/{id}', [ProyectoController::class, 'destroy'])
         ->where('id', '.*')
         ->name('proyecto.destroy');
-
-    Route::post('/proyecto/{id}/aceptar', [ProyectoController::class, 'aceptar'])
-        ->where('id', '.*')
-        ->name('proyecto.aceptar');
 
     Route::post('/proyecto/{id}/cerrar', [ProyectoController::class, 'cerrar'])
         ->where('id', '.*')

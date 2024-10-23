@@ -21,11 +21,7 @@
     <div class="card-body d-flex align-items-end pt-0">
         <div class="d-flex align-items-center flex-column mt-3 w-100">
             <span class="text-white pt-1 fw-semibold fs-6">
-                {{ $proyectoPresu }} presupuestados,
-                {{ $proyectoAcept }} aceptados,
-                {{ $proyectoPorFac }} por facturar, y
-                {{ $proyectoPorCobr }} pendientes de cobro.
-                {{ $proyectoCobr }} cobrados, y
+                {{ $proyectoAbierto }} abiertos y
                 {{ $proyectoCerrado }} cerrados.
             </span>
         </div>

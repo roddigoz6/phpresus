@@ -8,13 +8,13 @@
 
     @if (!$proyecto->cerrado)
         <div class="menu-item px-3">
-            <a href="#" class="menu-link px-3 aceptar-proyecto-btn" data-proyecto-id="{{ $proyecto->proyecto_id }}">
+            <a href="#" class="menu-link px-3 aceptar-presupuesto-btn" data-presupuesto-id="{{ $presupuesto->id }}">
                 <span class="menu-title">Aceptar presupuesto</span>
                 <span><i class="fa-solid fa-circle-check"></i></span>
             </a>
         </div>
         <div class="menu-item px-3">
-            <a href="{{ route('proyecto.download', ['id' => $proyecto->proyecto_id]) }}" class="menu-link px-3 descargar-proyecto-btn" data-proyecto-id="{{ $proyecto->proyecto_id }}">
+            <a href="{{ route('proyecto.download', ['id' => $proyecto->proyecto_id]) }}" class="menu-link px-3 descargar-proyecto-btn" data-presupuesto-id="{{ $presupuesto->id }}">
                 <span class="menu-title">Descargar PDF simple</span>
                 <span><i class="fa-solid fa-file-pdf"></i></span>
             </a>
@@ -22,7 +22,7 @@
 
         @if ($proyecto->estado != 'presupuestado')
         <div class="menu-item px-3">
-            <a href="{{ route('proyecto.downloadBudget', ['id' => $proyecto->proyecto_id]) }}" class="menu-link px-3 descargar-proforma-btn" data-proyecto-id="{{ $proyecto->proyecto_id }}">
+            <a href="{{ route('proyecto.downloadBudget', ['id' => $proyecto->proyecto_id]) }}" class="menu-link px-3 descargar-proforma-btn" data-presupuesto-id="{{ $presupuesto->id }}">
                 <span class="menu-title">Descargar proforma</span>
                 <span><i class="fa-solid fa-circle-down"></i></span>
             </a>
@@ -30,7 +30,7 @@
         @endif
 
         <div class="menu-item px-3">
-            <a href="" class="menu-link px-3 enviar-proyecto-btn" data-proyecto-id="{{ $proyecto->proyecto_id }}">
+            <a href="" class="menu-link px-3 enviar-presupuesto-btn" data-presupuesto-id="{{ $presupuesto->id }}">
                 <span class="menu-title">Enviar PDF simple</span>
                 <span><i class="fa-solid fa-envelope"></i></span>
             </a>
@@ -38,7 +38,7 @@
 
         @if ($proyecto->estado != 'presupuestado')
         <div class="menu-item px-3">
-            <a href="" class="menu-link px-3 enviar-proforma-btn" data-proyecto-id="{{ $proyecto->proyecto_id }}">
+            <a href="" class="menu-link px-3 enviar-proforma-btn" data-presupuesto-id="{{ $presupuesto->id }}">
                 <span class="menu-title">Enviar proforma</span>
                 <span><i class="fa-solid fa-envelopes-bulk"></i></span>
             </a>
@@ -53,7 +53,7 @@
         </div>
 
         <div class="menu-item px-3">
-            <a href="" class="menu-link px-3">
+            <a href="" class="menu-link px-3 facturar-presupuesto-btn" data-presupuesto-id="{{ $presupuesto->id }}">
                 <span class="menu-title">Generar factura</span>
                 <span><i class="fa-solid fa-euro"></i></span>
             </a>
@@ -65,7 +65,7 @@
         <form id="delete-form-{{ $presupuesto->id }}" action="{{ route('presupuesto.destroy', $presupuesto->id) }}" method="POST" style="display: inline;">
             @csrf
             @method('DELETE')
-            <button type="button" class="btn btn-light-danger delete-btn" data-presupuesto-id="{{ $presupuesto->id }}">
+            <button type="button" class="btn btn-light-danger delete-btn-presupuesto" data-presupuesto-id="{{ $presupuesto->id }}">
                 Eliminar <i class="fa-solid fa-trash"></i>
             </button>
         </form>

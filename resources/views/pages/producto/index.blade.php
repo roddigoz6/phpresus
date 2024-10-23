@@ -94,7 +94,7 @@
     <div class="tab-content mt-3" id="categoriasTabContent">
         <div class="tab-pane fade show active" id="todas" role="tabpanel" aria-labelledby="todas_tab">
             <div class="table-responsive">
-                <table class="table table-light text-center table-hover rounded-table">
+                <table class="table text-center table-hover rounded-table">
                     <thead class="bg-secondary">
                         <tr class="align-middle">
                             <th class="icon-table">Id</th>

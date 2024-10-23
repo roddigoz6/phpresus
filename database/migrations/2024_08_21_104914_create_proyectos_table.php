@@ -17,8 +17,6 @@ return new class extends Migration
             $table->enum('estado', ['abierto', 'cerrado'])->nullable();
             $table->string('serie_ref')->nullable();
             $table->integer('num_ref')->nullable();
-            $table->string('pago')->nullable();
-            $table->string('iva')->nullable();
             $table->boolean('eliminado')->default(false);
             $table->timestamps();
         });

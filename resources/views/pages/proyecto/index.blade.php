@@ -20,24 +20,20 @@
     <!-- Pestañas de navegación -->
     <ul class="nav nav-tabs" id="proyectoTabs" role="tablist">
         <li class="nav-item" role="presentation">
-            <a class="nav-link active" id="all-tab" data-bs-toggle="tab" href="#all" role="tab"
-                aria-controls="all" aria-selected="true">Todos</a>
+            <a class="nav-link {{ $tab == 'all' ? 'active' : '' }}" id="all-tab" href="{{ route('proyecto.index', ['tab' => 'all', 'page' => 1]) }}" role="tab" aria-controls="all" aria-selected="{{ $tab == 'all' ? 'true' : 'false' }}">Todos</a>
         </li>
         <li class="nav-item" role="presentation">
-            <a class="nav-link bg-info text-white" id="abiertos-tab" data-bs-toggle="tab" href="#abiertos" role="tab"
-                aria-controls="abiertos" aria-selected="false">Abiertos</a>
+            <a class="nav-link {{ $tab == 'abiertos' ? 'active' : '' }}" id="abiertos-tab" href="{{ route('proyecto.index', ['tab' => 'abiertos', 'page' => 1]) }}" role="tab" aria-controls="abiertos" aria-selected="{{ $tab == 'abiertos' ? 'true' : 'false' }}">Abiertos</a>
         </li>
         <li class="nav-item" role="presentation">
-            <a class="nav-link bg-secondary" id="cerrados-tab" data-bs-toggle="tab" href="#cerrados" role="tab"
-                aria-controls="cerrados" aria-selected="false">Cerrados</a>
+            <a class="nav-link {{ $tab == 'cerrados' ? 'active' : '' }}" id="cerrados-tab" href="{{ route('proyecto.index', ['tab' => 'cerrados', 'page' => 1]) }}" role="tab" aria-controls="cerrados" aria-selected="{{ $tab == 'cerrados' ? 'true' : 'false' }}">Cerrados</a>
         </li>
     </ul>
 
     <div class="tab-content mt-3" id="proyectoTabsContent">
 
         <!-- Todos los proyectos -->
-        <div class="tab-pane fade {{ $tab == 'all' ? 'show active' : '' }}" id="all" role="tabpanel"
-            aria-labelledby="all-tab">
+        <div class="tab-pane fade {{ $tab == 'all' ? 'show active' : '' }}" id="all" role="tabpanel" aria-labelledby="all-tab">
             <table class="table text-center table-hover rounded-table">
                 <thead class="bg-secondary">
                     <tr class="align-middle">
@@ -153,7 +149,9 @@
                                     </div>
                                 </td>
                             </tr>
-                            @foreach ($proyecto->presupuestos as $presupuesto)
+                            @foreach ($proyecto->presupuestos->filter(function($presupuesto) {
+                                return !$presupuesto->eliminado;
+                                }) as $presupuesto)
                                 <tr>
                                     <td>-</td>
                                     @switch($presupuesto->estado)
@@ -243,11 +241,138 @@
             </div>
         </div>
 
+
+        <!-- Abiertos -->
+        <div class="tab-pane fade {{ $tab == 'abiertos' ? 'show active' : '' }}" id="abiertos" role="tabpanel" aria-labelledby="abiertos-tab">
+            <table class="table text-center table-hover rounded-table">
+                <thead class="bg-secondary">
+                    <tr class="align-middle">
+                        <th class="icon-table">Proyecto</th>
+                        <th class="icon-table">Título / Serie de referencia</th>
+                        <th class="icon-table">Cliente</th>
+                        <th class="icon-table">Forma de pago</th>
+                        <th class="icon-table">Visita asignada</th>
+                        <th class="icon-table">Fecha de creación</th>
+                        <th class="icon-table">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if ($proyectosAbiertos->isEmpty())
+                        <tr>
+                            <td colspan="9" class="text-center">No hay proyectos abiertos.</td>
+                        </tr>
+                    @else
+                    @foreach ($proyectosAbiertos as $proyecto)
+                        <tr class="text-center">
+                            <td class="align-middle">
+                                <a href="#"
+                                    class="btn btn-light-secondary"
+                                    data-presupuesto-id="{{ $proyecto->proyecto_id }}"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#detallesProyectoModal"
+                                    data-proyecto-id="{{ $proyecto->proyecto_id }}"
+                                    title="Ver detalle del proyecto">
+                                    {{ $proyecto->proyecto_id }}
+                                    <span class="badge badge-primary">A</span>
+                                </a>
+                            </td>
+
+                            <td class="align-middle">{{ $proyecto->serie_ref ?? 'No registrado' }} - {{ $proyecto->num_ref ?? 'No registrado' }}</td>
+                            <td class="align-middle">
+                                <a
+                                    class="item-link"
+                                    type="button"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#clienteProyectoModal"
+                                    data-nombre="{{ $proyecto->cliente->nombre }}"
+                                    data-apellido="{{ $proyecto->cliente->apellido }}">
+                                    {{ $proyecto->cliente->nombre }} {{ $proyecto->cliente->apellido }}
+                                </a>
+                            </td>
+                            <td class="align-middle">{{ $proyecto->pago }}</td>
+                            <td class="align-middle">{{ $proyecto->created_at->format('d/m/Y H:i') }}</td>
+
+                            <td class="align-middle">
+                                <div class="card-toolbar">
+                                    <button type="button" class="btn btn-sm btn-icon btn-light-primary me-n3" data-kt-menu-trigger="{default: 'click', lg: 'hover'}" data-kt-menu-placement="bottom-end"><i class="fa-solid fa-bars"></i></button>
+                                    @include('partials/menus/_acciones_proyecto', ['proyecto' => $proyecto])
+                                </div>
+                            </td>
+                        </tr>
+
+                        @foreach ($proyecto->presupuestos->filter(function($presupuesto) {
+                            return !$presupuesto->eliminado;
+                            }) as $presupuesto)
+                            <tr>
+                                <td>-</td>
+                                <td class="align-middle">{{ $presupuesto->nom_pres ?? 'No registrado' }} <span class="badge badge-warning">{{ $presupuesto->estado }}</span></td>
+                                <td class="align-middle">-</td>
+                                <td class="align-middle">€{{ $presupuesto->precio_total }}</td>
+                                <td class="align-middle">{{ $presupuesto->created_at->format('d/m/Y H:i') }}</td>
+                                <td class="align-middle">
+                                    <div class="card-toolbar">
+                                        <button type="button" class="btn btn-sm btn-icon btn-light-primary me-n3" data-kt-menu-trigger="{default: 'click', lg: 'hover'}" data-kt-menu-placement="bottom-end"><i class="fa-solid fa-bars"></i></button>
+                                        @include('partials/menus/_acciones_presupuesto', ['presupuesto' => $presupuesto]) <!-- Cambiado para pasar el presupuesto -->
+                                    </div>
+                                </td>
+                            </tr>
+                        @endforeach
+                    @endforeach
+
+                    @endif
+                </tbody>
+            </table>
+
+            @php
+                $totalPages = $proyectosAbiertos->lastPage();
+                $currentPage = $proyectosAbiertos->currentPage();
+                $maxPagesToShow = 5; // Número máximo de enlaces de página a mostrar
+
+                $startPage = max($currentPage - floor($maxPagesToShow / 2), 1);
+                $endPage = min($startPage + $maxPagesToShow - 1, $totalPages);
+
+                // Ajuste para cuando hay menos de 10 páginas a mostrar al principio o al final
+                if ($endPage - $startPage + 1 < $maxPagesToShow) {
+                    $startPage = max($endPage - $maxPagesToShow + 1, 1);
+                }
+            @endphp
+
+            <div class="d-flex justify-content-center">
+                <ul class="pagination">
+                    @if ($startPage > 1)
+                        <li class="page-item">
+                            <a class="page-link" href="{{ $proyectosAbiertos->url(1) }}&tab=abiertos">1</a>
+                        </li>
+                        @if ($startPage > 2)
+                            <li class="page-item disabled"><span class="page-link">...</span></li>
+                        @endif
+                    @endif
+
+                    @for ($i = $startPage; $i <= $endPage; $i++)
+                        <li class="page-item {{ $proyectosAbiertos->currentPage() == $i ? 'active' : '' }}">
+                            <a class="page-link"
+                                href="{{ $proyectosAbiertos->url($i) }}&tab=abiertos">{{ $i }}</a>
+                        </li>
+                    @endfor
+
+                    @if ($endPage < $totalPages)
+                        @if ($endPage < $totalPages - 1)
+                            <li class="page-item disabled"><span class="page-link">...</span></li>
+                        @endif
+                        <li class="page-item">
+                            <a class="page-link"
+                                href="{{ $proyectosAbiertos->url($totalPages) }}&tab=abiertos">{{ $totalPages }}</a>
+                        </li>
+                    @endif
+                </ul>
+            </div>
+        </div>
+
         <!-- Cerrados -->
         <div class="tab-pane fade {{ $tab == 'cerrados' ? 'show active' : '' }}" id="cerrados" role="tabpanel"
         aria-labelledby="cerrados-tab">
-            <table class="table table-light text-center table-hover rounded-table">
-                <thead class="table-dark">
+            <table class="table text-center table-hover rounded-table">
+                <thead class="bg-secondary">
                     <tr class="align-middle">
                         <th class="icon-table">Proyecto</th>
                         <th class="icon-table">Título / Serie de referencia</th>
@@ -264,72 +389,63 @@
                             <td colspan="9" class="text-center">No hay proyectos creados.</td>
                         </tr>
                     @else
-                        @foreach ($proyectosCerrados as $proyecto)
-                            <tr class="text-center">
-                                <td class="align-middle">
-                                    <a href="#"
-                                        class="btn btn-light-secondary"
-                                        data-presupuesto-id="{{ $proyecto->proyecto_id }}"
-                                        data-bs-toggle="modal"
-                                        data-bs-target="#detallesProyectoModal"
-                                        data-proyecto-id="{{ $proyecto->proyecto_id }}"
-                                        title="Ver detalle del proyecto">
-                                        {{ $proyecto->proyecto_id }}
-                                        <span class="badge badge-dark">X</span>
-                                    </a>
-                                </td>
-                                <td class="align-middle"> {{ $proyecto->serie_ref ?? 'No registrado' }} - {{ $proyecto->num_ref ?? 'No registrado' }} </td>
-                                <td class="align-middle">
-                                    <a
-                                        class="item-link"
-                                        type="button"
-                                        data-bs-toggle="modal"
-                                        data-bs-target="#clienteProyectoModal"
-                                        data-nombre="{{ $proyecto->cliente->nombre }}"
-                                        data-apellido="{{ $proyecto->cliente->apellido }}"
-                                        data-dni="{{ $proyecto->cliente->dni }}"
-                                        data-email="{{ $proyecto->cliente->email }}"
-                                        data-movil="{{ $proyecto->cliente->movil }}"
-                                        data-contacto="{{ $proyecto->cliente->contacto }}"
-                                        data-direccion="{{ $proyecto->cliente->direccion }}"
-                                        data-cp="{{ $proyecto->cliente->cp }}"
-                                        data-poblacion="{{ $proyecto->cliente->poblacion }}"
-                                        data-provincia="{{ $proyecto->cliente->provincia }}"
-                                        data-fax="{{ $proyecto->cliente->fax }}"
-                                        data-cargo="{{ $proyecto->cliente->cargo }}"
-                                        data-titular-nom="{{ $proyecto->cliente->titular_nom }}"
-                                        data-titular-ape="{{ $proyecto->cliente->titular_ape }}"
-                                        data-direccion-envio="{{ $proyecto->cliente->direccion_envio }}"
-                                        data-cp-envio="{{ $proyecto->cliente->cp_envio }}"
-                                        data-poblacion-envio="{{ $proyecto->cliente->poblacion_envio }}"
-                                        data-provincia-envio="{{ $proyecto->cliente->provincia_envio }}"
-                                        data-pago="{{ $proyecto->cliente->pago }}"
-                                        data-establecido="{{ $proyecto->cliente->establecido }}">
-                                        {{ $proyecto->cliente->nombre }} {{ $proyecto->cliente->apellido }}
-                                    </a>
-                                </td>
+                    @foreach ($proyectosCerrados as $proyecto)
+                        <tr class="text-center">
+                            <td class="align-middle">
+                                <a href="#"
+                                    class="btn btn-light-secondary"
+                                    data-presupuesto-id="{{ $proyecto->proyecto_id }}"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#detallesProyectoModal"
+                                    data-proyecto-id="{{ $proyecto->proyecto_id }}"
+                                    title="Ver detalle del proyecto">
+                                    {{ $proyecto->proyecto_id }}
+                                    <span class="badge badge-secondary">C</span>
+                                </a>
+                            </td>
 
-                                <td class="align-middle">€{{ $proyecto->presupuesto->precio_total }}</td>
-                                <td class="align-middle">{{ $proyecto->pago }}</td>
+                            <td class="align-middle">{{ $proyecto->serie_ref ?? 'No registrado' }} - {{ $proyecto->num_ref ?? 'No registrado' }}</td>
+                            <td class="align-middle">
+                                <a
+                                    class="item-link"
+                                    type="button"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#clienteProyectoModal"
+                                    data-nombre="{{ $proyecto->cliente->nombre }}"
+                                    data-apellido="{{ $proyecto->cliente->apellido }}">
+                                    {{ $proyecto->cliente->nombre }} {{ $proyecto->cliente->apellido }}
+                                </a>
+                            </td>
+                            <td class="align-middle">{{ $proyecto->pago }}</td>
+                            <td class="align-middle">{{ $proyecto->created_at->format('d/m/Y H:i') }}</td>
 
-                                <td class="align-middle">
-                                    @if($proyecto->visitas->isEmpty())
-                                        No hay visitas
-                                    @else
-                                        <a href="{{route('visita.index')}}" class="btn btn-light-primary">Sí, ir a visitas</a>
-                                    @endif
-                                </td>
+                            <td class="align-middle">
+                                <div class="card-toolbar">
+                                    <button type="button" class="btn btn-sm btn-icon btn-light-primary me-n3" data-kt-menu-trigger="{default: 'click', lg: 'hover'}" data-kt-menu-placement="bottom-end"><i class="fa-solid fa-bars"></i></button>
+                                    @include('partials/menus/_acciones_proyecto', ['proyecto' => $proyecto])
+                                </div>
+                            </td>
+                        </tr>
 
-                                <td class="align-middle">{{ $proyecto->created_at->format('d/m/Y H:i') }}</td>
-
+                        @foreach ($proyecto->presupuestos->filter(function($presupuesto) {
+                                return !$presupuesto->eliminado;
+                            }) as $presupuesto)
+                            <tr>
+                                <td>-</td>
+                                <td class="align-middle">{{ $presupuesto->nom_pres ?? 'No registrado' }} <span class="badge badge-warning">{{ $presupuesto->estado }}</span></td>
+                                <td class="align-middle">-</td>
+                                <td class="align-middle">€{{ $presupuesto->precio_total }}</td>
+                                <td class="align-middle">{{ $presupuesto->created_at->format('d/m/Y H:i') }}</td>
                                 <td class="align-middle">
                                     <div class="card-toolbar">
                                         <button type="button" class="btn btn-sm btn-icon btn-light-primary me-n3" data-kt-menu-trigger="{default: 'click', lg: 'hover'}" data-kt-menu-placement="bottom-end"><i class="fa-solid fa-bars"></i></button>
-                                        @include('partials/menus/_acciones_proyecto', ['proyecto' => $proyecto])
+                                        @include('partials/menus/_acciones_presupuesto', ['presupuesto' => $presupuesto]) <!-- Cambiado para pasar el presupuesto -->
                                     </div>
                                 </td>
                             </tr>
                         @endforeach
+                    @endforeach
+
                     @endif
                 </tbody>
             </table>
@@ -431,9 +547,9 @@
 @push('scripts')
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const deleteButtons = document.querySelectorAll('.delete-btn');
+    const deleteButtonsProyecto = document.querySelectorAll('.delete-btn-proyecto');
 
-    deleteButtons.forEach(button => {
+    deleteButtonsProyecto.forEach(button => {
         button.addEventListener('click', function() {
             const proyectoId = button.getAttribute('data-proyecto-id');
             const row = button.closest('tr'); // Encuentra la fila más cercana
@@ -463,7 +579,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     }).then((result) => {
                         if (result.isConfirmed) {
                             $.ajax({
-                                url: `/proyecto/${encodeURIComponent(proyectoId)}`, // Asegúrate de codificar el ID
+                                url: '{{ route('proyecto.destroy', ['id' => ':proyectoId']) }}'.replace(':proyectoId', proyectoId),
                                 type: 'POST',
                                 data: {
                                     _token: $('meta[name="csrf-token"]').attr('content'),
@@ -492,7 +608,7 @@ document.addEventListener('DOMContentLoaded', function() {
                                     }
                                 },
                                 error: function(xhr) {
-                                    console.error(xhr.responseText);
+                                    console.error('Error details:', xhr);
                                     Swal.fire('Error', 'Hubo un problema al eliminar el proyecto.', 'error');
                                 }
                             });
@@ -503,6 +619,81 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 });
+
+document.addEventListener('DOMContentLoaded', function() {
+    const deleteButtonsPresupuesto = document.querySelectorAll('.delete-btn-presupuesto');
+
+    deleteButtonsPresupuesto.forEach(button => {
+        button.addEventListener('click', function() {
+            const presupuestoId = button.getAttribute('data-presupuesto-id');
+            const row = button.closest('tr'); // Encuentra la fila más cercana
+
+            // Primero, muestra un mensaje sobre objetos relacionados
+            Swal.fire({
+                title: 'Advertencia',
+                text: "Este presupuesto tiene objetos relacionados que también serán eliminados. ¿Deseas continuar?",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'OK',
+                cancelButtonText: "Cancelar"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Mensaje de confirmación para eliminar el presupuesto
+                    Swal.fire({
+                        title: '¿Estás seguro?',
+                        text: "No podrás revertir esto.",
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#d33',
+                        cancelButtonColor: '#3085d6',
+                        confirmButtonText: 'Eliminar',
+                        cancelButtonText: "Cancelar"
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            $.ajax({
+                                url: '{{ route('presupuesto.destroy', ['id' => ':presupuestoId']) }}'.replace(':presupuestoId', presupuestoId),
+                                type: 'POST',
+                                data: {
+                                    _token: $('meta[name="csrf-token"]').attr('content'),
+                                    _method: 'DELETE',
+                                },
+                                success: function(response) {
+                                    if (response.success) {
+                                        row.remove();
+                                        const Toast = Swal.mixin({
+                                            toast: true,
+                                            position: "top-end",
+                                            showConfirmButton: false,
+                                            timer: 3000,
+                                            timerProgressBar: true,
+                                            didOpen: (toast) => {
+                                                toast.onmouseenter = Swal.stopTimer;
+                                                toast.onmouseleave = Swal.resumeTimer;
+                                            }
+                                        });
+                                        Toast.fire({
+                                            icon: "success",
+                                            title: response.message
+                                        });
+                                    } else {
+                                        Swal.fire('Error', response.message || 'Hubo un problema al eliminar el presupuesto.', 'error');
+                                    }
+                                },
+                                error: function(xhr) {
+                                    console.error('Error details:', xhr);
+                                    Swal.fire('Error', 'Hubo un problema al eliminar el presupuesto.', 'error');
+                                }
+                            });
+                        }
+                    });
+                }
+            });
+        });
+    });
+});
+
 
 document.addEventListener('DOMContentLoaded', function() {
     var clienteModal = document.getElementById('clienteProyectoModal');
@@ -622,7 +813,44 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    $(document).on('click', '.enviar-proyecto-btn', function(event) {
+    $(document).on('click', '.aceptar-presupuesto-btn', function(event) {
+        event.preventDefault();
+
+        var presupuestoId = $(this).data('presupuesto-id');
+        console.log(presupuestoId);
+        $.ajax({
+            url: '{{ route('presupuesto.aceptar', ['id' => ':presupuestoId']) }}'.replace(':presupuestoId', presupuestoId),
+            type: 'POST',
+            data: {
+                _token: $('meta[name="csrf-token"]').attr('content')
+            },
+            success: function(response) {
+                if (response.success) {
+                    location.reload();
+                    Toast.fire({
+                        icon: "success",
+                        title: "Presupuesto aceptado.",
+                        timer: 3000
+                    });
+                } else {
+                    Toast.fire({
+                        icon: "error",
+                        title: "No se pudo aceptar el presupuesto.",
+                        timer: 3000
+                    });
+                }
+            },
+            error: function(xhr, status, error) {
+                Toast.fire({
+                    icon: "error",
+                    title: error,
+                    timer: 3000
+                });
+            }
+        });
+    });
+
+    $(document).on('click', '.enviar-presupuesto-btn', function(event) {
         event.preventDefault();
 
         var proyectoId = $(this).data('proyecto-id');
@@ -665,6 +893,34 @@ document.addEventListener('DOMContentLoaded', function() {
                 Toast.fire({
                     icon: 'success',
                     title: 'Proforma enviada.',
+                    timer: 3000
+                });
+            },
+            error: function(xhr, status, error) {
+                Toast.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    timer: 3000
+                });
+            }
+        });
+    });
+
+    $(document).on('click', '.facturar-presupuesto-btn', function(event) {
+        event.preventDefault();
+
+        var presupuestoId = $(this).data('presupuesto-id');
+
+        $.ajax({
+            url: '{{ route('presupuesto.facturar', ['id' => ':presupuestoId']) }}'.replace(':presupuestoId', presupuestoId),
+            method: 'POST',
+            data: {
+                _token: '{{ csrf_token() }}'
+            },
+            success: function(response) {
+                Toast.fire({
+                    icon: 'success',
+                    title: 'Presupuesto facturado.',
                     timer: 3000
                 });
             },
@@ -723,8 +979,6 @@ document.addEventListener('click', function(event) {
     }
 });
 
-
-
 /*
 EDITAR
 document.addEventListener('DOMContentLoaded', function() {
@@ -761,8 +1015,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
 </script>
 @endpush
+@include('partials.modals._asignar-visita')
 @if (!isset($proyectos) || empty($proyectos))
-    @include('partials.modals._asignar-visita')
     @include('partials/modals/_proyecto-editar')
     @include('partials/modals/_detalles-proyecto')
     @include('partials/modals/_cliente-proyecto')

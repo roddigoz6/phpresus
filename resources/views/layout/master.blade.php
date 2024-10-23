@@ -112,12 +112,12 @@
             <form id="createProyectoForm" method="post" action="{{route('proyecto.store')}}" autocomplete="off">
             @csrf
                 <div class="modal-body">
-
                     <button type="button" class="btn btn-light-primary text-start" id="clienteNuevoBtn">Cliente nuevo <span class="menu-icon"><i class="fa-solid fa-user-plus"></i></span></button>
 
                     <button type="button" class="btn btn-light-info text-end" id="clienteExistenteBtn">Cliente existente <i class="fa-solid fa-user-check"></i></button>
+                    <label for="" class="mt-3">El cliente es <span class="required">requerido</span> para crear el proyecto.</label>
 
-                    <div class="form-group mt-6" id="clienteSelectContainer" style="display: none;">
+                    <div class="form-group mt-3" id="clienteSelectContainer" style="display: none;">
                         <div class="row">
                             <div class="col me-auto">
                                 <select data-dropdown-parent="#clienteModalLabel" id="clienteSelectMaster" name="cliente_id" id="cliente_id" class="form-control">
@@ -126,7 +126,7 @@
                         </div>
                     </div>
 
-                    <div class="form-group mt-6" id="clienteNuevoContainer" style="display: none;">
+                    <div class="form-group mt-3" id="clienteNuevoContainer" style="display: none;">
                         <div class="row">
                             <div class="col me-auto" id="clienteNuevoBtn">
                                 <div class="row">
@@ -259,36 +259,6 @@
                                 </div>
                             </div>
 
-                            <div class="row">
-                                <div class="col">
-                                    <label for="pago">Forma de pago</label>
-                                    <select class="form-select" id="pago" name="pago" autocomplete="off" >
-                                        <option value="Ver condiciones">Ver condiciones</option>
-                                        <option value="50% inicio, 50% fin">50% inicio, 50% fin</option>
-                                        <option value="50% termino de obra, resto a 90 dias">50% termino de obra, resto a 90 días</option>
-                                        <option value="50% comienzo de obra, resto a convenir">50% comienzo de obra, resto a convenir</option>
-                                        <option value="Certificaciones quincenales">Certificaciones quincenales</option>
-                                        <option value="Como siempre">Como siempre</option>
-                                        <option value="Contado termino de obra">Contado termino de obra</option>
-                                        <option value="Convenir">Convenir</option>
-                                        <option value="Fin de ejercicio, 15 de diciembre">Fin de ejercicio, 15 de diciembre</option>
-                                        <option value="Letra de 90 dias">Letra de 90 días</option>
-                                        <option value="Letra a la vista">Letra a la vista</option>
-                                    </select>
-                                </div>
-
-                                <div class="col col-auto">
-                                    <label for="iva">IVA</label>
-                                    <select class="form-select" id="iva" name="iva" autocomplete="off">
-                                        <option value="7">7</option>
-                                        <option value="8">8</option>
-                                        <option value="10">10</option>
-                                        <option value="16">16</option>
-                                        <option value="18">18</option>
-                                        <option value="21">21</option>
-                                    </select>
-                                </div>
-                            </div>
                         </div>
                     </div>
                 </div>
@@ -451,9 +421,21 @@ $(document).ready(function() {
         const clienteId = isClienteSelectVisible ? $('#clienteSelectMaster').val() : null;
         const createProyecto = "{{ route('proyecto.store') }}";
 
+        // Validación: no permitir crear proyecto si no hay cliente seleccionado o si no se están creando datos del cliente
+        if (!isClienteSelectVisible && !$('#nombre').val()) {
+            Swal.fire({
+                toast: true,
+                icon: 'error',
+                title: 'Por favor, selecciona un cliente o proporciona los datos del nuevo cliente.',
+                position: 'top-end',
+                showConfirmButton: false,
+                timer: 3000
+            });
+            return; // Salir de la función
+        }
+
         // Si se selecciona un cliente existente
         if (isClienteSelectVisible && clienteId) {
-
             $.ajax({
                 url: createProyecto,
                 method: 'POST',
@@ -475,9 +457,8 @@ $(document).ready(function() {
                             position: 'top-end',
                             showConfirmButton: false,
                             timer: 3000
-                        }).then(function() {
-                            window.location.href = "{{ route('proyecto.index') }}";
                         });
+                        window.location.href = "{{ route('proyecto.index') }}"; // Redirigir inmediatamente
                     } else {
                         // Mostrar toast de error
                         Swal.fire({
@@ -562,9 +543,8 @@ $(document).ready(function() {
                             position: 'top-end',
                             showConfirmButton: false,
                             timer: 3000
-                        }).then(function() {
-                            window.location.href = "{{ route('proyecto.index') }}";
                         });
+                        window.location.href = "{{ route('proyecto.index') }}"; // Redirigir inmediatamente
                     } else {
                         // Mostrar toast de error
                         Swal.fire({

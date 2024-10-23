@@ -16,9 +16,9 @@ return new class extends Migration
         Schema::create('TClientes', function (Blueprint $table) {
             $table->id();
             //
-            $table->string('nombre')->nullable();
-            $table->string('apellido')->nullable();
-            $table->string('dni')->nullable();
+            $table->string('nombre');
+            $table->string('apellido');
+            $table->string('dni');
             $table->string('email')->nullable();
             $table->string('movil')->nullable();
 
@@ -35,7 +35,6 @@ return new class extends Migration
             $table->string('cp_envio')->nullable();
             $table->string('poblacion_envio')->nullable();
             $table->string('provincia_envio')->nullable();
-            $table->string('pago')->nullable();
 
             $table->boolean('establecido')->default(false);
             $table->boolean('eliminado')->default(false);

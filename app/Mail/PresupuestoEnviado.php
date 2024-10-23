@@ -2,17 +2,17 @@
 
 namespace App\Mail;
 
-use App\Models\Proyecto;
+use App\Models\Presupuesto;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
-class ProyectoEnviado extends Mailable
+class PresupuestoEnviado extends Mailable
 {
     use Queueable, SerializesModels;
-    public $proyecto;
+    public $presupuesto;
     public $pdfName;
 
     /**
@@ -20,23 +20,23 @@ class ProyectoEnviado extends Mailable
      *
      * @return void
      */
-    public function __construct(Proyecto $proyecto, $pdfName)
+    public function __construct(Presupuesto $presupuesto, $pdfName)
     {
-        $this->proyecto = $proyecto;
+        $this->presupuesto = $presupuesto;
         $this->pdfName = $pdfName;
     }
 
     public function build()
     {
-        $pdfPath = storage_path('app/public/proyectos/' . $this->pdfName);
+        $pdfPath = storage_path('app/public/presupuestos/' . $this->pdfName);
 
-        return $this->subject('Nuevo proyecto.')
+        return $this->subject('Nuevo presupuesto.')
                     ->view('mails.saludo')
                     ->with([
-                        'pdfUrl' => url('/storage/proyectos/' . $this->pdfName),
+                        'pdfUrl' => url('/storage/presupuestos/' . $this->pdfName),
                     ])
                     ->attach($pdfPath, [
-                        'as' => 'proyecto.pdf',
+                        'as' => 'presupuesto.pdf',
                         'mime' => 'application/pdf',
                     ]);
     }
@@ -49,7 +49,7 @@ class ProyectoEnviado extends Mailable
     public function envelope()
     {
         return new Envelope(
-            subject: 'Proyecto Enviado',
+            subject: 'Presupuesto Enviado',
         );
     }
 

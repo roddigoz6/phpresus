@@ -685,25 +685,26 @@ document.addEventListener('DOMContentLoaded', function() {
             var visitaId = this.getAttribute('data-visita-id');
             var visitaDescripcion = this.getAttribute('data-visita-descripcion');
             var proyectoId = this.getAttribute('data-proyecto-id');
-
-            // Actualiza el contenido dinámico del modal con la información de la visita
             var form = document.getElementById('visitaCerrarForm');
             var formAction = form.getAttribute('action').replace(':id', visitaId);
             form.setAttribute('action', formAction);
 
-            // Establece el ID de la visita en el input oculto
             document.getElementById('visita-id-input').value = visitaId;
-
-            // Actualiza el título del modal con el ID de la visita y el proyecto
             document.querySelector('#visitaCerrarModalLabel strong').textContent = `#${visitaId} del proyecto ${proyectoId}`;
-
-            // Actualiza la descripción de la visita en el modal
             document.getElementById('visitaDescripcion').textContent = visitaDescripcion;
 
-            // Mostrar el modal
             var modalElement = document.getElementById('visitaCerrarModal');
             var modal = new bootstrap.Modal(modalElement);
             modal.show();
+
+            modalElement.addEventListener('hidden.bs.modal', function () {
+                document.querySelectorAll('.modal-backdrop').forEach(function(backdrop) {
+                    backdrop.remove();
+                });
+
+                document.body.classList.remove('modal-open');
+                document.body.style = '';
+            });
         });
     });
 });

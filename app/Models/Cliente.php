@@ -30,7 +30,6 @@ class Cliente extends Model
         'cp_envio',
         'poblacion_envio',
         'provincia_envio',
-        'pago',
 
         'establecido',
         'eliminado',

@@ -30,6 +30,7 @@
                 <span><i class="fa-solid fa-calendar-check"></i></span>
             </a>
         </div>
+
         <div class="menu-item px-3">
             <a href="#" class="menu-link px-3 cerrar-proyecto-btn" data-proyecto-id="{{ $proyecto->proyecto_id }}">
                 <span class="menu-title">Cerrar proyecto</span>
@@ -42,7 +43,7 @@
         <form id="delete-form-{{ $proyecto->proyecto_id }}" action="{{ route('proyecto.destroy', $proyecto->proyecto_id) }}" method="POST" style="display: inline;">
             @csrf
             @method('DELETE')
-            <button type="button" class="btn btn-light-danger delete-btn" data-proyecto-id="{{ $proyecto->proyecto_id }}">
+            <button type="button" class="btn btn-light-danger delete-btn-proyecto" data-proyecto-id="{{ $proyecto->proyecto_id }}">
                 Eliminar proyecto <i class="fa-solid fa-trash"></i>
             </button>
         </form>

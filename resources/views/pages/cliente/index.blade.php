@@ -423,7 +423,7 @@
 
         <!-- Clientes no establecidos -->
         <div class="tab-pane fade" id="not-stablished" role="tabpanel" aria-labelledby="not-stablished-tab">
-            <table class="table table-light text-center table-hover rounded-table">
+            <table class="table text-center table-hover rounded-table">
                 <thead class="bg-secondary">
                     <tr class="align-middle">
                         <th class="icon-table">Cliente</th>

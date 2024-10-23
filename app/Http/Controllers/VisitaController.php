@@ -92,15 +92,7 @@ class VisitaController extends Controller
             'hora_fin' => $hora_fin,
         ]);
 
-        // Verifica el estado del proyecto y actualiza solo si es necesario
-        if ($proyecto->estado !== 'por_cobrar') {
-            $proyecto->update([
-                'estado' => 'por_cobrar',
-            ]);
-            $mensaje = 'Visita cerrada. Proyecto ' . $proyecto->proyecto_id . ' pendiente de factura.';
-        } else {
-            $mensaje = 'Visita cerrada del proyecto ' . $proyecto->proyecto_id . '.';
-        }
+        $mensaje = 'Visita cerrada del proyecto ' . $proyecto->proyecto_id . '.';
 
         // Redireccionar con mensaje de éxito
         return redirect()->route('proyecto.index')->with('success_visita_cerrar', $mensaje);
@@ -111,23 +103,22 @@ class VisitaController extends Controller
      */
     public function store(Request $request)
     {
-
-        //dd($request->all());
+        // Validar los datos
         $validatedData = $request->validate([
             'proyecto_id' => 'required|exists:TProyectos,proyecto_id',
             'descripcion' => 'nullable|string|max:255',
-            'fecha_inicio' => 'required|date',
+            'fecha_inicio' => 'required|date_format:d/m/Y',
             'hora_inicio' => 'required|date_format:H:i',
-            'fecha_fin' => 'nullable|date|after_or_equal:fecha_inicio',
+            'fecha_fin' => 'nullable|date_format:d/m/Y|after_or_equal:fecha_inicio',
             'hora_fin' => [
                 'nullable',
                 'date_format:H:i',
                 function ($attribute, $value, $fail) use ($request) {
-                    $fechaInicio = $request->input('fecha_inicio');
-                    $fechaFin = $request->input('fecha_fin');
+                    $fechaInicio = Carbon::createFromFormat('d/m/Y', $request->input('fecha_inicio'));
+                    $fechaFin = $request->input('fecha_fin') ? Carbon::createFromFormat('d/m/Y', $request->input('fecha_fin')) : null;
                     $horaInicio = $request->input('hora_inicio');
 
-                    if ($fechaInicio === $fechaFin && $value <= $horaInicio) {
+                    if ($fechaInicio->equalTo($fechaFin) && $value <= $horaInicio) {
                         $fail('La hora de fin debe ser posterior a la hora de inicio cuando la fecha de fin es la misma que la fecha de inicio.');
                     }
                 },
@@ -136,14 +127,17 @@ class VisitaController extends Controller
             'prioridad' => 'required|string|max:10',
         ]);
 
-        //dd($validatedData);
-        $visita = Visita::create([
+        // Convertir las fechas al formato adecuado antes de guardar
+        $fechaInicio = Carbon::createFromFormat('d/m/Y', $validatedData['fecha_inicio'])->format('Y-m-d');
+        $fechaFin = $validatedData['fecha_fin'] ? Carbon::createFromFormat('d/m/Y', $validatedData['fecha_fin'])->format('Y-m-d') : null;
 
+        // Crear la visita
+        $visita = Visita::create([
             'proyecto_id' => $validatedData['proyecto_id'],
             'descripcion' => $validatedData['descripcion'],
-            'fecha_inicio' => $validatedData['fecha_inicio'],
+            'fecha_inicio' => $fechaInicio,
             'hora_inicio' => $validatedData['hora_inicio'],
-            'fecha_fin' => $validatedData['fecha_fin'],
+            'fecha_fin' => $fechaFin,
             'hora_fin' => $validatedData['hora_fin'],
             'contacto_visita' => $validatedData['contacto_visita'],
             'prioridad' => $validatedData['prioridad'],

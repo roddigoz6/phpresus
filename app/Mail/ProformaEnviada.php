@@ -2,7 +2,7 @@
 
 namespace App\Mail;
 
-use App\Models\Proyecto;
+use App\Models\Presupuesto;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Content;
@@ -12,14 +12,14 @@ use Illuminate\Queue\SerializesModels;
 class ProformaEnviada extends Mailable
 {
     use Queueable, SerializesModels;
-    public $proyecto;
+    public $presupuesto;
     public $pdfName;
     /**
      * Create a new message instance.
      */
-    public function __construct(Proyecto $proyecto, $pdfName)
+    public function __construct(Presupuesto $presupuesto, $pdfName)
     {
-        $this->proyecto = $proyecto;
+        $this->presupuesto = $presupuesto;
         $this->pdfName = $pdfName;
     }
 

@@ -106,87 +106,62 @@
                 @csrf
                 @method('PUT')
                 <div class="row">
-                    <h3>Editar proyecto {{ $proyecto->proyecto_id }}, cliente <strong id="cliente_nombre_proyecto"> {{ $presupuesto->cliente->nombre }} </strong>.</h3>
+                    <h3>Editar presupuesto {{ $presupuesto->id}} de proyecto {{ $proyecto->proyecto_id }} <br> cliente <strong> {{ $proyecto->cliente->nombre }} </strong>.</h3>
+                    <input type="hidden" id="proyecto_id" name="proyecto_id" value="{{ $proyecto->proyecto_id }}">
                 </div>
+                <hr/>
 
-                <div class="row mb-3">
-                    <div class="col col-me">
-                        <div class="form-group">
-                            <div class="row">
-                                <select id="clienteSelectEdit" name="cliente" class="form-control">
-                                </select>
-                            </div>
+                <div class="row">
+                    <div class="col">
+                        <div class="input-group">
+                            <input type="text" class="form-control" name="nom_pres" id="nom_pres" placeholder="Nombre del presupuesto" value="{{ old('nom_pres', $presupuesto->nom_pres) }}">
                         </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <label for="pago">Forma de pago</label>
+                        <select class="form-select" id="pago" name="pago" autocomplete="off">
+                            <option value="Ver condiciones" {{ $presupuesto->pago == 'Ver condiciones' ? 'selected' : '' }}>Ver condiciones</option>
+                            <option value="50% inicio, 50% fin" {{ $presupuesto->pago == '50% inicio, 50% fin' ? 'selected' : '' }}>50% inicio, 50% fin</option>
+                            <option value="50% termino de obra, resto a 90 dias" {{ $presupuesto->pago == '50% termino de obra, resto a 90 dias' ? 'selected' : '' }}>50% termino de obra, resto a 90 días</option>
+                            <option value="50% comienzo de obra, resto a convenir" {{ $presupuesto->pago == '50% comienzo de obra, resto a convenir' ? 'selected' : '' }}>50% comienzo de obra, resto a convenir</option>
+                            <option value="Certificaciones quincenales" {{ $presupuesto->pago == 'Certificaciones quincenales' ? 'selected' : '' }}>Certificaciones quincenales</option>
+                            <option value="Como siempre" {{ $presupuesto->pago == 'Como siempre' ? 'selected' : '' }}>Como siempre</option>
+                            <option value="Contado termino de obra" {{ $presupuesto->pago == 'Contado termino de obra' ? 'selected' : '' }}>Contado termino de obra</option>
+                            <option value="Convenir" {{ $presupuesto->pago == 'Convenir' ? 'selected' : '' }}>Convenir</option>
+                            <option value="Fin de ejercicio, 15 de diciembre" {{ $presupuesto->pago == 'Fin de ejercicio, 15 de diciembre' ? 'selected' : '' }}>Fin de ejercicio, 15 de diciembre</option>
+                            <option value="Letra de 90 dias" {{ $presupuesto->pago == 'Letra de 90 dias' ? 'selected' : '' }}>Letra de 90 días</option>
+                            <option value="Letra a la vista" {{ $presupuesto->pago == 'Letra a la vista' ? 'selected' : '' }}>Letra a la vista</option>
+                        </select>
                     </div>
 
                     <div class="col col-auto">
-                        <button type="button" class="btn btn-light-primary" data-bs-toggle="modal" data-bs-target="#crearClienteModalEdit" data-bs-toggle="popover" data-bs-trigger="hover focus" title="Crear nuevo cliente">
-                           Nuevo cliente <i class="fas fa-plus-circle"></i>
-                        </button>
+                        <label for="iva">IVA</label>
+                        <select class="form-select" id="iva" name="iva" autocomplete="off">
+                            <option value="7" {{ $presupuesto->iva == "7" ? 'selected' : '' }}>7</option>
+                            <option value="8" {{ $presupuesto->iva == "8" ? 'selected' : '' }}>8</option>
+                            <option value="10" {{ $presupuesto->iva == "10" ? 'selected' : '' }}>10</option>
+                            <option value="16" {{ $presupuesto->iva == "16" ? 'selected' : '' }}>16</option>
+                            <option value="18" {{ $presupuesto->iva == "18" ? 'selected' : '' }}>18</option>
+                            <option value="21" {{ $presupuesto->iva == "21" ? 'selected' : '' }}>21</option>
+                        </select>
                     </div>
-                </div>
-
-                <div class="row form-group">
-
-                    <div class="col form-group">
-                        <p class="mb-0">Datos del cliente</p>
-                        Cliente: <strong id="cliente_nombre">{{ $presupuesto->cliente->nombre }} {{ $presupuesto->cliente->apellido }}</strong>
-                        <input type="hidden" value="{{ $presupuesto->cliente->id }}" id="cliente_id" name="cliente_id">
-                    </div>
-
-                    <div class="col form-group">
-                        Contacto: <strong id="cliente_contacto">{{ $presupuesto->cliente->contacto ?: 'No registrado' }}</strong><br>
-                        Forma de pago de cliente: <strong id="cliente_pago">{{ $presupuesto->cliente->pago ?: 'No registrado' }}</strong>
-                    </div>
-                </div>
-
-                <div class="col">
-                    <hr />
-                    <p class="mb-0">Info del proyecto</p>
-
-                    <div class="row">
-                        <div class="col">
-                            <input class="form-control" type="text" name="serie_ref" placeholder="Nombre del proyecto / serie de referencia" value="{{ $proyecto->serie_ref }}">
-                        </div>
-
-                        <div class="col">
-                            <input class="form-control" type="text" name="num_ref" placeholder="Número de referencia" value="{{ $proyecto->num_ref }}">
-                        </div>
-                    </div>
-
-                    <div>
-                        <label for="pago">Forma de pago</label>
-                            <select class="form-select" id="pago" name="pago">
-                                <option value="Ver condiciones" {{ $proyecto->pago == 'Ver condiciones' ? 'selected' : '' }}>Ver condiciones</option>
-                                <option value="50% inicio, 50% fin" {{ $proyecto->pago == '50% inicio, 50% fin' ? 'selected' : '' }}>50% inicio, 50% fin</option>
-                                <option value="50% termino de obra, resto a 90 dias" {{ $proyecto->pago == '50% termino de obra, resto a 90 días' ? 'selected' : '' }}>50% termino de obra, resto a 90 días</option>
-                                <option value="50% comienzo de obra, resto a convenir" {{ $proyecto->pago == '50% comienzo de obra, resto a convenir' ? 'selected' : '' }}>50% comienzo de obra, resto a convenir</option>
-                                <option value="Certificaciones quincenales" {{ $proyecto->pago == 'Certificaciones quincenales' ? 'selected' : '' }}>Certificaciones quincenales</option>
-                                <option value="Como siempre" {{ $proyecto->pago == 'Como siempre' ? 'selected' : '' }}>Como siempre</option>
-                                <option value="Contado termino de obra" {{ $proyecto->pago == 'Contado termino de obra' ? 'selected' : '' }}>Contado termino de obra</option>
-                                <option value="Convenir" {{ $proyecto->pago == 'Convenir' ? 'selected' : '' }}>Convenir</option>
-                                <option value="Fin de ejercicio, 15 de diciembre" {{ $proyecto->pago == 'Fin de ejercicio, 15 de diciembre' ? 'selected' : '' }}>Fin de ejercicio, 15 de diciembre</option>
-                                <option value="Letra de 90 dias" {{ $proyecto->pago == 'Letra de 90 días' ? 'selected' : '' }}>Letra de 90 días</option>
-                                <option value="Letra a la vista" {{ $proyecto->pago == 'Letra a la vista' ? 'selected' : '' }}>Letra a la vista</option>
-                            </select>
-                    </div>
-                    <hr />
                 </div>
 
                 <p>Arrastra aquí los productos para agregarlos al presupuesto.</p>
-
                 <div id="canvas" class="border p-2" style="min-height: 300px; overflow-y: auto;"
                     ondrop="drop(event)" ondragover="allowDrop(event)">
                     <div id="lista-presupuesto" class="table-responsive">
-                        <table class="table table-light text-center table-hover rounded-table">
-                            <thead class="table-dark">
+                        <table class="table text-center table-hover rounded-table">
+                            <thead class="bg-secondary">
                                 <tr>
                                     <th class="icon-table">Nombre</th>
                                     <th class="icon-table">Descripción</th>
                                     <th class="icon-table">Cantidad</th>
                                     <th class="icon-table">Precio x Unidad</th>
                                     <th class="icon-table">Precio</th>
-                                    <th class="icon-table"></th>
+                                    <th class="icon-table">Acciones</th>
                                 </tr>
                             </thead>
                             <tbody id="productos-table-body" class="list">
@@ -267,154 +242,6 @@
     </div>
 </div>
 
-<!--Modal para agregar clientes-->
-<div class="modal fade" id="crearClienteModalEdit" tabindex="1" aria-labelledby="crearClienteModalEditLabel" aria-hidden="true">
-    <div class="modal-dialog modal-xl modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-body">
-                <form id="createClientFormEdit" action="{{ route('cliente.store') }}" method="POST">
-                    @csrf
-                    <input type="hidden" name="context" value="form">
-                    <div class="row">
-                        <div class="col">
-                            <div class="header-modal">
-                                <h4>Datos del cliente</h4>
-                                <input type="hidden" name="context" value="form">
-                            </div>
-                            <div class="row">
-                                <div class="col">
-                                    <div class="">
-                                        <label for="nombre">Nombre</label> <strong class="required"></strong>
-                                        <input type="text" class="form-control" id="nombre" name="nombre" required>
-                                    </div>
-                                </div>
-                                <div class="col">
-                                    <div class="">
-                                        <label for="apellido">Apellido</label> <strong class="required"></strong>
-                                        <input type="text" class="form-control" id="apellido" name="apellido" required>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col">
-                                    <div class="">
-                                        <label for="dni">DNI</label> <strong class="required"></strong>
-                                        <input type="text" class="form-control" id="dni" name="dni" required>
-                                    </div>
-                                </div>
-                                <div class="col">
-                                    <div>
-                                        <label for="movil">Móvil</label> <strong class="required"></strong>
-                                        <input type="text" class="form-control" id="movil" name="movil" required>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="">
-                                <label for="email">Correo Electrónico</label>
-                                <input type="email" class="form-control" id="email" name="email">
-                            </div>
-                            <div class="">
-                                <label for="direccion">Direccion</label> <strong class="required"></strong>
-                                <input type="text" class="form-control" id="direccion" name="direccion" required>
-                            </div>
-                            <div class="">
-                                <label for="cp">Código postal</label> <strong class="required"></strong>
-                                <input type="text" class="form-control" id="cp" name="cp" required>
-                            </div>
-                            <div class="row">
-                                <div class="col">
-                                    <div class="">
-                                        <label for="poblacion">Población</label> <strong class="required"></strong>
-                                        <input type="text" class="form-control" id="poblacion" name="poblacion" required>
-                                    </div>
-                                </div>
-                                <div class="col">
-                                    <div class="">
-                                        <label for="provincia">Provincia</label> <strong class="required"></strong>
-                                        <input type="text" class="form-control" id="provincia" name="provincia" required>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col">
-                                    <div class="">
-                                        <label for="fax">Fax</label>
-                                        <input type="text" class="form-control" id="fax" name="fax">
-                                    </div>
-                                </div>
-                                <div class="col">
-                                    <div>
-                                        <label for="cargo">Cargo</label>
-                                        <input type="text" class="form-control" id="cargo" name="cargo">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="col">
-                            <div class="header-modal">
-                                <h4>Datos de envío</h4>
-                            </div>
-                            <div class="">
-                                <label for="contacto">Contacto</label>
-                                <input type="text" class="form-control" id="contacto" name="contacto">
-                            </div>
-                            <div class="">
-                                <label for="titular_nom">Nombre de titular</label>
-                                <input type="text" class="form-control" id="titular_nom" name="titular_nom">
-                            </div>
-                            <div class="">
-                                <label for="titular_ape">Apellido de titular</label>
-                                <input type="text" class="form-control" id="titular_ape" name="titular_ape">
-                            </div>
-                            <div class="">
-                                <label for="direccion_envio">Dirección de envío</label>
-                                <input type="text" class="form-control" id="direccion_envio" name="direccion_envio">
-                            </div>
-                            <div class="">
-                                <label for="cp_envio">Código postal de dirección de envío</label>
-                                <input type="text" class="form-control" id="cp_envio" name="cp_envio">
-                            </div>
-                            <div class="">
-                                <label for="poblacion_envio">Población de dirección de envío</label>
-                                <input type="text" class="form-control" id="poblacion_envio" name="poblacion_envio">
-                            </div>
-                            <div class="">
-                                <label for="provincia_envio">Provincia de dirección de envío</label>
-                                <input type="text" class="form-control" id="provincia_envio" name="provincia_envio">
-                            </div>
-
-                        </div>
-                        <div class="header-modal">
-                            <h4>Pago</h4>
-                        </div>
-                        <div class="">
-                            <label for="pago">Forma de pago</label>
-                            <select class="form-select" id="pago" name="pago">
-                                <option value="Ver condiciones">Ver condiciones</option>
-                                <option value="50% inicio, 50% fin">50% inicio, 50% fin</option>
-                                <option value="50% termino de obra, resto a 90 dias">50% termino de obra, resto a 90 días</option>
-                                <option value="50% comienzo de obra, resto a convenir">50% comienzo de obra, resto a convenir</option>
-                                <option value="Certificaciones quincenales">Certificaciones quincenales</option>
-                                <option value="Como siempre">Como siempre</option>
-                                <option value="Contado termino de obra">Contado termino de obra</option>
-                                <option value="Convenir">Convenir</option>
-                                <option value="Fin de ejercicio, 15 de diciembre">Fin de ejercicio, 15 de diciembre</option>
-                                <option value="Letra de 90 dias">Letra de 90 días</option>
-                                <option value="Letra a la vista">Letra a la vista</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="mt-3">Los campos <strong class="required"></strong> son requeridos.</div>
-                    <div class="d-flex justify-content-end">
-                        <button type="submit" class="btn btn-light-primary mt-3">Guardar <i class="fas fa-check-circle"></i></button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
-
 @push('scripts')
 <script>
 $(document).ready(function() {
@@ -434,7 +261,6 @@ function generarIdCapitulo() {
 
     return maxCapituloId + 1;
 }
-
 
 let productosArrastrados = {!! json_encode($productosArrastrados) !!};
 
@@ -476,7 +302,8 @@ function drop(event) {
             orden: productosArrastrados.length + 1,
             tipo: '',
             titulo: '',
-            descripcion: ''
+            descripcion: '',
+            actualizarPrecio: false
         });
 
         actualizarListaProductos();
@@ -601,7 +428,6 @@ function guardarCapitulo() {
 }
 
 function actualizarListaProductos() {
-
     const tableBody = $('#productos-table-body');
     tableBody.empty();
 
@@ -674,6 +500,30 @@ function actualizarListaProductos() {
             // Aquí va el código para productos (no capítulos)
             const tdNombre = $('<td class="align-middle"></td>');
             tdNombre.text(producto.nombre);
+
+            // Checkbox para actualizar el precio con popover
+            const actualizarPrecio = $('<input>');
+            actualizarPrecio.addClass('form-check-input ms-2');
+            actualizarPrecio.attr({
+                type: 'checkbox',
+                title: 'Actualizar precio',
+                'data-bs-toggle': 'popover',
+                'data-bs-placement': 'top',
+                'data-bs-trigger': 'hover',
+            });
+
+            // Mantener el estado del checkbox basado en el valor actual de producto.actualizarPrecio
+            if (producto.actualizarPrecio) {
+                actualizarPrecio.prop('checked', true);
+            }
+
+            actualizarPrecio.on('change', function () {
+                const isChecked = $(this).is(':checked');
+                producto.actualizarPrecio = isChecked;
+                document.getElementById("lista_productos").value = JSON.stringify(productosArrastrados);
+            });
+
+            tdNombre.append(actualizarPrecio);
 
             const tdDescripcion = $('<td class="align-middle"></td>');
             const descripcionInput = $('<textarea class="form-control"></textarea>');
@@ -941,124 +791,6 @@ $(document).ready(function() {
 
         const pageUrl = $(this).attr('href');
         cargarProductos({ url: pageUrl });
-    });
-});
-
-$(document).ready(function() {
-    const Toast = Swal.mixin({
-        toast: true,
-        position: "top-end",
-        showConfirmButton: false,
-        timer: 3000,
-        timerProgressBar: true,
-        didOpen: (toast) => {
-            toast.onmouseenter = Swal.stopTimer;
-            toast.onmouseleave = Swal.resumeTimer;
-        }
-    });
-
-    // Datos del cliente original
-    const originalCliente = {
-        id: $('#cliente_id').val(),
-        nombre: $('#cliente_nombre').text(),
-        contacto: $('#cliente_contacto').text(),
-        pago: $('#cliente_pago').text()
-    };
-
-    $('#createClientFormEdit').submit(function(e) {
-        e.preventDefault();
-
-        let formData = $(this).serialize();
-
-        $.ajax({
-            type: 'POST',
-            url: $(this).attr('action'),
-            data: formData,
-            success: function(response) {
-                $('#crearClienteModalEdit').modal('hide');
-
-                $('#cliente_id').val(response.id);
-                $('#cliente_nombre').html(`${response.nombre} ${response.apellido}`);
-                $('#cliente_contacto').html(response.contacto || 'No registrado');
-                $('#cliente_pago').html(response.pago || 'No registrado');
-                $('#cliente_nombre_proyecto').html(response.nombre);
-
-                Toast.fire({
-                    icon: "success",
-                    title: "Cliente creado exitosamente.",
-                    timer: 3000
-                });
-            },
-            error: function(xhr, status, error) {
-                console.error(error);
-                Toast.fire({
-                    icon: "error",
-                    title: "Error al crear el cliente. Inténtalo de nuevo.",
-                    timer: 4000
-                });
-            }
-        });
-    });
-
-    function initializeSelect2Edit() {
-        $('#clienteSelectEdit').select2({
-            placeholder: 'Seleccionar cliente',
-            allowClear: true,
-            width: '100%',
-            language: {
-                noResults: function() {
-                    return 'No se encontraron clientes con ese nombre';
-                }
-            }
-        }).on('change', function() {
-            const clienteId = $(this).val();
-
-            if (clienteId && clienteId !== originalCliente.id) { // Verificar si el cliente ha cambiado
-                $.ajax({
-                    url: '{{ route("clientes.data") }}',
-                    method: 'GET',
-                    success: function(data) {
-                        // Encontrar el cliente seleccionado
-                        const cliente = data.find(c => c.id == clienteId);
-
-                        if (cliente) {
-                            $('#cliente_id').val(cliente.id);
-                            $('#cliente_nombre').html(`${cliente.text}`);
-                            $('#cliente_contacto').html(cliente.contacto || 'No registrado');
-                            $('#cliente_pago').html(cliente.pago || 'No registrado');
-                            $('#cliente_nombre_proyecto').html(cliente.text);
-                        }
-                    },
-                    error: function(error) {
-                        console.error('Error al obtener los detalles del cliente:', error);
-                    }
-                });
-            } else {
-                // Restablecer los datos al cliente original si no se selecciona uno nuevo
-                $('#cliente_id').val(originalCliente.id);
-                $('#cliente_nombre').html(originalCliente.nombre);
-                $('#cliente_contacto').html(originalCliente.contacto);
-                $('#cliente_pago').html(originalCliente.pago);
-                $('#cliente_nombre_proyecto').html(originalCliente.nombre);
-            }
-        });
-    }
-
-    initializeSelect2Edit();
-
-    $.ajax({
-        url: '{{ route("clientes.data") }}',
-        method: 'GET',
-        success: function(data) {
-            $('#clienteSelectEdit').empty().append(
-                $.map(data, function(cliente) {
-                    return new Option(cliente.text, cliente.id, false, false);
-                })
-            ).val('{{ $presupuesto->cliente->id }}').trigger('change'); // Seleccionar cliente actual
-        },
-        error: function(error) {
-            console.error('Error al cargar los clientes:', error);
-        }
     });
 });
 

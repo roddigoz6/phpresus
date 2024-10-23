@@ -127,19 +127,49 @@
                         Forma de pago de cliente: <strong>{{$proyecto->pago ?: "No registrado"}}</strong>
                     </div>
                 </div>
+                <hr />
+                <div class="row">
+                    <div class="col">
+                        <label for="pago">Forma de pago</label>
+                        <select class="form-select" id="pago" name="pago" autocomplete="off" >
+                            <option value="Ver condiciones">Ver condiciones</option>
+                            <option value="50% inicio, 50% fin">50% inicio, 50% fin</option>
+                            <option value="50% termino de obra, resto a 90 dias">50% termino de obra, resto a 90 días</option>
+                            <option value="50% comienzo de obra, resto a convenir">50% comienzo de obra, resto a convenir</option>
+                            <option value="Certificaciones quincenales">Certificaciones quincenales</option>
+                            <option value="Como siempre">Como siempre</option>
+                            <option value="Contado termino de obra">Contado termino de obra</option>
+                            <option value="Convenir">Convenir</option>
+                            <option value="Fin de ejercicio, 15 de diciembre">Fin de ejercicio, 15 de diciembre</option>
+                            <option value="Letra de 90 dias">Letra de 90 días</option>
+                            <option value="Letra a la vista">Letra a la vista</option>
+                        </select>
+                    </div>
+
+                    <div class="col col-auto">
+                        <label for="iva">IVA</label>
+                        <select class="form-select" id="iva" name="iva" autocomplete="off">
+                            <option value="7">7</option>
+                            <option value="8">8</option>
+                            <option value="10">10</option>
+                            <option value="16">16</option>
+                            <option value="18">18</option>
+                            <option value="21">21</option>
+                        </select>
+                    </div>
+                </div>
 
                 <p>Arrastra aquí los productos para agregarlos al presupuesto.</p>
                 <div id="canvas" class="border p-2" style="min-height: 500px; overflow-y: auto;" ondrop="drop(event)" ondragover="allowDrop(event)">
                     <div id="lista-presupuesto" class="table-responsive">
-                        <table  class="table table-light text-center table-hover rounded-table">
-                            <thead class="table-dark">
+                        <table  class="table text-center table-hover rounded-table">
+                            <thead class="bg-secondary">
                                 <tr>
                                     <th class="icon-table">Nombre</th>
                                     <th class="icon-table">Descripción</th>
                                     <th class="icon-table">Cantidad</th>
                                     <th class="icon-table">Precio x Unidad</th>
                                     <th class="icon-table">Precio</th>
-                                    <th class="icon-table">Actualizar</th>
                                     <th class="icon-table"></th>
                                 </tr>
                             </thead>
@@ -278,7 +308,8 @@ function drop(event) {
             orden: productosArrastrados.length + 1,
             descripcion: '',
             cantidad: 1,
-            tipo: productoTipo
+            tipo: productoTipo,
+            actualizarPrecio: false
         });
 
         actualizarListaProductos();
@@ -347,7 +378,6 @@ function drop2(event) {
             //console.log(`No se encontró el producto o capítulo con ID: ${productoId}, capitulo_id: ${capituloId}`);
         }
 
-        // Actualizar el orden de los productos y capítulos
         actualizarOrdenProductos();
     } else {
         const Toast = Swal.mixin({
@@ -421,18 +451,14 @@ function guardarCapitulo() {
 }
 
 function actualizarListaProductos() {
-    //console.log("FUN: actualizarListaProductos");
-
     const tableBody = $('#productos-table-body');
     tableBody.empty();
 
     productosArrastrados.forEach((producto, index) => {
-        //console.log('Producto:', producto);
-
         const tr = $('<tr></tr>');
         if (producto.tipo != 'linea') {
             tr.attr('data-capitulo-id', producto.capitulo_id || '');
-        }else{
+        } else {
             tr.attr('data-producto-id', producto.id || '');
         }
 
@@ -446,9 +472,7 @@ function actualizarListaProductos() {
             const descripcionInput = $('<textarea class="form-control"></textarea>');
             descripcionInput.attr('name', `descripcion_capitulo_${index + 1}`);
             descripcionInput.val(producto.descripcion || '');
-            descripcionInput.on('change', function() {
-                //console.log("CP1", descripcionInput);
-                //console.log(producto);
+            descripcionInput.on('change', function () {
                 producto.descripcion = $(this).val();
                 document.getElementById("lista_productos").value = JSON.stringify(productosArrastrados);
             });
@@ -459,7 +483,7 @@ function actualizarListaProductos() {
             eliminarBtn.attr('type', 'button');
             eliminarBtn.addClass('btn btn-danger btn-sm');
             eliminarBtn.html('<i class="fa-solid fa-trash"></i>');
-            eliminarBtn.on('click', function() {
+            eliminarBtn.on('click', function () {
                 tr.remove();
                 productosArrastrados = productosArrastrados.filter(p => p.capitulo_id !== producto.capitulo_id);
                 actualizarOrdenProductos();
@@ -492,21 +516,41 @@ function actualizarListaProductos() {
 
             tr.append(tdTitulo, tdDescripcion, tdAcciones, idInput, ordenInput, tipoInput);
         } else {
-            // Aquí va el código para productos (no capítulos)
             const tdNombre = $('<td class="align-middle"></td>');
             tdNombre.text(producto.nombre);
 
-            const tdDescripcion = $('<td class="align-middle"></td>');
-            const descripcionInput = $('<textarea class="form-control"></textarea>');
+            // Checkbox para actualizar el precio con popover
+            const actualizarPrecio = $('<input>');
+            actualizarPrecio.addClass('form-check-input ms-2');
+            actualizarPrecio.attr({
+                type: 'checkbox',
+                title: 'Actualizar precio',
+                'data-bs-toggle': 'popover',
+                'data-bs-placement': 'top',
+                'data-bs-trigger': 'hover',
+            });
 
-            descripcionInput.attr('name', `descripcion_capitulo_${index + 1}`);
-            descripcionInput.val(producto.descripcion || '');
+            // Mantener el estado del checkbox basado en el valor actual de producto.actualizarPrecio
+            if (producto.actualizarPrecio) {
+                actualizarPrecio.prop('checked', true);
+            }
 
-            descripcionInput.on('change', function() {
-                producto.descripcion = $(this).val();
+            actualizarPrecio.on('change', function () {
+                const isChecked = $(this).is(':checked');
+                producto.actualizarPrecio = isChecked;
                 document.getElementById("lista_productos").value = JSON.stringify(productosArrastrados);
             });
 
+            tdNombre.append(actualizarPrecio);
+
+            const tdDescripcion = $('<td class="align-middle"></td>');
+            const descripcionInput = $('<textarea class="form-control"></textarea>');
+            descripcionInput.attr('name', `descripcion_capitulo_${index + 1}`);
+            descripcionInput.val(producto.descripcion || '');
+            descripcionInput.on('change', function () {
+                producto.descripcion = $(this).val();
+                document.getElementById("lista_productos").value = JSON.stringify(productosArrastrados);
+            });
             tdDescripcion.append(descripcionInput);
 
             const tdCantidad = $('<td class="align-middle"></td>');
@@ -518,7 +562,7 @@ function actualizarListaProductos() {
                 max: producto.stock
             });
             cantidadInput.addClass('cantidad-producto form-control');
-            cantidadInput.on('change', function() {
+            cantidadInput.on('change', function () {
                 const cantidad = parseInt($(this).val());
                 producto.cantidad = cantidad;
                 tdPrecioTotal.text((cantidad * producto.precio).toFixed(2) + '€');
@@ -535,7 +579,7 @@ function actualizarListaProductos() {
                 step: 0.01
             });
             precioInput.addClass('input-precio-producto form-control');
-            precioInput.on('change', function() {
+            precioInput.on('change', function () {
                 const precio = parseFloat($(this).val());
                 producto.precio = precio;
                 tdPrecioTotal.text((producto.cantidad * precio).toFixed(2) + '€');
@@ -547,39 +591,20 @@ function actualizarListaProductos() {
             tdPrecioTotal.addClass('precio-total-producto text-center');
             tdPrecioTotal.text((producto.cantidad * producto.precio).toFixed(2) + '€');
 
-            // Crear celda para el checkbox de actualización de precio
-            const tdActualizarPrecio = $('<td class="align-middle form-check text-center"></td>');
-            const actualizarPrecio = $('<input>');
-            actualizarPrecio.addClass('form-check-input');
-            actualizarPrecio.attr({
-                type: 'checkbox',
-            });
-
-            // Opcional: Puedes agregar un evento para manejar el cambio del checkbox
-            actualizarPrecio.on('change', function() {
-                const isChecked = $(this).is(':checked');
-                producto.actualizarPrecio = isChecked;
-                console.log(`Actualizar precio: ${isChecked}`);
-            });
-
-            // Añadir el checkbox a la celda
-            tdActualizarPrecio.append(actualizarPrecio);
-
-            // Crear celda para acciones
-            const tdAcciones = $('<td class="align-middle"></td>');
+            const tdAcciones = $('<td class="align-middle text-center"></td>');
             const eliminarBtn = $('<button></button>');
             eliminarBtn.attr('type', 'button');
-            eliminarBtn.addClass('btn btn-danger btn-sm');
+            eliminarBtn.addClass('btn btn-danger btn-sm btn-icon');
             eliminarBtn.html('<i class="fa-solid fa-trash"></i>');
-            eliminarBtn.on('click', function() {
+            eliminarBtn.on('click', function () {
                 tr.remove();
                 productosArrastrados = productosArrastrados.filter(p => p.id !== producto.id);
                 actualizarOrdenProductos();
                 actualizarPrecioTotal();
             });
+
             tdAcciones.append(eliminarBtn);
 
-            // Crear campos ocultos para orden y tipo
             const ordenInput = $('<input>');
             ordenInput.attr({
                 type: 'hidden',
@@ -596,28 +621,30 @@ function actualizarListaProductos() {
                 value: producto.tipo
             });
 
-            // Añadir todas las celdas a la fila
-            tr.append(tdNombre, tdDescripcion, tdCantidad, tdPrecio, tdPrecioTotal, tdActualizarPrecio, tdAcciones, ordenInput, tipoInput);
-
+            tr.append(tdNombre, tdDescripcion, tdCantidad, tdPrecio, tdPrecioTotal, tdAcciones, ordenInput, tipoInput);
         }
 
         tableBody.append(tr);
 
-        tr.on('dragstart', function(e) {
+        tr.on('dragstart', function (e) {
             $(this).addClass('dragging');
             window.fila_original = tr;
             window.drop_function = 2;
             e.originalEvent.dataTransfer.setData('text/plain', producto.id);
         });
 
-        tr.on('dragend', function() {
+        tr.on('dragend', function () {
             $(this).removeClass('dragging');
             actualizarOrdenProductos();
         });
     });
 
     actualizarPrecioTotal();
+
+    // Inicializar popover
+    $('[data-bs-toggle="popover"]').popover();
 }
+
 
 function actualizarOrdenProductos() {
     $('#productos-table-body tr').each(function(index) {
@@ -721,7 +748,7 @@ document.addEventListener('DOMContentLoaded', function() {
             toast.onmouseenter = Swal.stopTimer;
             toast.onmouseleave = Swal.resumeTimer;
         }
-    })
+    });
 
     form.addEventListener('submit', function(event) {
         event.preventDefault();
@@ -729,8 +756,8 @@ document.addEventListener('DOMContentLoaded', function() {
         const listaProductosInput = document.getElementById('lista_productos');
         const listaProductos = JSON.parse(listaProductosInput.value || '[]');
 
+        // Validación para asegurarse de que hay productos en el presupuesto
         if (listaProductos.length === 0) {
-
             Toast.fire({
                 icon: 'error',
                 title: 'Error',
@@ -739,11 +766,25 @@ document.addEventListener('DOMContentLoaded', function() {
             return;
         }
 
-        var formData = new FormData(this);
-        var proyectoId = $('#proyecto_id').val();
-        var nomPres = $('#nom_pres').val();
-        formData.append('proyecto_id', proyectoId);
-        formData.append('nom_pres', nomPres);
+        // Obtención de valores correctos para proyecto y nombre de presupuesto
+        const proyectoId = document.getElementById('proyecto_id').value;
+        const nomPres = document.getElementById('nom_pres').value;
+        const pago = document.getElementById('pago').value;
+        const iva = document.getElementById('iva').value;
+
+        // Preparación del FormData
+        const formData = new FormData(this);
+
+        // Verificar si 'proyecto_id' y 'nom_pres' ya están en el FormData
+        if (!formData.has('proyecto_id')) {
+            formData.append('proyecto_id', proyectoId);
+        }
+
+        if (!formData.has('nom_pres')) {
+            formData.append('nom_pres', nomPres);
+        }
+        formData.append('pago', pago);
+        formData.append('iva', iva);
 
         $.ajax({
             url: '{{ route('presupuesto.store') }}',
@@ -756,28 +797,17 @@ document.addEventListener('DOMContentLoaded', function() {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             },
             success: function(data) {
-
                 if (data.success) {
                     localStorage.setItem('successMessage', data.message || 'Proyecto presupuestado correctamente.');
                     window.location.href = '{{ route('proyecto.index') }}';
-
                 } else {
                     Toast.fire({
                         icon: 'error',
-                        title: data.message || 'Hubo un problema al crear el presupuesto.'
+                        title: 'Error',
+                        text: data.message || 'Hubo un problema al crear el presupuesto.'
                     });
+
                     if (data.errors) {
-                        const Toast = Swal.mixin({
-                            toast: true,
-                            position: 'top-end',
-                            showConfirmButton: false,
-                            timer: 3000,
-                            timerProgressBar: true,
-                            didOpen: (toast) => {
-                                toast.onmouseenter = Swal.stopTimer;
-                                toast.onmouseleave = Swal.resumeTimer;
-                            }
-                        });
                         Object.values(data.errors).forEach(errorMessages => {
                             errorMessages.forEach(errorMessage => {
                                 Toast.fire({
@@ -791,7 +821,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
             },
             error: function(xhr) {
-
                 console.error('Error:', xhr);
                 Toast.fire({
                     icon: 'error',
@@ -802,6 +831,8 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 });
+
+
 
 $(document).ready(function() {
     function cargarProductos(params = {}) {

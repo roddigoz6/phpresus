@@ -6,6 +6,7 @@ use Carbon\Carbon;
 
 use Illuminate\Http\Request;
 use App\Models\Proyecto;
+use App\Models\Presupuesto;
 use App\Models\Visita;
 use App\Models\Producto;
 use App\Models\Cliente;
@@ -31,27 +32,27 @@ class DashboardController extends Controller
         $proyectos = Proyecto::where('eliminado', false)
             ->count();
 
-        $proyectoPresu = Proyecto::where('eliminado', false)
-            ->where('estado', 'presupuestado')
-            ->count();
-
-        $proyectoAcept = Proyecto::where('eliminado', false)
-            ->where('estado', 'presupuesto_aceptado')
-            ->count();
-
-        $proyectoPorFac = Proyecto::where('eliminado', false)
-            ->where('estado', 'por_facturar')
-            ->count();
-
-        $proyectoPorCobr = Proyecto::where('eliminado', false)
-            ->where('estado', 'facturado_pendiente_cobro')
-            ->count();
-
-        $proyectoCobr = Proyecto::where('eliminado', false)
-            ->where('estado', 'factura_cobrada')
+        $proyectoAbierto = Proyecto::where('eliminado', false)
+            ->where('estado', 'abierto')
             ->count();
 
         $proyectoCerrado = Proyecto::where('eliminado', false)
+            ->where('estado', 'cerrado')
+            ->count();
+
+        $presupuestos = Presupuesto::where('eliminado', false)
+            ->count();
+
+        $presupuestoPres = Presupuesto::where('eliminado', false)
+            ->where('estado', 'presupuestado')
+            ->count();
+
+        $presupuestoAcept = Presupuesto::where('eliminado', false)
+            ->where('estado', 'presupuesto_aceptado')
+            ->count();
+
+        $presupuestoCobr = Presupuesto::where('eliminado', false)
+            ->where('estado', 'por_cobrar')
             ->count();
 
         // Productos
@@ -84,12 +85,12 @@ class DashboardController extends Controller
         return view('pages.dashboards.index', compact(
             'user',
             'proyectos',
-            'proyectoPresu',
-            'proyectoAcept',
-            'proyectoPorFac',
-            'proyectoPorCobr',
-            'proyectoCobr',
+            'proyectoAbierto',
             'proyectoCerrado',
+            'presupuestos',
+            'presupuestoPres',
+            'presupuestoAcept',
+            'presupuestoCobr',
             'productosMasPopulares',
             'productosDisponiblesCount',
             'clientes',

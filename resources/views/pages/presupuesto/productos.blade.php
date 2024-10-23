@@ -1,6 +1,6 @@
 @if (!$productos->isEmpty())
-    <table class="table table-light table-hover text-center rounded-table">
-        <thead class="table-dark">
+    <table class="table table-hover text-center rounded-table">
+        <thead class="bg-secondary">
             <tr>
                 <th class="icon-table">Nombre</th>
                 <th class="icon-table">Precio</th>

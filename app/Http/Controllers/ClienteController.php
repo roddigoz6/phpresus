@@ -93,12 +93,12 @@ class ClienteController extends Controller
             'apellido' => 'required|string|max:255',
             'dni' => 'required|string|max:9',
             'email' => 'nullable|string|max:255',
-            'movil' => 'required|string|max:20',
+            'movil' => 'nullable|string|max:20',
             'contacto' => 'nullable|string|max:255',
-            'direccion' => 'required|string|max:255',
-            'cp' => 'required|string|max:9',
-            'poblacion' => 'required|string|max:255',
-            'provincia' => 'required|string|max:255',
+            'direccion' => 'nullable|string|max:255',
+            'cp' => 'nullable|string|max:9',
+            'poblacion' => 'nullable|string|max:255',
+            'provincia' => 'nullable|string|max:255',
             'fax' => 'nullable|string|max:9',
             'cargo' => 'nullable|string|max:255',
             'titular_nom' => 'nullable|string|max:255',
@@ -107,7 +107,6 @@ class ClienteController extends Controller
             'cp_envio' => 'nullable|string|max:255',
             'poblacion_envio' => 'nullable|string|max:255',
             'provincia_envio' => 'nullable|string|max:255',
-            'pago' => 'required|string|max:255',
         ]);
 
         // Crear el nuevo cliente en la base de datos

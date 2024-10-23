@@ -56,7 +56,6 @@ class DatabaseSeeder extends Seeder
             "cp_envio" => "35636",
             "poblacion_envio" => "Peruano",
             "provincia_envio" => "Lima",
-            "pago" => "",
 
         ]);
         //2
@@ -80,7 +79,6 @@ class DatabaseSeeder extends Seeder
             "cp_envio" => "34342",
             "poblacion_envio" => "griega",
             "provincia_envio" => "Rhodes",
-            "pago" => "",
 
         ]);
         //3
@@ -104,7 +102,6 @@ class DatabaseSeeder extends Seeder
             "cp_envio" => "66666",
             "poblacion_envio" => "peruano",
             "provincia_envio" => "Comas",
-            "pago" => "",
 
         ]);
         //4
@@ -128,7 +125,6 @@ class DatabaseSeeder extends Seeder
             "cp_envio" => "66116",
             "poblacion_envio" => "peruano",
             "provincia_envio" => "Comas",
-            "pago" => "",
 
         ]);
     }
